@@ -1,0 +1,23 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "outDir": "./dist",
+        "sourceMap": true,
+        "target": "es5"
+    },
+    "exclude": [
+        "bundles",
+        "dist",
+        "node_modules",
+        "gulpfile.js",
+        "rollup.config.js",
+        "test.ts"
+    ]
+}

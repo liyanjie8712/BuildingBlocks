@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net451;netstandard1.3;</TargetFrameworks>
+        <Description>AspNetCore.Http扩展</Description>
+        <Copyright>© Liyanjie.me</Copyright>
+        <Authors>liyanjie8712@outlook.com</Authors>
+        <Company>Liyanjie.me</Company>
+        <RepositoryUrl>https://github.com/liyanjie8712/BuildingBlocks</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/liyanjie8712/BuildingBlocks</PackageProjectUrl>
+        <RepositoryType>Git</RepositoryType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
+        <DocumentationFile>bin\Release\net451\Liyanjie.AspNetCore.Http.Extensions.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard1.3\Liyanjie.AspNetCore.Http.Extensions.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <Target Name="MovePackage" AfterTargets="Pack">
+        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_Packages\" />
+    </Target>
+
+    <ItemGroup>
+        <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+        <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    </ItemGroup>
+
+</Project>
