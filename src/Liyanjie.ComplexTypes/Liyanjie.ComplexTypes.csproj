@@ -20,10 +20,10 @@
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">
-        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_Packages\" />
+        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
         <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
     </ItemGroup>
 

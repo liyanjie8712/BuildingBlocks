@@ -5,7 +5,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// Identity
     /// </summary>
-    public class Identity<TType, TValue> : _ValueObject where TType : struct
+    public class Identity<TType, TValue> : _ValueObject
     {
         /// <summary>
         /// 类型
