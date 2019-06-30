@@ -16,19 +16,11 @@ namespace System
         /// <returns></returns>
         public static string Description(this Enum @enum, char separator = ',')
         {
-            string description(Type enumType, string enumName)
-            {
-                if (string.IsNullOrWhiteSpace(enumName))
-                    return null;
-
-                return enumType.GetField(enumName)?.GetCustomAttribute<DescriptionAttribute>(false)?.Description;
-            }
-
             var type = @enum.GetType();
             var flags = type.GetTypeInfo().GetCustomAttribute<FlagsAttribute>();
 
             if (flags == null)
-                return description(type, Enum.GetName(type, @enum));
+                return _Description(type, Enum.GetName(type, @enum));
             else
             {
                 var values = Enum.GetValues(type);
@@ -42,15 +34,23 @@ namespace System
                     {
                         if (@enum.Equals(value))
                         {
-                            output = $"{output}{separator}{description(type, Enum.GetName(type, value))}";
+                            output = $"{output}{separator}{_Description(type, Enum.GetName(type, value))}";
                             break;
                         }
                     }
                     else if (@enum.HasFlag((Enum)value))
-                        output = $"{output}{separator}{description(type, Enum.GetName(type, value))}";
+                        output = $"{output}{separator}{_Description(type, Enum.GetName(type, value))}";
                 }
 
                 return output.TrimStart(separator);
+            }
+
+            string _Description(Type enumType, string enumName)
+            {
+                if (string.IsNullOrWhiteSpace(enumName))
+                    return null;
+
+                return enumType.GetField(enumName)?.GetCustomAttribute<DescriptionAttribute>(false)?.Description;
             }
         }
     }

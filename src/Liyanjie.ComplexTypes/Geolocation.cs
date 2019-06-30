@@ -21,7 +21,8 @@ namespace Liyanjie.ComplexTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<object> GetAtomicValues() {
+        protected override IEnumerable<object> GetAtomicValues()
+        {
             yield return Longitude;
             yield return Latitude;
         }

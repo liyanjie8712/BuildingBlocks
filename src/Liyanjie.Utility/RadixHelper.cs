@@ -28,13 +28,13 @@ namespace Liyanjie.Utility
             }
 
             var list = new List<long>();
-            var tmp = 0L;
+            long tmp;
 
             while (number > radix)
             {
                 tmp = number % radix;
                 number -= tmp;
-                number = number / radix;
+                number /= radix;
 
                 if (string.IsNullOrWhiteSpace(radixCodes))
                 {

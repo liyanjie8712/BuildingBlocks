@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Liyanjie.ComplexTypes
 {
@@ -7,7 +6,6 @@ namespace Liyanjie.ComplexTypes
     /// 证件
     /// </summary>
     public class Licence<TType> : _ValueObject
-        where TType : struct
     {
         /// <summary>
         /// 类型

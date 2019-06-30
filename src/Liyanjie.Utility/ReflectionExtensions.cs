@@ -29,7 +29,6 @@ namespace Liyanjie.Utility
             additional?.Invoke(input, output);
 
             translated.Clear();
-            translated = null;
 
             return output;
         }
@@ -51,7 +50,6 @@ namespace Liyanjie.Utility
             await additional?.Invoke(input, output);
 
             translated.Clear();
-            translated = null;
 
             return output;
         }

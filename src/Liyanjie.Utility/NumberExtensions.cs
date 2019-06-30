@@ -38,7 +38,7 @@ namespace System
             return _Is2PowN(input);
         }
 
-        static bool _Is2PowN(this long input)
+        static bool _Is2PowN(long input)
         {
             return input < 1 ? false : ((input & (input - 1)) == 0) ? true : false;
         }
@@ -73,25 +73,27 @@ namespace System
             return _Divisors(number);
         }
 
-        static List<long> _Divisors(this long number)
+        static List<long> _Divisors(long number)
         {
             if (number < 0)
                 throw new ArgumentOutOfRangeException(nameof(number), $"{nameof(number)} 必须为非负整型！");
 
-            if (number == 0)
+            if (number < 2)
                 return new List<long> { 1 };
 
             var divisors = new List<long>(2);
-            divisors.Add(1);
 
-            for (long j = 2; j < number; j++)
+            for (long i = 1; i <= number; i++)
             {
-                if (number % j == 0)
-                    divisors.Add(j);
+                if (divisors.Contains(i))
+                    break;
+                if (number % i == 0)
+                {
+                    divisors.Add(i);
+                    divisors.Add(number / i);
+                }
             }
 
-            if (number > 1)
-                divisors.Add(number);
             return divisors;
         }
     }

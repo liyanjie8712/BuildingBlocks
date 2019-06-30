@@ -26,13 +26,13 @@ namespace Liyanjie.ComplexTypes
         /// 
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="identity"></param>
+        /// <param name="value"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        public static Identity<TType, TValue> Create(TType type, TValue identity, string remark) => new Identity<TType, TValue>
+        public static Identity<TType, TValue> Create(TType type, TValue value, string remark = default) => new Identity<TType, TValue>
         {
             Type = type,
-            Value = identity,
+            Value = value,
             Remark = remark,
         };
 

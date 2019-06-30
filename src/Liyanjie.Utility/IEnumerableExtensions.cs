@@ -24,7 +24,7 @@ namespace System.Collections.Generic
         /// <param name="separator"></param>
         /// <param name="toString"></param>
         /// <returns></returns>
-        public static string ToString<T>(this IEnumerable<T> source, string separator = ",", Func<T, string> toString = null)
+        public static string ToString<T>(this IEnumerable<T> source, string separator = ",", Func<T, string> toString = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

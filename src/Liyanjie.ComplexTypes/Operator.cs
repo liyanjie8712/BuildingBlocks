@@ -8,7 +8,6 @@ namespace Liyanjie.ComplexTypes
     /// </summary>
     /// <typeparam name="TType"></typeparam>
     public class Operator<TType> : _ValueObject
-        where TType : struct
     {
         /// <summary>
         /// 类型

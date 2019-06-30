@@ -8,7 +8,6 @@ namespace Liyanjie.ComplexTypes
     /// </summary>
     /// <typeparam name="TStatus"></typeparam>
     public class Status<TStatus> : _ValueObject
-        where TStatus : struct
     {
         /// <summary>
         /// 值
@@ -31,7 +30,7 @@ namespace Liyanjie.ComplexTypes
         /// <param name="status"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        public static Status<TStatus> Create(TStatus status, string remark = null) => new Status<TStatus>
+        public static Status<TStatus> Create(TStatus status, string remark = default) => new Status<TStatus>
         {
             Value = status,
             Remark = remark,

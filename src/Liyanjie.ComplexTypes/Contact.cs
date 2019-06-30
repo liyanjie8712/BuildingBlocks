@@ -6,7 +6,6 @@ namespace Liyanjie.ComplexTypes
     /// 联系人
     /// </summary>
     public class Contact<TType> : _ValueObject
-        where TType : struct
     {
         /// <summary>
         /// 联系方式

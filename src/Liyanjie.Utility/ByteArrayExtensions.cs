@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+
 using Liyanjie.Utility;
 
 namespace System.Security.Cryptography
@@ -159,7 +160,7 @@ namespace System.Security.Cryptography
         public static byte[] Decrypt_RSA(this byte[] input, string privateKeyString)
             => _Decrypt_RSA(input, privateKeyString);
 
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
         /// <summary>
         /// 
         /// </summary>
@@ -182,12 +183,12 @@ namespace System.Security.Cryptography
 #endif
 
         static byte[] _Encrypt_RSA(this byte[] input, string publicKeyString
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
             , RSAEncryptionPadding encryptionPadding = null
 #endif
             )
         {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
             encryptionPadding = encryptionPadding ?? RSAEncryptionPadding.Pkcs1;
 #endif
             byte[] output = null;
@@ -199,7 +200,7 @@ namespace System.Security.Cryptography
                 if (input.Length <= bufferSize)
                 {
                     output =
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
                         rsa.Encrypt(input, encryptionPadding)
 #elif NET45
                         rsa.EncryptValue(input)
@@ -219,7 +220,7 @@ namespace System.Security.Cryptography
                             var tmpBuffer = new byte[readSize];
                             Array.Copy(buffer, 0, tmpBuffer, 0, readSize);
                             var tmpEncrypted =
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
                                 rsa.Encrypt(tmpBuffer, encryptionPadding)
 #elif NET45
                                 rsa.EncryptValue(tmpBuffer)
@@ -238,12 +239,12 @@ namespace System.Security.Cryptography
         }
 
         static byte[] _Decrypt_RSA(this byte[] input, string privateKeyString
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
             , RSAEncryptionPadding encryptionPadding = null
 #endif
             )
         {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
             encryptionPadding = encryptionPadding ?? RSAEncryptionPadding.Pkcs1;
 #endif
             byte[] output = null;
@@ -254,7 +255,7 @@ namespace System.Security.Cryptography
                 if (input.Length <= maxBlockSize)
                 {
                     output =
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
                         rsa.Decrypt(input, encryptionPadding)
 #elif NET45
                         rsa.DecryptValue(input)
@@ -274,7 +275,7 @@ namespace System.Security.Cryptography
                             var tmpBuffer = new byte[blockSize];
                             Array.Copy(buffer, 0, tmpBuffer, 0, blockSize);
                             var tmpDecrypted =
-#if NETSTANDARD1_3
+#if NETSTANDARD1_3 || NETSTANDARD2_0
                                 rsa.Decrypt(tmpBuffer, encryptionPadding)
 #elif NET45
                                 rsa.DecryptValue(tmpBuffer)

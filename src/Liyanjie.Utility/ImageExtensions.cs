@@ -1,12 +1,12 @@
-﻿#if NET45
+﻿#if NET45 || NETSTANDARD2_0
+using System;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+
 namespace System.Drawing
 {
-    using System;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.IO;
-    using System.Linq;
-
     /// <summary>
     /// 
     /// </summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Liyanjie.Utility
 {
@@ -15,12 +14,9 @@ namespace Liyanjie.Utility
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static List<T> ToList<T>() where T : struct
+        public static IEnumerable<T> GetItems<T>() where T : Enum
         {
-            var type = typeof(T);
-            return type.GetTypeInfo().IsEnum
-                ? Enum.GetValues(type).Cast<T>().ToList()
-                : throw new ArgumentException("enumType must be Enum type!");
+            return Enum.GetValues(typeof(T)).Cast<T>();
         }
     }
 }

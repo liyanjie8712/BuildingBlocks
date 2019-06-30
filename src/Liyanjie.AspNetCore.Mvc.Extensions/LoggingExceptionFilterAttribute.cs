@@ -25,7 +25,7 @@ namespace Liyanjie.AspNetCore.Mvc.Extensions
         /// <param name="context"></param>
         public override void OnException(ExceptionContext context)
         {
-            logger.LogError(default(EventId), context.Exception, "捕获到未知异常");
+            logger.LogError(default, context.Exception, "捕获到未知异常");
             base.OnException(context);
         }
     }
