@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFrameworks>net45;netstandard1.3;netstandard2.0;</TargetFrameworks>
-        <LangVersion>8.0</LangVersion>
         <Description>扩展方法合集</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
