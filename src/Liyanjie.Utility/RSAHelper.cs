@@ -17,29 +17,23 @@ namespace Liyanjie.Utility
         /// <returns></returns>
         public static (string PublicKey, string PrivateKey) GenerateKeys()
         {
-            using (var rsa = RSA.Create())
-            {
-                return (SerializeParameters(rsa.ExportParameters(false)), SerializeParameters(rsa.ExportParameters(true)));
-            }
+            using var rsa = RSA.Create();
+            return (SerializeParameters(rsa.ExportParameters(false)), SerializeParameters(rsa.ExportParameters(true)));
         }
 
         internal static string SerializeParameters(RSAParameters parameters)
         {
-            using (var stream = new MemoryStream())
-            using (var xmlWriter = XmlWriter.Create(stream))
-            {
-                new XmlSerializer(typeof(RSAParameters)).Serialize(xmlWriter, parameters);
-                return Encoding.UTF8.GetString(stream.ToArray());
-            }
+            using var stream = new MemoryStream();
+            using var xmlWriter = XmlWriter.Create(stream);
+            new XmlSerializer(typeof(RSAParameters)).Serialize(xmlWriter, parameters);
+            return Encoding.UTF8.GetString(stream.ToArray());
         }
 
         internal static RSAParameters DeserializeParameters(string xmlString)
         {
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xmlString)))
-            using (var xmlReader = XmlReader.Create(stream))
-            {
-                return (RSAParameters)new XmlSerializer(typeof(RSAParameters)).Deserialize(xmlReader);
-            }
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(xmlString));
+            using var xmlReader = XmlReader.Create(stream);
+            return (RSAParameters)new XmlSerializer(typeof(RSAParameters)).Deserialize(xmlReader);
         }
     }
 }

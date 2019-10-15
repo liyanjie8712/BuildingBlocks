@@ -16,7 +16,7 @@ namespace System.Security.Cryptography
         /// <param name="input"></param>
         /// <param name="encodeMode"></param>
         /// <returns></returns>
-        public static byte[] Encode(this byte[] input, EncodeMode encodeMode)
+        public static byte[] Encoded(this byte[] input, EncodeMode encodeMode)
         {
             HashAlgorithm encoder = null;
             switch (encodeMode)
@@ -55,7 +55,7 @@ namespace System.Security.Cryptography
         /// <param name="key">长度32字符</param>
         /// <param name="iv">长度16字符，为空时使用ECB模式，非空时使用CBC模式</param>
         /// <returns></returns>
-        public static byte[] Encrypt_Aes(this byte[] input, string key, string iv = null)
+        public static byte[] Encrypted_Aes(this byte[] input, string key, string iv = null)
         {
             using (var aes = CreateAes(key, iv))
             using (var encryptor = aes.CreateEncryptor())
@@ -71,7 +71,7 @@ namespace System.Security.Cryptography
         /// <param name="key">长度32字符</param>
         /// <param name="iv">长度16字符，为空时使用ECB模式，非空时使用CBC模式</param>
         /// <returns></returns>
-        public static byte[] Decrypt_Aes(this byte[] input, string key, string iv = null)
+        public static byte[] Decrypted_Aes(this byte[] input, string key, string iv = null)
         {
             using (var aes = CreateAes(key, iv))
             using (var decryptor = aes.CreateDecryptor())
@@ -102,7 +102,7 @@ namespace System.Security.Cryptography
         /// <param name="iv">长度8字符</param>
         /// <param name="key">长度24字符</param>
         /// <returns></returns>
-        public static byte[] Encrypt_TripleDES(this byte[] input, string key, string iv = null)
+        public static byte[] Encrypted_TripleDES(this byte[] input, string key, string iv = null)
         {
             using (var tripleDES = CreateTripleDES(key, iv))
             using (var encryptor = tripleDES.CreateEncryptor())
@@ -118,7 +118,7 @@ namespace System.Security.Cryptography
         /// <param name="iv">长度8字符</param>
         /// <param name="key">长度24字符</param>
         /// <returns></returns>
-        public static byte[] Decrypt_TripleDES(this byte[] input, string key, string iv = null)
+        public static byte[] Decrypted_TripleDES(this byte[] input, string key, string iv = null)
         {
             using (var tripleDES = CreateTripleDES(key, iv))
             using (var decryptor = tripleDES.CreateDecryptor())
@@ -148,8 +148,8 @@ namespace System.Security.Cryptography
         /// <param name="input"></param>
         /// <param name="publicKeyString">公钥</param>
         /// <returns></returns>
-        public static byte[] Encrypt_RSA(this byte[] input, string publicKeyString)
-            => _Encrypt_RSA(input, publicKeyString);
+        public static byte[] Encrypted_RSA(this byte[] input, string publicKeyString)
+            => _Encrypted_RSA(input, publicKeyString);
 
         /// <summary>
         /// 
@@ -157,8 +157,8 @@ namespace System.Security.Cryptography
         /// <param name="input"></param>
         /// <param name="privateKeyString">密钥</param>
         /// <returns></returns>
-        public static byte[] Decrypt_RSA(this byte[] input, string privateKeyString)
-            => _Decrypt_RSA(input, privateKeyString);
+        public static byte[] Decrypted_RSA(this byte[] input, string privateKeyString)
+            => _Decrypted_RSA(input, privateKeyString);
 
 #if NETSTANDARD1_3 || NETSTANDARD2_0
         /// <summary>
@@ -168,8 +168,8 @@ namespace System.Security.Cryptography
         /// <param name="publicKeyString">公钥</param>
         /// <param name="encryptionPadding">OaepSHA1|OaepSHA256|OaepSHA384|OaepSHA512|Pkcs1</param>
         /// <returns></returns>
-        public static byte[] Encrypt_RSA(this byte[] input, string publicKeyString, RSAEncryptionPadding encryptionPadding)
-            => _Encrypt_RSA(input, publicKeyString, encryptionPadding);
+        public static byte[] Encrypted_RSA(this byte[] input, string publicKeyString, RSAEncryptionPadding encryptionPadding)
+            => _Encrypted_RSA(input, publicKeyString, encryptionPadding);
 
         /// <summary>
         /// 
@@ -178,11 +178,11 @@ namespace System.Security.Cryptography
         /// <param name="privateKeyString">密钥</param>
         /// <param name="encryptionPadding">OaepSHA1|OaepSHA256|OaepSHA384|OaepSHA512|Pkcs1</param>
         /// <returns></returns>
-        public static byte[] Decrypt_RSA(this byte[] input, string privateKeyString, RSAEncryptionPadding encryptionPadding)
-            => _Decrypt_RSA(input, privateKeyString, encryptionPadding);
+        public static byte[] Decrypted_RSA(this byte[] input, string privateKeyString, RSAEncryptionPadding encryptionPadding)
+            => _Decrypted_RSA(input, privateKeyString, encryptionPadding);
 #endif
 
-        static byte[] _Encrypt_RSA(this byte[] input, string publicKeyString
+        static byte[] _Encrypted_RSA(this byte[] input, string publicKeyString
 #if NETSTANDARD1_3 || NETSTANDARD2_0
             , RSAEncryptionPadding encryptionPadding = null
 #endif
@@ -238,7 +238,7 @@ namespace System.Security.Cryptography
             return output;
         }
 
-        static byte[] _Decrypt_RSA(this byte[] input, string privateKeyString
+        static byte[] _Decrypted_RSA(this byte[] input, string privateKeyString
 #if NETSTANDARD1_3 || NETSTANDARD2_0
             , RSAEncryptionPadding encryptionPadding = null
 #endif

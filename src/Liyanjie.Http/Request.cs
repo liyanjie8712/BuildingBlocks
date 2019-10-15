@@ -72,15 +72,13 @@ namespace Liyanjie.Http
         /// <returns></returns>
         public virtual async Task<HttpResponseMessage> SendAsync(int timeoutBySeconds = 60)
         {
-            using (var client = CreateHttpClient(TimeSpan.FromSeconds(timeoutBySeconds))) 
+            using var client = CreateHttpClient(TimeSpan.FromSeconds(timeoutBySeconds));
+            return await client.SendAsync(new HttpRequestMessage
             {
-                return await client.SendAsync(new HttpRequestMessage
-                {
-                    Content = CreateHttpContent(),
-                    Method = Method,
-                    RequestUri = CreateRequestUri(),
-                });
-            }
+                Content = CreateHttpContent(),
+                Method = Method,
+                RequestUri = CreateRequestUri(),
+            });
         }
     }
 }

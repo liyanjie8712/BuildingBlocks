@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net45;netstandard1.1;</TargetFrameworks>
+        <LangVersion>8.0</LangVersion>
         <Description>Http帮助类</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>

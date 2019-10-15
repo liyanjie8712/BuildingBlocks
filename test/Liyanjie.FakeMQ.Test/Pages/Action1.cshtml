@@ -1,0 +1,22 @@
+﻿@page
+
+@inject Liyanjie.FakeMQ.EventBus EventBus
+
+@{
+    Layout = null;
+
+    var message = $"Action1:{DateTimeOffset.Now.ToString("yyyyMMddHHmmssfffffffzzzz")}";
+    EventBus.Publish(new Liyanjie.FakeMQ.Test.Domains.MessageEvent { Message = message });
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Action1</title>
+</head>
+<body>
+    @message
+</body>
+</html>

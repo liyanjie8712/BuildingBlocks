@@ -21,7 +21,7 @@ namespace System
         /// </summary>
         /// <param name="imageBase64String"></param>
         /// <returns></returns>
-        public static Bitmap Decode(this string imageBase64String)
+        public static Bitmap Decoded(this string imageBase64String)
         {
             return new Bitmap(new MemoryStream(Convert.FromBase64String(imageBase64String)));
         }
@@ -34,8 +34,8 @@ namespace System
         /// <param name="encodeMode"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static string Encode(this string input, EncodeMode encodeMode, Encoding encoding = null)
-            => BitConverter.ToString((encoding ?? Encoding.UTF8).GetBytes(input).Encode(encodeMode));
+        public static string Encoded(this string input, EncodeMode encodeMode, Encoding encoding = null)
+            => BitConverter.ToString((encoding ?? Encoding.UTF8).GetBytes(input).Encoded(encodeMode));
 
         /// <summary>
         /// 
@@ -43,7 +43,7 @@ namespace System
         /// <param name="input"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static string Encode_Base64(this string input, Encoding encoding = null)
+        public static string Encoded_Base64(this string input, Encoding encoding = null)
             => Convert.ToBase64String((encoding ?? Encoding.UTF8).GetBytes(input));
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace System
         /// <param name="input"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static string Decode_Base64(this string input, Encoding encoding = null)
+        public static string Decoded_Base64(this string input, Encoding encoding = null)
             => (encoding ?? Encoding.UTF8).GetString(Convert.FromBase64String(input));
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace System
         /// <param name="key">长度32字符</param>
         /// <param name="iv">长度16字符，为空时使用ECB模式，非空时使用CBC模式</param>
         /// <returns></returns>
-        public static string Encrypt_Aes(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypt_Aes(key, iv));
+        public static string Encrypted_Aes(this string input, string key, string iv = null)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypted_Aes(key, iv));
 
         /// <summary>
         /// Aes解密
@@ -72,8 +72,8 @@ namespace System
         /// <param name="key">长度32字符</param>
         /// <param name="iv">长度16字符，为空时使用ECB模式，非空时使用CBC模式</param>
         /// <returns></returns>
-        public static string Decrypt_Aes(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypt_Aes(key, iv));
+        public static string Decrypted_Aes(this string input, string key, string iv = null)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypted_Aes(key, iv));
 
         /// <summary>
         /// 加密
@@ -82,8 +82,8 @@ namespace System
         /// <param name="iv">长度8字符</param>
         /// <param name="key">长度24字符</param>
         /// <returns></returns>
-        public static string Encrypt_TripleDES(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypt_TripleDES(key, iv));
+        public static string Encrypted_TripleDES(this string input, string key, string iv = null)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypted_TripleDES(key, iv));
 
         /// <summary>
         /// 解密
@@ -92,8 +92,8 @@ namespace System
         /// <param name="iv">长度8字符</param>
         /// <param name="key">长度24字符</param>
         /// <returns></returns>
-        public static string Decrypt_TripleDES(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypt_TripleDES(key, iv));
+        public static string Decrypted_TripleDES(this string input, string key, string iv = null)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypted_TripleDES(key, iv));
 
         /// <summary>
         /// 
@@ -101,8 +101,8 @@ namespace System
         /// <param name="input"></param>
         /// <param name="publicKeyString">公钥</param>
         /// <returns></returns>
-        public static string Encrypt_RSA(this string input, string publicKeyString)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypt_RSA(publicKeyString));
+        public static string Encrypted_RSA(this string input, string publicKeyString)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypted_RSA(publicKeyString));
 
         /// <summary>
         /// 
@@ -110,8 +110,8 @@ namespace System
         /// <param name="input"></param>
         /// <param name="privateKeyString">私钥</param>
         /// <returns></returns>
-        public static string Decrypt_RSA(this string input, string privateKeyString)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypt_RSA(privateKeyString));
+        public static string Decrypted_RSA(this string input, string privateKeyString)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypted_RSA(privateKeyString));
 
 #if NETSTANDARD1_3
         /// <summary>
@@ -121,8 +121,8 @@ namespace System
         /// <param name="publicKeyString">公钥</param>
         /// <param name="encryptionPadding">OaepSHA1|OaepSHA256|OaepSHA384|OaepSHA512|Pkcs1</param>
         /// <returns></returns>
-        public static string Encrypt_RSA(this string input, string publicKeyString, RSAEncryptionPadding encryptionPadding)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypt_RSA(publicKeyString, encryptionPadding));
+        public static string Encrypted_RSA(this string input, string publicKeyString, RSAEncryptionPadding encryptionPadding)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Encrypted_RSA(publicKeyString, encryptionPadding));
 
         /// <summary>
         /// 
@@ -131,8 +131,8 @@ namespace System
         /// <param name="privateKeyString">私钥</param>
         /// <param name="encryptionPadding"></param>
         /// <returns></returns>
-        public static string Decrypt_RSA(this string input, string privateKeyString, RSAEncryptionPadding encryptionPadding)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypt_RSA(privateKeyString, encryptionPadding));
+        public static string Decrypted_RSA(this string input, string privateKeyString, RSAEncryptionPadding encryptionPadding)
+            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).Decrypted_RSA(privateKeyString, encryptionPadding));
 #endif
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace System
         /// <param name="pattern"></param>
         /// <param name="replacement"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string input, string pattern, string replacement)
+        public static string Replace(this string input, string pattern, string replacement)
             => Regex.Replace(input, pattern, replacement);
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace System
         /// <param name="replacement"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string input, string pattern, string replacement, RegexOptions options)
+        public static string Replace(this string input, string pattern, string replacement, RegexOptions options)
             => Regex.Replace(input, pattern, replacement, options);
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace System
         /// <param name="options"></param>
         /// <param name="matchTimeout"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string input, string pattern, string replacement, RegexOptions options, TimeSpan matchTimeout)
+        public static string Replace(this string input, string pattern, string replacement, RegexOptions options, TimeSpan matchTimeout)
             => Regex.Replace(input, pattern, replacement, options, matchTimeout);
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace System
         /// <param name="pattern"></param>
         /// <param name="evaluator"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string input, string pattern, MatchEvaluator evaluator)
+        public static string Replace(this string input, string pattern, MatchEvaluator evaluator)
             => Regex.Replace(input, pattern, evaluator);
 
         /// <summary>
@@ -397,7 +397,7 @@ namespace System
         /// <param name="evaluator"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string input, string pattern, MatchEvaluator evaluator, RegexOptions options)
+        public static string Replace(this string input, string pattern, MatchEvaluator evaluator, RegexOptions options)
             => Regex.Replace(input, pattern, evaluator, options);
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace System
         /// <param name="options"></param>
         /// <param name="matchTimeout"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string input, string pattern, MatchEvaluator evaluator, RegexOptions options, TimeSpan matchTimeout)
+        public static string Replace(this string input, string pattern, MatchEvaluator evaluator, RegexOptions options, TimeSpan matchTimeout)
             => Regex.Replace(input, pattern, evaluator, options, matchTimeout);
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace System
         /// <param name="input"></param>
         /// <param name="pattern"></param>
         /// <returns></returns>
-        public static string[] RegexSplit(this string input, string pattern)
+        public static string[] Split(this string input, string pattern)
             => Regex.Split(input, pattern);
 
         /// <summary>
@@ -428,7 +428,7 @@ namespace System
         /// <param name="pattern"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static string[] RegexSplit(this string input, string pattern, RegexOptions options)
+        public static string[] Split(this string input, string pattern, RegexOptions options)
             => Regex.Split(input, pattern, options);
 
         /// <summary>
@@ -439,7 +439,7 @@ namespace System
         /// <param name="options"></param>
         /// <param name="matchTimeout"></param>
         /// <returns></returns>
-        public static string[] RegexSplit(this string input, string pattern, RegexOptions options, TimeSpan matchTimeout)
+        public static string[] Split(this string input, string pattern, RegexOptions options, TimeSpan matchTimeout)
             => Regex.Split(input, pattern, options, matchTimeout);
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace System
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string Escape(this string input)
+        public static string Escaped(this string input)
             => Regex.Escape(input);
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace System
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string Unescape(this string input)
+        public static string Unescaped(this string input)
             => Regex.Unescape(input);
     }
 }

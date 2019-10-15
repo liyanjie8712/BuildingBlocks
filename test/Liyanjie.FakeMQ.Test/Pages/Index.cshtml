@@ -1,0 +1,23 @@
+﻿@page
+
+@inject Liyanjie.FakeMQ.Test.Infrastructure.SqliteContext Context
+
+@{
+    Layout = null;
+    var list = Context.Messages.ToList();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @foreach (var item in list)
+    {
+        <p>@item.Id|@item.Content</p>
+    }
+</body>
+</html>

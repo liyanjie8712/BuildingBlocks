@@ -17,6 +17,7 @@ namespace Microsoft.AspNetCore.Mvc
         {
             if (modelState.ContainsKey(key))
                 return modelState[key].ValidationState == ModelValidationState.Valid;
+
             return true;
         }
     }

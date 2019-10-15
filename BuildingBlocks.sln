@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29319.158
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}"
 EndProject
@@ -37,6 +37,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E8BAE215-1C03-4791-8D18-D34C71363E07}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.ComplexTypes", "src\Liyanjie.ComplexTypes\Liyanjie.ComplexTypes.csproj", "{0CC71E20-1204-4FC8-973D-87BD4A33EA2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.FakeMQ", "src\Liyanjie.FakeMQ\Liyanjie.FakeMQ.csproj", "{B64186A9-9D10-4E00-9AF0-F81E6687CE13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.FakeMQ.Test", "test\Liyanjie.FakeMQ.Test\Liyanjie.FakeMQ.Test.csproj", "{05C136A3-07A1-4757-8FDB-1797D885301B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +100,14 @@ Global
 		{0CC71E20-1204-4FC8-973D-87BD4A33EA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CC71E20-1204-4FC8-973D-87BD4A33EA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CC71E20-1204-4FC8-973D-87BD4A33EA2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64186A9-9D10-4E00-9AF0-F81E6687CE13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64186A9-9D10-4E00-9AF0-F81E6687CE13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64186A9-9D10-4E00-9AF0-F81E6687CE13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64186A9-9D10-4E00-9AF0-F81E6687CE13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05C136A3-07A1-4757-8FDB-1797D885301B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05C136A3-07A1-4757-8FDB-1797D885301B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05C136A3-07A1-4757-8FDB-1797D885301B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05C136A3-07A1-4757-8FDB-1797D885301B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +126,8 @@ Global
 		{32B40E82-FFC1-4A9E-926F-12B189990946} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{28B79092-2429-4EF5-B840-FE76B0F1E048} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{0CC71E20-1204-4FC8-973D-87BD4A33EA2C} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
+		{B64186A9-9D10-4E00-9AF0-F81E6687CE13} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
+		{05C136A3-07A1-4757-8FDB-1797D885301B} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8F8E1D8-848B-4EE7-B1FD-9200F7EF1AD2}

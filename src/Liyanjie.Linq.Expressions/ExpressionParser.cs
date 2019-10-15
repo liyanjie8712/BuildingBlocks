@@ -521,7 +521,6 @@ namespace Liyanjie.Linq.Expressions
                     throw new ExpressionParseException($"访问符“{token_LeftLeft.Id.Description()}”左侧找不到表达式。", Input, token_LeftLeft);
                 tokens.Remove(token_LeftLeft);
 
-                //return Expression.Call(contains_Enumerable, GetExpression(token_Left), expression_LeftLeftLeft);
                 return Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), new[] { expression_LeftLeftLeft.Type }, GetExpression(token_Left), expression_LeftLeftLeft);
             }
             else if (token_LeftLeft.Id == TokenId.Access || token_LeftLeft.Id == TokenId.NullableAccess)
@@ -666,7 +665,6 @@ namespace Liyanjie.Linq.Expressions
             else if (token.Id == TokenId.Method)
                 return Expression_New(token);
             else
-                //return Expression.Constant(token.GetValue());
                 throw new Exception($"Token(Id:{token.Id},Value:{token.Value}) can not get a value.");
         }
 
@@ -1058,52 +1056,6 @@ namespace Liyanjie.Linq.Expressions
             #endregion
             throw new ExpressionParseException($"运算符“{@operator.Description()}”无法应用于“{type_Left.Name}”和“{type_Right.Name}”类型的操作数");
         }
-
-        ///// <summary>
-        ///// ++a
-        ///// </summary>
-        ///// <param name="a"></param>
-        ///// <returns></returns>
-        //static dynamic PreIncrement(ref dynamic a)
-        //{
-        //    a += 1;
-        //    return a;
-        //}
-
-        ///// <summary>
-        ///// a++
-        ///// </summary>
-        ///// <param name="a"></param>
-        ///// <returns></returns>
-        //static dynamic PostIncrement(ref dynamic a)
-        //{
-        //    var b = a;
-        //    a += 1;
-        //    return b;
-        //}
-
-        ///// <summary>
-        ///// --a
-        ///// </summary>
-        ///// <param name="a"></param>
-        ///// <returns></returns>
-        //static dynamic PreDecrement(ref dynamic a)
-        //{
-        //    a -= 1;
-        //    return a;
-        //}
-
-        ///// <summary>
-        ///// a--
-        ///// </summary>
-        ///// <param name="a"></param>
-        ///// <returns></returns>
-        //static dynamic PostDecrement(ref dynamic a)
-        //{
-        //    var b = a;
-        //    a -= 1;
-        //    return b;
-        //}
 
         /// <summary>
         /// 

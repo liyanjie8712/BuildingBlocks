@@ -17,7 +17,7 @@ namespace System.Drawing
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static string Encode(this Image image)
+        public static string Encoded(this Image image)
         {
             using (var stream = new MemoryStream())
             {
