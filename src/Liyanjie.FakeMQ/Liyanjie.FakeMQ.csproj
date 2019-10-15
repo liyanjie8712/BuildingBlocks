@@ -19,6 +19,10 @@
         <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.FakeMQ.xml</DocumentationFile>
     </PropertyGroup>
 
+    <Target Name="MovePackage" AfterTargets="Pack">
+        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
+    </Target>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
