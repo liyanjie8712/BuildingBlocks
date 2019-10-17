@@ -42,6 +42,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.AspNetCore.Authent
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{93D289B2-043A-43F8-BB3B-A93B59B76966}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "test\ConsoleApp\ConsoleApp.csproj", "{4CBBB5A8-AAD4-41E7-818A-C124CB965368}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{00B2191A-C8FB-465C-9652-1227C56DAA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00B2191A-C8FB-465C-9652-1227C56DAA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00B2191A-C8FB-465C-9652-1227C56DAA6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CBBB5A8-AAD4-41E7-818A-C124CB965368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CBBB5A8-AAD4-41E7-818A-C124CB965368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CBBB5A8-AAD4-41E7-818A-C124CB965368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CBBB5A8-AAD4-41E7-818A-C124CB965368}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +129,7 @@ Global
 		{28B79092-2429-4EF5-B840-FE76B0F1E048} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{0CC71E20-1204-4FC8-973D-87BD4A33EA2C} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{00B2191A-C8FB-465C-9652-1227C56DAA6F} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
+		{4CBBB5A8-AAD4-41E7-818A-C124CB965368} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8F8E1D8-848B-4EE7-B1FD-9200F7EF1AD2}

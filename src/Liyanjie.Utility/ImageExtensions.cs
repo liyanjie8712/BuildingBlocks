@@ -279,7 +279,11 @@ namespace System.Drawing
                 h = height.Value;
             }
 
-            return image.GetThumbnailImage(w, h, () => false, IntPtr.Zero);
+            var output = new Bitmap(w,h);
+            using var graphics = GetGraphics(output);
+            graphics.DrawImage(image, 0, 0,w,h);
+
+            return output;
         }
 
         /// <summary>
@@ -360,10 +364,11 @@ namespace System.Drawing
 
             var imageCodecInfo = ImageCodecInfo.GetImageEncoders().FirstOrDefault(_ => _.FormatID == GetFormat(Path.GetExtension(path)).Guid);
             if (imageCodecInfo != null)
-                image.Save(path, imageCodecInfo, new EncoderParameters
-                {
-                    Param = new[] { new EncoderParameter(Encoder.Quality, quality) }
-                });
+            {
+                using var encoderParameters = new EncoderParameters(1);
+                encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, quality);
+                image.Save(path, imageCodecInfo, encoderParameters);
+            }
             else
                 image.Save(path, image.RawFormat);
         }
