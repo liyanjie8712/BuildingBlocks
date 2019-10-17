@@ -19,12 +19,13 @@ namespace System.Collections.Generic
         {
             var output = new TModel();
 
+            dictionary = dictionary.ToDictionary(_ => _.Key.ToLower(), _ => _.Value);
             foreach (var property in typeof(TModel).GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 if (!property.CanWrite)
                     continue;
 
-                var objectValue = dictionary[property.Name];
+                var objectValue = dictionary[property.Name.ToLower()];
 
                 object value = null;
 
