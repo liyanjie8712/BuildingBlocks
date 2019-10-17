@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net45;netstandard1.0;</TargetFrameworks>
+        <Description>扩展方法合集（Chinese）</Description>
+        <Copyright>© Liyanjie.me</Copyright>
+        <Authors>liyanjie8712@outlook.com</Authors>
+        <Company>Liyanjie.me</Company>
+        <RepositoryUrl>https://github.com/liyanjie8712/BuildingBlocks</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/liyanjie8712/BuildingBlocks</PackageProjectUrl>
+        <RepositoryType>Git</RepositoryType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+        <DocumentationFile>bin\Release\net45\Liyanjie.Utilities.Cn.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.1|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard1.1\Liyanjie.Utilities.Cn.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <Target Name="MovePackage" AfterTargets="Pack">
+        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
+    </Target>
+
+    <ItemGroup>
+        <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    </ItemGroup>
+
+</Project>

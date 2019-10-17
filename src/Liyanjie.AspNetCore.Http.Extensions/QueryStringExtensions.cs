@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.Internal;
+﻿using System.Collections.Generic;
+using System.Linq;
+
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Microsoft.AspNetCore.Http
@@ -14,14 +16,17 @@ namespace Microsoft.AspNetCore.Http
         /// <typeparam name="TModel"></typeparam>
         /// <param name="queryString"></param>
         /// <returns></returns>
-        public static TModel BuildModel<TModel>(this QueryString queryString) where TModel : new()
+        public static TModel BuildModel<TModel>(this QueryString queryString)
+            where TModel : new()
         {
             var output = new TModel();
 
             if (!queryString.HasValue)
                 return output;
 
-            return new QueryCollection(QueryHelpers.ParseNullableQuery(queryString.Value)).BuildModel<TModel>();
+            return QueryHelpers.ParseNullableQuery(queryString.Value)
+                .ToDictionary(_ => _.Key, _ => (object)_.Value)
+                .BuildModel<TModel>();
         }
     }
 }
