@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Liyanjie.Utility;
+
 namespace System
 {
     /// <summary>
@@ -14,9 +16,7 @@ namespace System
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool Is2PowN(this short input)
-        {
-            return _Is2PowN(input);
-        }
+            => _Is2PowN(input);
 
         /// <summary>
         /// 是否为2的N次方
@@ -24,9 +24,7 @@ namespace System
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool Is2PowN(this int input)
-        {
-            return _Is2PowN(input);
-        }
+            => _Is2PowN(input);
 
         /// <summary>
         /// 是否为2的N次方
@@ -34,9 +32,37 @@ namespace System
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool Is2PowN(this long input)
-        {
-            return _Is2PowN(input);
-        }
+            => _Is2PowN(input);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="radix"></param>
+        /// <param name="radixCodes"></param>
+        /// <returns></returns>
+        public static string ToString(this short input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+            => RadixHelper.ToString(input, radix, radixCodes);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="radix"></param>
+        /// <param name="radixCodes"></param>
+        /// <returns></returns>
+        public static string ToString(this int input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+            => RadixHelper.ToString(input, radix, radixCodes);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="radix"></param>
+        /// <param name="radixCodes"></param>
+        /// <returns></returns>
+        public static string ToString(this long input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+            => RadixHelper.ToString(input, radix, radixCodes);
 
         static bool _Is2PowN(long input)
         {
@@ -49,9 +75,7 @@ namespace System
         /// <param name="number"></param>
         /// <returns></returns>
         public static List<short> Divisors(this short number)
-        {
-            return _Divisors(number).Cast<short>().ToList();
-        }
+            => _Divisors(number).Cast<short>().ToList();
 
         /// <summary>
         /// 获取一个非负整型的所有正约数
@@ -59,9 +83,7 @@ namespace System
         /// <param name="number"></param>
         /// <returns></returns>
         public static List<int> Divisors(this int number)
-        {
-            return _Divisors(number).Cast<int>().ToList();
-        }
+            => _Divisors(number).Cast<int>().ToList();
 
         /// <summary>
         /// 获取一个非负整型的所有正约数
@@ -69,9 +91,7 @@ namespace System
         /// <param name="number"></param>
         /// <returns></returns>
         public static List<long> Divisors(this long number)
-        {
-            return _Divisors(number);
-        }
+            => _Divisors(number);
 
         static List<long> _Divisors(long number)
         {

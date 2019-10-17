@@ -17,7 +17,7 @@ namespace System.Drawing
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static string Encoded(this Image image)
+        public static string Encode(this Image image)
         {
             using (var stream = new MemoryStream())
             {
@@ -317,34 +317,29 @@ namespace System.Drawing
         /// <param name="image2"></param>
         /// <param name="direction">true=水平方向，false=垂直方向</param>
         /// <returns></returns>
-        public static Image Concat(this Image image1, Image image2, bool direction = false)
+        public static Image Concatenate(this Image image1, Image image2, bool direction = false)
         {
             if (image1 == null)
                 throw new ArgumentNullException(nameof(image1));
             if (image2 == null)
                 return image1;
 
-            var width = direction ? image1.Width + image2.Width : Math.Max(image1.Width, image2.Width);
-
             if (direction)
             {
                 var image = new Bitmap(image1.Width + image2.Width, Math.Max(image1.Height, image2.Height));
-                using (var graphics = GetGraphics(image))
-                {
-                    graphics.DrawImage(image1, 0, 0);
-                    graphics.DrawImage(image2, image.Width, 0);
-                }
+                using var graphics = GetGraphics(image);
+                graphics.DrawImage(image1, 0, 0);
+                graphics.DrawImage(image2, image1.Width, 0);
 
                 return image;
             }
             else
             {
                 var image = new Bitmap(Math.Max(image1.Width, image2.Width), image1.Height + image2.Height);
-                using (var graphics = GetGraphics(image))
-                {
-                    graphics.DrawImage(image1, 0, 0);
-                    graphics.DrawImage(image2, 0, image.Height);
-                }
+
+                using var graphics = GetGraphics(image);
+                graphics.DrawImage(image1, 0, 0);
+                graphics.DrawImage(image2, 0, image1.Height);
 
                 return image;
             }

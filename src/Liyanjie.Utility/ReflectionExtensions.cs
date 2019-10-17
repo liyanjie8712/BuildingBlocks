@@ -47,14 +47,15 @@ namespace Liyanjie.Utility
 
             var output = (TOutput)Translate(typeof(TOutput), typeof(TInput), input, translated);
 
-            await additional?.Invoke(input, output);
+            if (additional != null)
+                await additional.Invoke(input, output);
 
             translated.Clear();
 
             return output;
         }
 
-        static object Translate(Type outputType, Type inputType, object input, IDictionary<(Type, Type, object), object> translated)
+        static object Translate(Type outputType, Type inputType, object input, Dictionary<(Type, Type, object), object> translated)
         {
             if (input == null)
                 return null;

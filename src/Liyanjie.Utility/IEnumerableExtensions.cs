@@ -29,7 +29,7 @@ namespace System.Collections.Generic
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            toString = toString ?? (_ => _.ToString());
+            toString ??= _ => _.ToString();
 
             return string.Join(separator, source.Select(toString));
         }
