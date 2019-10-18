@@ -36,7 +36,7 @@ namespace System
             if (typeInfo.IsInterface || typeInfo.IsAbstract || !typeInfo.IsClass)
                 return null;
 
-            var constructor = serviceType.GetConstructors(BindingFlags.Public).FirstOrDefault();
+            var constructor = serviceType.GetConstructors().FirstOrDefault();
             if (constructor == null)
                 return Activator.CreateInstance(serviceType);
 
