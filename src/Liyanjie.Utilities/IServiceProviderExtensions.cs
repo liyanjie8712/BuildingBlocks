@@ -15,6 +15,7 @@ namespace System
         /// <param name="serviceProvider"></param>
         /// <returns></returns>
         public static TService GetServiceOrCreateInstance<TService>(this IServiceProvider serviceProvider)
+            where TService : class
         {
             return (TService)GetServiceOrCreateInstance(serviceProvider, typeof(TService));
         }
@@ -31,7 +32,11 @@ namespace System
             if (service != null)
                 return service;
 
-            var constructor = serviceType.GetConstructors().FirstOrDefault();
+            var typeInfo = serviceType.GetTypeInfo();
+            if (typeInfo.IsInterface || typeInfo.IsAbstract || !typeInfo.IsClass)
+                return null;
+
+            var constructor = serviceType.GetConstructors(BindingFlags.Public).FirstOrDefault();
             if (constructor == null)
                 return Activator.CreateInstance(serviceType);
 
