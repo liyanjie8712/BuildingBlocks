@@ -23,6 +23,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public dynamic Value { get; set; }
+        public object Value { get; set; }
     }
 }

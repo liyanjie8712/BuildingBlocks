@@ -11,6 +11,18 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
+        <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
         <DocumentationFile>bin\Release\net45\Liyanjie.Linq.Expressions.xml</DocumentationFile>
     </PropertyGroup>
@@ -22,18 +34,5 @@
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-        <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
-        <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
-    </ItemGroup>
 
 </Project>

@@ -11,6 +11,14 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
         <DocumentationFile>bin\Release\net45\Liyanjie.Linq.xml</DocumentationFile>
     </PropertyGroup>
@@ -22,13 +30,5 @@
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
-
-    <ItemGroup>
-        <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
-    </ItemGroup>
 
 </Project>

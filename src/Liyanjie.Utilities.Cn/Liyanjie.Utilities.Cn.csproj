@@ -11,6 +11,10 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
         <DocumentationFile>bin\Release\net45\Liyanjie.Utilities.Cn.xml</DocumentationFile>
     </PropertyGroup>
@@ -22,9 +26,5 @@
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
-
-    <ItemGroup>
-        <PackageReference Include="System.ValueTuple" Version="4.3.0" />
-    </ItemGroup>
 
 </Project>

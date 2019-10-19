@@ -15,7 +15,7 @@ namespace Liyanjie.Linq.Expressions
     /// </summary>
     public class ExpressionParser
     {
-        static readonly MethodInfo contains_Enumerable = typeof(Enumerable).GetTypeInfo().GetDeclaredMethods("Contains").Single(_ => _.GetParameters().Length == 2);
+        static readonly MethodInfo enumerable_Contains = typeof(Enumerable).GetTypeInfo().GetDeclaredMethods("Contains").Single(_ => _.GetParameters().Length == 2);
 
         readonly ParameterExpression parameterExpression;
         readonly Type variablesType;
@@ -27,17 +27,17 @@ namespace Liyanjie.Linq.Expressions
         /// </summary>
         /// <param name="parameterExpression"></param>
         /// <param name="variables"></param>
-        public ExpressionParser(ParameterExpression parameterExpression, IDictionary<string, dynamic> variables)
+        public ExpressionParser(ParameterExpression parameterExpression, IDictionary<string, object> variables)
         {
             this.parameterExpression = parameterExpression;
-            variables = variables ?? new Dictionary<string, dynamic>();
+            variables ??= new Dictionary<string, object>();
             this.variablesType = TypeFactory.CreateType(variables.ToDictionary(_ => _.Key, _ => (Type)_.Value.GetType()));
-            this.variablesObject = Activator.CreateInstance(this.variablesType);
+            this.variablesObject = Activator.CreateInstance(variablesType);
             foreach (var item in variables)
             {
-                this.variablesType.GetTypeInfo().GetProperty(item.Key)?.SetValue(this.variablesObject, item.Value);
+                variablesType.GetTypeInfo().GetProperty(item.Key)?.SetValue(variablesObject, item.Value);
             }
-            this.variablesExpression = Expression.Constant(this.variablesObject);
+            this.variablesExpression = Expression.Constant(variablesObject);
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace Liyanjie.Linq.Expressions
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<string, dynamic> Variables
-            => this.variablesType.GetTypeInfo().GetProperties().ToDictionary(_ => _.Name, _ => _.GetValue(this.variablesObject));
+        public IDictionary<string, object> Variables
+            => variablesType.GetTypeInfo().GetProperties().ToDictionary(_ => _.Name, _ => _.GetValue(variablesObject));
 
         /// <summary>
         /// 
@@ -73,7 +73,7 @@ namespace Liyanjie.Linq.Expressions
             #region []
             while (tokens.Any(_ => _.Id == TokenId.LeftBracket))
             {
-                var indexed_Tokens = tokens.Select((_, i) => new { Id = _.Id, Index = i }).OrderBy(_ => _.Index);
+                var indexed_Tokens = tokens.Select((_, i) => new { _.Id, Index = i }).OrderBy(_ => _.Index);
                 //“]”的位置
                 var index_RightBracket = indexed_Tokens.First(_ => _.Id == TokenId.RightBracket).Index;
                 //“[”的位置
@@ -93,7 +93,7 @@ namespace Liyanjie.Linq.Expressions
             #region ()
             while (tokens.Any(_ => _.Id == TokenId.LeftParenthesis))
             {
-                var indexed_Tokens = tokens.Select((_, i) => new { Id = _.Id, Index = i }).OrderBy(_ => _.Index);
+                var indexed_Tokens = tokens.Select((_, i) => new { _.Id, Index = i }).OrderBy(_ => _.Index);
                 //“)”的位置
                 var index_RightParenthesis = indexed_Tokens.First(_ => _.Id == TokenId.RightParenthesis).Index;
                 //“(”的位置
@@ -413,7 +413,7 @@ namespace Liyanjie.Linq.Expressions
                     }
                 }
                 var index_Test_Start = tokens
-                    .Select((_, i) => new { Id = _.Id, Index = i })
+                    .Select((_, i) => new { _.Id, Index = i })
                     .OrderBy(_ => _.Index)
                     .Where(_ => _.Index < index_Predicate)
                     .LastOrDefault(_ => _.Id == TokenId.Assign || _.Id == TokenId.DivideAssign || _.Id == TokenId.MultiplyAssign || _.Id == TokenId.ModuloAssign || _.Id == TokenId.AddAssign || _.Id == TokenId.SubtractAssign || _.Id == TokenId.LeftShiftAssign || _.Id == TokenId.RightShiftAssign || _.Id == TokenId.AndAssign || _.Id == TokenId.ExclusiveOrAssign || _.Id == TokenId.OrAssign)
@@ -622,52 +622,32 @@ namespace Liyanjie.Linq.Expressions
         }
 
         Expression GetExpression(Token token)
-        {
-            if (token.Id == TokenId.Expression)
-                return token.Value;
-            else if (token.Id == TokenId.Parameter)
-                return parameterExpression;
-            else if (token.Id == TokenId.Property)
-                return Expression.Property(parameterExpression, (string)token.Value);
-            else if (token.Id == TokenId.Variable)
-                return Expression.Property(variablesExpression, (string)token.Value);
-            else if (token.Id == TokenId.String)
-                return token.Value is string
-                    ? Expression.Constant(token.Value)
-                    : Expression.Call(Parse(token.Value), "ToString", null);
-            else if (token.Id == TokenId.Char)
-                return Expression_ParseOrConvert(token, typeof(char));
-            else if (token.Id == TokenId.Int)
-                return Expression_ParseOrConvert(token, typeof(int));
-            else if (token.Id == TokenId.UInt)
-                return Expression_ParseOrConvert(token, typeof(uint));
-            else if (token.Id == TokenId.Long)
-                return Expression_ParseOrConvert(token, typeof(long));
-            else if (token.Id == TokenId.ULong)
-                return Expression_ParseOrConvert(token, typeof(ulong));
-            else if (token.Id == TokenId.Double)
-                return Expression_ParseOrConvert(token, typeof(double));
-            else if (token.Id == TokenId.Float)
-                return Expression_ParseOrConvert(token, typeof(float));
-            else if (token.Id == TokenId.Decimal)
-                return Expression_ParseOrConvert(token, typeof(decimal));
-            else if (token.Id == TokenId.Bool)
-                return Expression_ParseOrConvert(token, typeof(bool));
-            else if (token.Id == TokenId.Guid)
-                return Expression_ParseOrConvert(token, typeof(Guid));
-            else if (token.Id == TokenId.DateTime)
-                return Expression_ParseOrConvert(token, typeof(DateTime), _ => _.GetParameters().Length == 1);
-            else if (token.Id == TokenId.DateTimeOffset)
-                return Expression_ParseOrConvert(token, typeof(DateTimeOffset), _ => _.GetParameters().Length == 1);
-            else if (token.Id == TokenId.Array)
-                return Expression_NewArrayInit(token);
-            else if (token.Id == TokenId.Object)
-                return Expression_New(token);
-            else if (token.Id == TokenId.Method)
-                return Expression_New(token);
-            else
-                throw new Exception($"Token(Id:{token.Id},Value:{token.Value}) can not get a value.");
-        }
+            => token.Id switch
+            {
+                TokenId.Expression => (Expression)token.Value,
+                TokenId.Parameter => parameterExpression,
+                TokenId.Property => Expression.Property(parameterExpression, (string)token.Value),
+                TokenId.Variable => Expression.Property(variablesExpression, (string)token.Value),
+                TokenId.String => token.Value is string 
+                    ? (Expression)Expression.Constant(token.Value)
+                    : Expression.Call(Parse(token.Value as IList<Token>), "ToString", null),
+                TokenId.Char => Expression_ParseOrConvert(token, typeof(char)),
+                TokenId.Int => Expression_ParseOrConvert(token, typeof(int)),
+                TokenId.UInt => Expression_ParseOrConvert(token, typeof(uint)),
+                TokenId.Long => Expression_ParseOrConvert(token, typeof(long)),
+                TokenId.ULong => Expression_ParseOrConvert(token, typeof(ulong)),
+                TokenId.Double => Expression_ParseOrConvert(token, typeof(double)),
+                TokenId.Float => Expression_ParseOrConvert(token, typeof(float)),
+                TokenId.Decimal => Expression_ParseOrConvert(token, typeof(decimal)),
+                TokenId.Bool => Expression_ParseOrConvert(token, typeof(bool)),
+                TokenId.Guid => Expression_ParseOrConvert(token, typeof(Guid)),
+                TokenId.DateTime => Expression_ParseOrConvert(token, typeof(DateTime), _ => _.GetParameters().Length == 1),
+                TokenId.DateTimeOffset => Expression_ParseOrConvert(token, typeof(DateTimeOffset), _ => _.GetParameters().Length == 1),
+                TokenId.Array => Expression_NewArrayInit(token),
+                TokenId.Object => Expression_New(token),
+                TokenId.Method => Expression_New(token),
+                _ => throw new Exception($"Token(Id:{token.Id},Value:{token.Value}) can not get a value."),
+            };
 
         Expression Expression_ParseOrConvert(Token token, Type type, Func<MethodInfo, bool> methodSelector = null)
         {
@@ -710,7 +690,7 @@ namespace Liyanjie.Linq.Expressions
                 }
                 else
                     throw new ExpressionParseException("", Input, t);
-                properties.Add(t.Value, expression.Type);
+                properties.Add(t.Value as string, expression.Type);
                 expressions.Add(expression);
             }
             var type = TypeFactory.CreateType(properties);
@@ -1065,7 +1045,7 @@ namespace Liyanjie.Linq.Expressions
         /// <param name="expressionString"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        public static LambdaExpression ParseLambda(Type parameterType, string expressionString, IDictionary<string, dynamic> variables)
+        public static LambdaExpression ParseLambda(Type parameterType, string expressionString, IDictionary<string, object> variables)
         {
             var parameter = Expression.Parameter(parameterType);
             var parser = new ExpressionParser(parameter, variables);

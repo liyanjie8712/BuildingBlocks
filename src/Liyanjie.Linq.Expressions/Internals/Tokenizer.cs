@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Liyanjie.Linq.Expressions.Exceptions;
 
 namespace Liyanjie.Linq.Expressions.Internals
@@ -1197,7 +1198,7 @@ namespace Liyanjie.Linq.Expressions.Internals
                 }
                 Parse(_tokens);
                 token.Id = TokenId.Method;
-                token.Value = new KeyValuePair<string, IList<Token>>(token.Value, _tokens);
+                token.Value = new KeyValuePair<string, IList<Token>>(token.Value as string, _tokens);
             }
         }
 
