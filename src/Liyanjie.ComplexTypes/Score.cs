@@ -6,7 +6,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 评分
     /// </summary>
-    public class Score : _ValueObject
+    public class Score : ValueObject
     {
         /// <summary>
         /// 评分

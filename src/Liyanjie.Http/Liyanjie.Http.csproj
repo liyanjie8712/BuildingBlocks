@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard1.1;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
         <Description>Http帮助类</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -15,16 +15,16 @@
         <DocumentationFile>bin\Release\net45\Liyanjie.Http.xml</DocumentationFile>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.1|AnyCPU'">
-        <DocumentationFile>bin\Release\netstandard1.1\Liyanjie.Http.xml</DocumentationFile>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.Http.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup>
-        <PackageReference Include="System.Net.Http" Version="4.3.0" />
+    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+        <Reference Include="System.Net.Http" />
     </ItemGroup>
 
 </Project>

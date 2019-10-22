@@ -6,7 +6,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public abstract class _ValueObject
+    public abstract class ValueObject
     {
         /// <summary>
         /// 
@@ -27,7 +27,7 @@ namespace Liyanjie.ComplexTypes
             }
 
             var thisValues = GetAtomicValues().GetEnumerator();
-            var otherValues = ((_ValueObject)obj).GetAtomicValues().GetEnumerator();
+            var otherValues = ((ValueObject)obj).GetAtomicValues().GetEnumerator();
             while (thisValues.MoveNext() && otherValues.MoveNext())
             {
                 if (thisValues.Current is null ^ otherValues.Current is null)
@@ -49,7 +49,7 @@ namespace Liyanjie.ComplexTypes
         public override int GetHashCode()
         {
             return GetAtomicValues()
-                .Select(_ => _ != null ? _.GetHashCode() : 0)
+                .Select(_ => _ == null ? 0 : _.GetHashCode())
                 .Aggregate((x, y) => x ^ y);
         }
 
@@ -57,9 +57,9 @@ namespace Liyanjie.ComplexTypes
         /// 
         /// </summary>
         /// <returns></returns>
-        public _ValueObject Clone()
+        public ValueObject Clone()
         {
-            return this.MemberwiseClone() as _ValueObject;
+            return MemberwiseClone() as ValueObject;
         }
     }
 }

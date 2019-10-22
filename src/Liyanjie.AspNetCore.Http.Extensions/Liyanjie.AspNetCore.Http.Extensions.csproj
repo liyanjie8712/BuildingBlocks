@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net451;netstandard1.3;</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;</TargetFrameworks>
         <Description>AspNetCore.Http扩展</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -11,26 +11,17 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.0.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-        <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.0.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Liyanjie.Utilities\Liyanjie.Utilities.csproj" />
     </ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|AnyCPU'">
-        <DocumentationFile>bin\Release\net451\Liyanjie.AspNetCore.Http.Extensions.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
-        <DocumentationFile>bin\Release\netstandard1.3\Liyanjie.AspNetCore.Http.Extensions.xml</DocumentationFile>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.AspNetCore.Http.Extensions.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">

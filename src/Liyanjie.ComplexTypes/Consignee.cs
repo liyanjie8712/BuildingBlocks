@@ -5,7 +5,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 收件人
     /// </summary>
-    public class Consignee : _ValueObject
+    public class Consignee : ValueObject
     {
         /// <summary>
         /// 地址

@@ -7,7 +7,7 @@ namespace Liyanjie.ComplexTypes
     /// 状态
     /// </summary>
     /// <typeparam name="TStatus"></typeparam>
-    public class Status<TStatus> : _ValueObject
+    public class Status<TStatus> : ValueObject
     {
         /// <summary>
         /// 值

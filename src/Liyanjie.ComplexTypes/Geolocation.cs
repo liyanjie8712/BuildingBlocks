@@ -5,7 +5,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 位置
     /// </summary>
-    public class Geolocation : _ValueObject
+    public class Geolocation : ValueObject
     {
         /// <summary>
         /// 所在经度

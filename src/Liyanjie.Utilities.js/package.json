@@ -8,11 +8,11 @@
     },
     "description": "liyanjie.utilities.js",
     "keywords": [
-        "lianjie",
+        "liyanjie",
         "utilities"
     ],
     "license": "None",
-    "repository": "https://github.com/liyanjie8712/BuildingBlocks/tree/master/src/Liyanjie.Utility.js",
+    "repository": "https://github.com/liyanjie8712/BuildingBlocks",
     "devDependencies": {
         "@types/node": "^11.11.6",
         "gulp": "^4.0.0",

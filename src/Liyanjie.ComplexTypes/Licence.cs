@@ -5,7 +5,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 证件
     /// </summary>
-    public class Licence<TType> : _ValueObject
+    public class Licence<TType> : ValueObject
     {
         /// <summary>
         /// 类型

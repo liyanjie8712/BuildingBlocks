@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard1.5;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
         <Description>将字符串表达式解析为Expression</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -12,14 +12,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
-        <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
     </ItemGroup>
 
@@ -27,8 +19,8 @@
         <DocumentationFile>bin\Release\net45\Liyanjie.Linq.Expressions.xml</DocumentationFile>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.5|AnyCPU'">
-        <DocumentationFile>bin\Release\netstandard1.5\Liyanjie.Linq.Expressions.xml</DocumentationFile>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.Linq.Expressions.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard1.5;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
         <Description>Dynamic Linq</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -11,24 +11,20 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
-    </ItemGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
         <DocumentationFile>bin\Release\net45\Liyanjie.Linq.xml</DocumentationFile>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.5|AnyCPU'">
-        <DocumentationFile>bin\Release\netstandard1.5\Liyanjie.Linq.xml</DocumentationFile>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.Linq.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
+    </ItemGroup>
 
 </Project>

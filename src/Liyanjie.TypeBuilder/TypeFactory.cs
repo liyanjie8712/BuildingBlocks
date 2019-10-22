@@ -8,6 +8,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+
 using Liyanjie.TypeBuilder.Internals;
 
 namespace Liyanjie.TypeBuilder

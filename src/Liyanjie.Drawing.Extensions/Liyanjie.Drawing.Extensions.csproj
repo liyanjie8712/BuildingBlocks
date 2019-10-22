@@ -2,25 +2,34 @@
 
     <PropertyGroup>
         <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
-        <Description>英语多元化</Description>
+        <Description>Liyanjie.Drawing.Extensions</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
         <Company>Liyanjie.me</Company>
         <RepositoryUrl>https://github.com/liyanjie8712/BuildingBlocks</RepositoryUrl>
         <PackageProjectUrl>https://github.com/liyanjie8712/BuildingBlocks</PackageProjectUrl>
         <RepositoryType>Git</RepositoryType>
+        <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
-        <DocumentationFile>bin\Release\net45\Liyanjie.EnglishPluralization.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\net45\Liyanjie.Drawing.Extensions.xml</DocumentationFile>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.0|AnyCPU'">
-        <DocumentationFile>bin\Release\netstandard1.0\Liyanjie.EnglishPluralization.xml</DocumentationFile>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.Drawing.Extensions.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+        <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    </ItemGroup>
 
 </Project>

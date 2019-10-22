@@ -12,7 +12,7 @@
   ],
   "description": "Linq implements in Javascript like C#",
   "license": "None",
-  "repository": "https://github.com/liyanjie8712/BuildingBlocks/tree/master/src/Liyanjie.Linq.js",
+  "repository": "https://github.com/liyanjie8712/BuildingBlocks",
   "devDependencies": {
     "@types/node": "^11.11.6",
     "gulp": "^4.0.0",

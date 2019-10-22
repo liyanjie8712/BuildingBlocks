@@ -7,7 +7,7 @@ namespace Liyanjie.ComplexTypes
     /// 操作人
     /// </summary>
     /// <typeparam name="TType"></typeparam>
-    public class Operator<TType> : _ValueObject
+    public class Operator<TType> : ValueObject
     {
         /// <summary>
         /// 类型

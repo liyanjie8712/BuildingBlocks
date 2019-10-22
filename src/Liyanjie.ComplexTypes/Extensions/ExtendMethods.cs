@@ -15,15 +15,15 @@ namespace Liyanjie.ComplexTypes
         /// <param name="value"></param>
         /// <returns></returns>
         public static T Assign<T>(this T origin, T value)
-            where T : _ValueObject
+            where T : ValueObject
         {
             var type = origin.GetType();
-            var type_ComplexType = typeof(_ValueObject);
+            var type_ComplexType = typeof(ValueObject);
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var property in properties)
             {
                 if (type_ComplexType.IsAssignableFrom(property.PropertyType))
-                    (property.GetValue(origin) as _ValueObject).Assign(property.GetValue(value) as _ValueObject);
+                    (property.GetValue(origin) as ValueObject).Assign(property.GetValue(value) as ValueObject);
                 else if (property.CanWrite)
                     property.SetValue(origin, value == null ? null : property.GetValue(value));
             }

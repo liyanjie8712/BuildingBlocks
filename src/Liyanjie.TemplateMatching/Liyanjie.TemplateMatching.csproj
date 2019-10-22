@@ -11,10 +11,6 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-        <Reference Include="System.Web" />
-    </ItemGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
         <DocumentationFile>bin\Release\net45\Liyanjie.TemplateMatching.xml</DocumentationFile>
     </PropertyGroup>
@@ -22,5 +18,9 @@
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+        <Reference Include="System.Web" />
+    </ItemGroup>
 
 </Project>

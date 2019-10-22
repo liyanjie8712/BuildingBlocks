@@ -5,7 +5,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 联系人
     /// </summary>
-    public class Contact<TType> : _ValueObject
+    public class Contact<TType> : ValueObject
     {
         /// <summary>
         /// 联系方式

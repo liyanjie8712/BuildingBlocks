@@ -5,7 +5,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Name : _ValueObject
+    public class Name : ValueObject
     {
         /// <summary>
         /// 名
