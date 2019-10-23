@@ -31,6 +31,7 @@ namespace Liyanjie.Linq.Expressions
         {
             this.parameterExpression = parameterExpression;
             variables ??= new Dictionary<string, object>();
+            
             this.variablesType = TypeFactory.CreateType(variables.ToDictionary(_ => _.Key, _ => (Type)_.Value.GetType()));
             this.variablesObject = Activator.CreateInstance(variablesType);
             foreach (var item in variables)

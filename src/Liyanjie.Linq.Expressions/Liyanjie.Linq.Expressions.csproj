@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;netstandard2.1;</TargetFrameworks>
         <Description>将字符串表达式解析为Expression</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -11,10 +11,6 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
-    </ItemGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
         <DocumentationFile>bin\Release\net45\Liyanjie.Linq.Expressions.xml</DocumentationFile>
     </PropertyGroup>
@@ -23,8 +19,24 @@
         <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.Linq.Expressions.xml</DocumentationFile>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.1\Liyanjie.Linq.Expressions.xml</DocumentationFile>
+    </PropertyGroup>
+
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+        <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+        <ProjectReference Include="..\Liyanjie.TypeBuilder\Liyanjie.TypeBuilder.csproj" />
+    </ItemGroup>
 
 </Project>

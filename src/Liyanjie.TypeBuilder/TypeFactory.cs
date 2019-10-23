@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
-using Liyanjie.TypeBuilder.Internals;
+using Liyanjie.TypeBuilder.Internal;
 
 namespace Liyanjie.TypeBuilder
 {
@@ -150,7 +150,6 @@ namespace Liyanjie.TypeBuilder
                     var equals = typeBuilder.DefineMethod("Equals", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, CallingConventions.HasThis, typeof(bool), new[] { typeof(object) });
                     equals.SetCustomAttribute(debuggerHiddenAttributeBuilder);
                     equals.DefineParameter(1, ParameterAttributes.In, "value");
-
                     var ilGeneratorEquals = equals.GetILGenerator();
                     ilGeneratorEquals.DeclareLocal(typeBuilder.AsType());
                     ilGeneratorEquals.Emit(OpCodes.Ldarg_1);

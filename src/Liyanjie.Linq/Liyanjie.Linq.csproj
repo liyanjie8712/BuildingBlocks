@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;netstandard2.1;</TargetFrameworks>
         <Description>Dynamic Linq</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -19,11 +19,23 @@
         <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.Linq.xml</DocumentationFile>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+        <DocumentationFile>bin\Release\netstandard2.1\Liyanjie.Linq.xml</DocumentationFile>
+    </PropertyGroup>
+
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
         <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
     </ItemGroup>
 

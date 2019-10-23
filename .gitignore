@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /test/ConsoleApp1
 /test/ConsoleApp
+/test
