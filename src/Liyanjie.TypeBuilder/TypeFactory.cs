@@ -109,13 +109,13 @@ namespace Liyanjie.TypeBuilder
                     for (int i = 0; i < names.Length; i++)
                     {
                         // field
-                        fields[i] = typeBuilder.DefineField($"<{names[i]}>i__Field", generics[i].AsType(), FieldAttributes.Private | FieldAttributes.InitOnly);
+                        fields[i] = typeBuilder.DefineField($"<{names[i]}>i__Field", generics[i].UnderlyingSystemType, FieldAttributes.Private | FieldAttributes.InitOnly);
                         fields[i].SetCustomAttribute(debuggerBrowsableAttributeBuilder);
 
-                        var property = typeBuilder.DefineProperty(names[i], PropertyAttributes.None, CallingConventions.HasThis, generics[i].AsType(), emptyTypes);
+                        var property = typeBuilder.DefineProperty(names[i], PropertyAttributes.None, CallingConventions.HasThis, generics[i].UnderlyingSystemType, emptyTypes);
 
                         // getter
-                        var getter = typeBuilder.DefineMethod($"get_{names[i]}", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName, CallingConventions.HasThis, generics[i].AsType(), null);
+                        var getter = typeBuilder.DefineMethod($"get_{names[i]}", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName, CallingConventions.HasThis, generics[i].UnderlyingSystemType, null);
                         getter.SetCustomAttribute(compilerGeneratedAttributeBuilder);
                         var ilGeneratorGetter = getter.GetILGenerator();
                         ilGeneratorGetter.Emit(OpCodes.Ldarg_0);
@@ -124,7 +124,7 @@ namespace Liyanjie.TypeBuilder
                         property.SetGetMethod(getter);
 
                         // setter
-                        var setter = typeBuilder.DefineMethod($"set_{names[i]}", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName, CallingConventions.HasThis, null, new[] { generics[i].AsType() });
+                        var setter = typeBuilder.DefineMethod($"set_{names[i]}", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName, CallingConventions.HasThis, null, new[] { generics[i].UnderlyingSystemType });
                         setter.SetCustomAttribute(compilerGeneratedAttributeBuilder);
 
                         // workaround for https://github.com/dotnet/corefx/issues/7792
@@ -151,9 +151,9 @@ namespace Liyanjie.TypeBuilder
                     equals.SetCustomAttribute(debuggerHiddenAttributeBuilder);
                     equals.DefineParameter(1, ParameterAttributes.In, "value");
                     var ilGeneratorEquals = equals.GetILGenerator();
-                    ilGeneratorEquals.DeclareLocal(typeBuilder.AsType());
+                    ilGeneratorEquals.DeclareLocal(typeBuilder.UnderlyingSystemType);
                     ilGeneratorEquals.Emit(OpCodes.Ldarg_1);
-                    ilGeneratorEquals.Emit(OpCodes.Isinst, typeBuilder.AsType());
+                    ilGeneratorEquals.Emit(OpCodes.Isinst, typeBuilder.UnderlyingSystemType);
                     ilGeneratorEquals.Emit(OpCodes.Stloc_0);
                     ilGeneratorEquals.Emit(OpCodes.Ldloc_0);
 
@@ -186,7 +186,7 @@ namespace Liyanjie.TypeBuilder
 
                     for (int i = 0; i < names.Length; i++)
                     {
-                        var equalityComparerT = equalityComparer.MakeGenericType(generics[i].AsType());
+                        var equalityComparerT = equalityComparer.MakeGenericType(generics[i].UnderlyingSystemType);
 
                         // Equals()
                         var equalityComparerTDefault = System.Reflection.Emit.TypeBuilder.GetMethod(equalityComparerT, equalityComparerDefault);
@@ -222,7 +222,7 @@ namespace Liyanjie.TypeBuilder
                         ilGeneratorToString.Emit(OpCodes.Ldloc_0);
                         ilGeneratorToString.Emit(OpCodes.Ldarg_0);
                         ilGeneratorToString.Emit(OpCodes.Ldfld, fields[i]);
-                        ilGeneratorToString.Emit(OpCodes.Box, generics[i].AsType());
+                        ilGeneratorToString.Emit(OpCodes.Box, generics[i].UnderlyingSystemType);
                         ilGeneratorToString.Emit(OpCodes.Callvirt, stringBuilderAppend);
                         ilGeneratorToString.Emit(OpCodes.Pop);
                     }
@@ -237,7 +237,7 @@ namespace Liyanjie.TypeBuilder
                     ilGeneratorConstructorDef.Emit(OpCodes.Ret);
 
                     // .ctor with params
-                    var constructor = typeBuilder.DefineConstructor(MethodAttributes.Public | MethodAttributes.HideBySig, CallingConventions.HasThis, generics.Select(p => p.AsType()).ToArray());
+                    var constructor = typeBuilder.DefineConstructor(MethodAttributes.Public | MethodAttributes.HideBySig, CallingConventions.HasThis, generics.Select(p => p.UnderlyingSystemType).ToArray());
                     constructor.SetCustomAttribute(debuggerHiddenAttributeBuilder);
 
                     var ilGeneratorConstructor = constructor.GetILGenerator();
@@ -307,7 +307,7 @@ namespace Liyanjie.TypeBuilder
                     ilGeneratorToString.Emit(OpCodes.Callvirt, objectToString);
                     ilGeneratorToString.Emit(OpCodes.Ret);
 
-                    type = typeBuilder.CreateTypeInfo().AsType();
+                    type = typeBuilder.CreateTypeInfo().UnderlyingSystemType;
 
                     type = generatedTypes.GetOrAdd(fullName + "|_1", type);
                 }
