@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Liyanjie.TypeBuilder.Internal
 {
-    internal static class Extensions
+    internal static class ExtendMethods
     {
         public static Type AsType(this System.Reflection.Emit.GenericTypeParameterBuilder builder)
         {
