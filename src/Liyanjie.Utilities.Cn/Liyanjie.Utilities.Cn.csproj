@@ -23,7 +23,7 @@
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
         <PackageReference Include="System.ValueTuple" Version="4.3.0" />
     </ItemGroup>
 

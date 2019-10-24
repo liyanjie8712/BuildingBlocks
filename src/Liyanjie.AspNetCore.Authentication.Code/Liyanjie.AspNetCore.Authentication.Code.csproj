@@ -13,10 +13,6 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
-    </ItemGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
         <DocumentationFile>bin\Release\netstandard2.0\Liyanjie.AspNetCore.Authentication.Code.xml</DocumentationFile>
     </PropertyGroup>
@@ -28,5 +24,9 @@
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
+    </ItemGroup>
 
 </Project>

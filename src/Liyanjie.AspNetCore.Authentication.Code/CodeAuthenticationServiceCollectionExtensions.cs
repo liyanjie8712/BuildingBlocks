@@ -1,8 +1,6 @@
 ﻿using Liyanjie.AspNetCore.Authentication.Code;
 
-using Microsoft.AspNetCore.Authentication;
-
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.AspNetCore.Authentication
 {
     /// <summary>
     /// 
