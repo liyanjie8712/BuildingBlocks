@@ -5,16 +5,16 @@ namespace Liyanjie.TypeBuilder
     /// <summary>
     /// 
     /// </summary>
-    public abstract class TypeBase
+    public abstract class DynamicBase
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public object GetProperty(string name)
+        public object GetPropertyValue(string name)
         {
-            return GetType().GetTypeInfo().GetProperty(name).GetValue(this, null);
+            return GetType().GetTypeInfo().GetProperty(name).GetValue(this);
         }
 
         /// <summary>
@@ -22,9 +22,9 @@ namespace Liyanjie.TypeBuilder
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetProperty(string name, object value)
+        public void SetPropertyValue(string name, object value)
         {
-            GetType().GetTypeInfo().GetProperty(name).SetValue(this, value, null);
+            GetType().GetTypeInfo().GetProperty(name).SetValue(this, value);
         }
     }
 }

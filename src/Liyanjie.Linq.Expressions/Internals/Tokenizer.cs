@@ -212,7 +212,7 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     Id = TokenId.String,
                                     Index = charIndex,
                                     Length = i - charIndex,
-                                    Value = char.Parse(s),
+                                    Value = s,
                                 });
                             sb.Clear();
                             charId = CharId.Empty;
@@ -1086,20 +1086,21 @@ namespace Liyanjie.Linq.Expressions.Internals
 
         static void ParseConvert(IList<Token> tokens)
         {
-            bool predicate(Token _) => false
-                || _.Id == TokenId.ParseString
-                || _.Id == TokenId.ParseChar
-                || _.Id == TokenId.ParseInt
-                || _.Id == TokenId.ParseUInt
-                || _.Id == TokenId.ParseLong
-                || _.Id == TokenId.ParseULong
-                || _.Id == TokenId.ParseDouble
-                || _.Id == TokenId.ParseFloat
-                || _.Id == TokenId.ParseDecimal
-                || _.Id == TokenId.ParseBool
-                || _.Id == TokenId.ParseGuid
-                || _.Id == TokenId.ParseDateTime
-                || _.Id == TokenId.ParseDateTimeOffset;
+            static bool predicate(Token token)
+                => false
+                || token.Id == TokenId.ParseString
+                || token.Id == TokenId.ParseChar
+                || token.Id == TokenId.ParseInt
+                || token.Id == TokenId.ParseUInt
+                || token.Id == TokenId.ParseLong
+                || token.Id == TokenId.ParseULong
+                || token.Id == TokenId.ParseDouble
+                || token.Id == TokenId.ParseFloat
+                || token.Id == TokenId.ParseDecimal
+                || token.Id == TokenId.ParseBool
+                || token.Id == TokenId.ParseGuid
+                || token.Id == TokenId.ParseDateTime
+                || token.Id == TokenId.ParseDateTimeOffset;
             while (tokens.Any(predicate))
             {
                 var token = tokens.First(predicate);

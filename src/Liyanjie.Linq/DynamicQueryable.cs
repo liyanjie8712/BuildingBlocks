@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
+
 using Liyanjie.Linq.Expressions;
 using Liyanjie.Linq.Internals;
 
@@ -73,9 +74,9 @@ namespace System.Linq
         /// <returns></returns>
         public static IEnumerable<object> AsEnumerable(this IQueryable source)
         {
-            foreach (var obj in source)
+            foreach (var item in source)
             {
-                yield return obj;
+                yield return item;
             }
         }
 
@@ -616,8 +617,6 @@ namespace System.Linq
         public static object Sum(this IQueryable source)
         {
             Check.NotNull(source, nameof(source));
-
-            var returnType = source.Expression.Type.GenericTypeArguments[0];
 
             return source.ExecuteSum();
         }

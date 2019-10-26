@@ -15,11 +15,8 @@ namespace Liyanjie.Linq.Expressions
     /// </summary>
     public class ExpressionParser
     {
-        static readonly MethodInfo enumerable_Contains = typeof(Enumerable).GetTypeInfo().GetDeclaredMethods("Contains").Single(_ => _.GetParameters().Length == 2);
-
         readonly ParameterExpression parameterExpression;
-        readonly Type variablesType;
-        readonly object variablesObject;
+        readonly DynamicBase variablesObject;
         readonly ConstantExpression variablesExpression;
 
         /// <summary>
@@ -31,12 +28,11 @@ namespace Liyanjie.Linq.Expressions
         {
             this.parameterExpression = parameterExpression;
             variables ??= new Dictionary<string, object>();
-            
-            this.variablesType = TypeFactory.CreateType(variables.ToDictionary(_ => _.Key, _ => (Type)_.Value.GetType()));
-            this.variablesObject = Activator.CreateInstance(variablesType);
+            var variablesType = TypeFactory.CreateType(variables.ToDictionary(_ => _.Key, _ => (Type)_.Value.GetType()));
+            this.variablesObject = Activator.CreateInstance(variablesType) as DynamicBase;
             foreach (var item in variables)
             {
-                variablesType.GetTypeInfo().GetProperty(item.Key)?.SetValue(variablesObject, item.Value);
+                variablesObject.SetPropertyValue(item.Key, item.Value);
             }
             this.variablesExpression = Expression.Constant(variablesObject);
         }
@@ -50,7 +46,7 @@ namespace Liyanjie.Linq.Expressions
         /// 
         /// </summary>
         public IDictionary<string, object> Variables
-            => variablesType.GetTypeInfo().GetProperties().ToDictionary(_ => _.Name, _ => _.GetValue(variablesObject));
+            => variablesObject.GetType().GetProperties().ToDictionary(_ => _.Name, _ => _.GetValue(variablesObject));
 
         /// <summary>
         /// 
@@ -629,7 +625,7 @@ namespace Liyanjie.Linq.Expressions
                 TokenId.Parameter => parameterExpression,
                 TokenId.Property => Expression.Property(parameterExpression, (string)token.Value),
                 TokenId.Variable => Expression.Property(variablesExpression, (string)token.Value),
-                TokenId.String => token.Value is string 
+                TokenId.String => token.Value is string
                     ? (Expression)Expression.Constant(token.Value)
                     : Expression.Call(Parse(token.Value as IList<Token>), "ToString", null),
                 TokenId.Char => Expression_ParseOrConvert(token, typeof(char)),
@@ -679,19 +675,26 @@ namespace Liyanjie.Linq.Expressions
             var expressions = new List<Expression>();
             foreach (var item in tokens.Split(_ => _.Id == TokenId.Comma))
             {
-                var t = item.First();
+                string name;
                 Expression expression;
                 if (item.Any(_ => _.Id == TokenId.Assign))
                 {
-                    expression = Parse(item.Where((_, i) => i > 1).ToList());
+                    name = item.First().Value as string;
+                    expression = Parse(item.Skip(2).ToList());
                 }
                 else if (item.Count() == 1)
                 {
+                    name = item.First().Value as string;
+                    expression = Parse(item.ToList());
+                }
+                else if (item.Any(_ => _.Id == TokenId.Access || _.Id == TokenId.NullableAccess))
+                {
+                    name = item.Last().Value as string;
                     expression = Parse(item.ToList());
                 }
                 else
-                    throw new ExpressionParseException("", Input, t);
-                properties.Add(t.Value as string, expression.Type);
+                    throw new ExpressionParseException("", Input, item.First());
+                properties.Add(name, expression.Type);
                 expressions.Add(expression);
             }
             var type = TypeFactory.CreateType(properties);

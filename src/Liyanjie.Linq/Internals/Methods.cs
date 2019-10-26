@@ -47,6 +47,8 @@ namespace Liyanjie.Linq.Internals
         public static MethodInfo SingleOrDefaultWithPredicate = GetMethod(nameof(Queryable.SingleOrDefault), 1);
         public static MethodInfo SkipWithCount = GetMethod(nameof(Queryable.Skip), 1);
         public static MethodInfo SkipWhileWithPredicate = GetMethod(nameof(Queryable.SkipWhile), 1, PredicateHas2Parameters);
+        //public static MethodInfo Sum = GetMethod(nameof(Queryable.Sum));
+        //public static MethodInfo SumWithSelector = GetMethod(nameof(Queryable.Sum), 1);
         public static MethodInfo TakeWithCount = GetMethod(nameof(Queryable.Take), 1);
         public static MethodInfo TakeWhileWithPredicate = GetMethod(nameof(Queryable.TakeWhile), 1, PredicateHas2Parameters);
         public static MethodInfo ThenByWithSelector = GetMethod(nameof(Queryable.ThenBy), 1);
