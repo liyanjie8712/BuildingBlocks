@@ -1,5 +1,5 @@
 ﻿using System;
-using Liyanjie.Linq.Expressions.Internals;
+using Liyanjie.Linq.Expressions.Internal;
 
 namespace Liyanjie.Linq.Expressions.Exceptions
 {

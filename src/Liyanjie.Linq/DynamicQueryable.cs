@@ -25,9 +25,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute<bool>(Methods.AllWithPredicate, lambda);
+            return source.Execute<bool>(Methods.AllWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -58,9 +58,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute<bool>(Methods.AnyWithPredicate, lambda);
+            return source.Execute<bool>(Methods.AnyWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -108,9 +108,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(selector, nameof(selector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var selectorLambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
 
-            return source.ExecuteAverage(lambda);
+            return source.ExecuteAverage(selectorLambda);
         }
 
         #endregion
@@ -141,10 +141,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            //var createParameterCtor = source.IsLinqToObjects();
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute<int>(Methods.CountWithPredicate, lambda);
+            return source.Execute<int>(Methods.CountWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -227,9 +226,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute(Methods.FirstWithPredicate, lambda);
+            return source.Execute(Methods.FirstWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -260,9 +259,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute(Methods.FirstOrDefaultWithPredicate, lambda);
+            return source.Execute(Methods.FirstOrDefaultWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -281,9 +280,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(keySelector, nameof(keySelector));
 
-            var keyLambda = ExpressionParser.ParseLambda(source.ElementType, keySelector, variables);
+            var keySelectorLambda = ExpressionParser.ParseLambda(source.ElementType, keySelector, variables);
 
-            return source.CreateQuery(Methods.GroupByWithKeySelector, keyLambda);
+            return source.CreateQuery(Methods.GroupByWithKeySelector, keySelectorLambda);
         }
 
         #endregion
@@ -314,9 +313,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute(Methods.LastWithPredicate, lambda);
+            return source.Execute(Methods.LastWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -347,9 +346,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute(Methods.LastOrDefaultWithPredicate, lambda);
+            return source.Execute(Methods.LastOrDefaultWithPredicate, predicateLambda);
         }
 
         #endregion LastOrDefault
@@ -365,7 +364,7 @@ namespace System.Linq
         {
             Check.NotNull(source, nameof(source));
 
-            return source.Execute(Methods.Max, source.ElementType);
+            return source.ExecuteMaxMin(Methods.Max);
         }
 
         /// <summary>
@@ -380,9 +379,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(selector, nameof(selector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var selectorLambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
 
-            return source.Execute(Methods.MaxWithSelector, lambda.ReturnType, lambda);
+            return source.ExecuteMaxMin(Methods.MaxWithSelector, selectorLambda);
         }
 
         #endregion
@@ -398,7 +397,7 @@ namespace System.Linq
         {
             Check.NotNull(source, nameof(source));
 
-            return source.Execute(Methods.Min, source.ElementType);
+            return source.ExecuteMaxMin(Methods.Min);
         }
 
         /// <summary>
@@ -413,9 +412,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(selector, nameof(selector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var selectorLambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
 
-            return source.Execute(Methods.MinWithSelector, lambda.ReturnType, lambda);
+            return source.ExecuteMaxMin(Methods.MinWithSelector, selectorLambda);
         }
 
         #endregion
@@ -426,17 +425,17 @@ namespace System.Linq
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="selector"></param>
+        /// <param name="keySelector"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        public static IOrderedQueryable OrderBy(this IQueryable source, string selector, IDictionary<string, dynamic> variables = null)
+        public static IOrderedQueryable OrderBy(this IQueryable source, string keySelector, IDictionary<string, dynamic> variables = null)
         {
             Check.NotNull(source, nameof(source));
-            Check.NotEmpty(selector, nameof(selector));
+            Check.NotEmpty(keySelector, nameof(keySelector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var keySelectorLambda = ExpressionParser.ParseLambda(source.ElementType, keySelector, variables);
 
-            return (IOrderedQueryable)source.CreateQuery(Methods.OrderByWithSelector, lambda);
+            return (IOrderedQueryable)source.CreateQuery(Methods.OrderByWithSelector, keySelectorLambda);
         }
 
         #endregion
@@ -447,17 +446,17 @@ namespace System.Linq
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="selector"></param>
+        /// <param name="keySelector"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        public static IOrderedQueryable OrderByDescending(this IQueryable source, string selector, IDictionary<string, dynamic> variables = null)
+        public static IOrderedQueryable OrderByDescending(this IQueryable source, string keySelector, IDictionary<string, dynamic> variables = null)
         {
             Check.NotNull(source, nameof(source));
-            Check.NotEmpty(selector, nameof(selector));
+            Check.NotEmpty(keySelector, nameof(keySelector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var keySelectorLambda = ExpressionParser.ParseLambda(source.ElementType, keySelector, variables);
 
-            return (IOrderedQueryable)source.CreateQuery(Methods.OrderByDescendingWithSelector, lambda);
+            return (IOrderedQueryable)source.CreateQuery(Methods.OrderByDescendingWithSelector, keySelectorLambda);
         }
 
         #endregion
@@ -492,9 +491,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(selector, nameof(selector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var selectorLambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
 
-            return source.CreateQuery(Methods.SelectWithSelector, lambda);
+            return source.CreateQuery(Methods.SelectWithSelector, selectorLambda);
         }
 
         #endregion
@@ -525,9 +524,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute(Methods.SingleWithPredicate, lambda);
+            return source.Execute(Methods.SingleWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -558,9 +557,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.Execute(Methods.SingleOrDefaultWithPredicate, lambda);
+            return source.Execute(Methods.SingleOrDefaultWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -600,9 +599,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotNull(predicate, nameof(predicate));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.CreateQuery(Methods.SkipWhileWithPredicate, lambda);
+            return source.CreateQuery(Methods.SkipWhileWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -633,9 +632,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(selector, nameof(selector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var selectorLambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
 
-            return source.ExecuteSum(lambda);
+            return source.ExecuteSum(selectorLambda);
         }
 
         #endregion
@@ -672,9 +671,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotNull(predicate, nameof(predicate));
 
-            var expression = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.CreateQuery(Methods.TakeWhileWithPredicate, expression);
+            return source.CreateQuery(Methods.TakeWhileWithPredicate, predicateLambda);
         }
 
         #endregion
@@ -685,17 +684,17 @@ namespace System.Linq
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="selector"></param>
+        /// <param name="keySelector"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        public static IOrderedQueryable ThenBy(this IOrderedQueryable source, string selector, IDictionary<string, dynamic> variables = null)
+        public static IOrderedQueryable ThenBy(this IOrderedQueryable source, string keySelector, IDictionary<string, dynamic> variables = null)
         {
             Check.NotNull(source, nameof(source));
-            Check.NotEmpty(selector, nameof(selector));
+            Check.NotEmpty(keySelector, nameof(keySelector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var keySelectorLambda = ExpressionParser.ParseLambda(source.ElementType, keySelector, variables);
 
-            return (IOrderedQueryable)source.CreateQuery(Methods.ThenByWithSelector, lambda);
+            return (IOrderedQueryable)source.CreateQuery(Methods.ThenByWithSelector, keySelectorLambda);
         }
 
         #endregion
@@ -714,9 +713,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotEmpty(selector, nameof(selector));
 
-            var lambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
+            var keySelectorLambda = ExpressionParser.ParseLambda(source.ElementType, selector, variables);
 
-            return (IOrderedQueryable)source.CreateQuery(Methods.ThenByDescendingWithSelector, lambda);
+            return (IOrderedQueryable)source.CreateQuery(Methods.ThenByDescendingWithSelector, keySelectorLambda);
         }
 
         #endregion
@@ -735,9 +734,9 @@ namespace System.Linq
             Check.NotNull(source, nameof(source));
             Check.NotNull(predicate, nameof(predicate));
 
-            var expression = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
+            var predicateLambda = ExpressionParser.ParseLambda(source.ElementType, predicate, variables);
 
-            return source.CreateQuery(Methods.WhereWithPredicate, expression);
+            return source.CreateQuery(Methods.WhereWithPredicate, predicateLambda);
         }
 
         #endregion

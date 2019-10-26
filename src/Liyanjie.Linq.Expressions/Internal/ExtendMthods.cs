@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace Liyanjie.Linq.Expressions.Internals
+namespace Liyanjie.Linq.Expressions.Internal
 {
     /// <summary>
     /// 
     /// </summary>
-    internal static class Extensions
+    internal static class ExtendMthods
     {
         /// <summary>
         /// 
@@ -103,7 +103,7 @@ namespace Liyanjie.Linq.Expressions.Internals
             var type = @enum.GetType();
             var name = Enum.GetName(type, @enum);
 
-            return type.GetField(name)?.GetCustomAttribute<DescriptionAttribute>(false).Description;
+            return type.GetField(name)?.GetCustomAttribute<DescriptionAttribute>(false)?.Description ?? name;
         }
 
         public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, Func<T, bool> separatorSelector)

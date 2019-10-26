@@ -61,6 +61,25 @@ namespace Liyanjie.Linq.Internals
         }
 
         /// <summary>
+        /// 用于：All、Any、Count
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="method"></param>
+        /// <param name="lambda"></param>
+        /// <returns></returns>
+        public static TResult Execute<TResult>(this IQueryable source, MethodInfo method, LambdaExpression lambda = null)
+        {
+            if (method.IsGenericMethod)
+                method = method.MakeGenericMethod(source.ElementType);
+
+            var expression = lambda == null
+                ? Expression.Call(method, source.Expression)
+                : Expression.Call(method, source.Expression, lambda);
+            return source.Provider.Execute<TResult>(expression);
+        }
+
+        /// <summary>
         /// 用于：ElementAt、ElementAtOrDefault
         /// </summary>
         /// <param name="source"></param>
@@ -81,13 +100,12 @@ namespace Liyanjie.Linq.Internals
         /// </summary>
         /// <param name="source"></param>
         /// <param name="method"></param>
-        /// <param name="returnType"></param>
         /// <param name="lambda"></param>
         /// <returns></returns>
-        public static object Execute(this IQueryable source, MethodInfo method, Type returnType, LambdaExpression lambda = null)
+        public static object ExecuteMaxMin(this IQueryable source, MethodInfo method, LambdaExpression lambda = null)
         {
             method = method.GetGenericArguments().Length == 2
-                ? method.MakeGenericMethod(source.ElementType, returnType)
+                ? method.MakeGenericMethod(source.ElementType, lambda.ReturnType)
                 : method.MakeGenericMethod(source.ElementType);
 
             var expression = lambda == null
@@ -111,28 +129,6 @@ namespace Liyanjie.Linq.Internals
                 : Expression.Call(typeof(Queryable), method, new[] { source.ElementType }, source.Expression, lambda);
             
             return source.Provider.Execute(expression);
-
-            //var elementType = lambda == null
-            //    ? source.ElementType
-            //    : lambda.ReturnType;
-
-            //var type = elementType.GetNonNullableType();
-            //var isNullableType = elementType.IsNullableType();
-
-            //if (type == typeof(decimal))
-            //    return isNullableType
-            //        ? source.Provider.Execute<decimal?>(expression)
-            //        : source.Provider.Execute<decimal>(expression);
-            //if (type == typeof(float))
-            //    return isNullableType
-            //        ? source.Provider.Execute<float?>(expression)
-            //        : source.Provider.Execute<float>(expression);
-            //if (type == typeof(double) || type == typeof(long) || type == typeof(int))
-            //    return isNullableType
-            //        ? source.Provider.Execute<double?>(expression)
-            //        : source.Provider.Execute<double>(expression);
-
-            //throw new Exception("Call Linq Average Error.");
         }
 
         public static object ExecuteSum(this IQueryable source, LambdaExpression lambda = null)
@@ -144,55 +140,6 @@ namespace Liyanjie.Linq.Internals
                 : Expression.Call(typeof(Queryable), method, new[] { source.ElementType }, source.Expression, lambda);
 
             return source.Provider.Execute(expression);
-
-            //var elementType = lambda == null
-            //    ? source.ElementType
-            //    : lambda.ReturnType;
-
-            //var type = elementType.GetNonNullableType();
-            //var isNullableType = elementType.IsNullableType();
-
-            //if (type == typeof(decimal))
-            //    return isNullableType
-            //        ? source.Provider.Execute<decimal?>(expression)
-            //        : source.Provider.Execute<decimal>(expression);
-            //if (type == typeof(float))
-            //    return isNullableType
-            //        ? source.Provider.Execute<float?>(expression)
-            //        : source.Provider.Execute<float>(expression);
-            //if (type == typeof(double))
-            //    return isNullableType
-            //        ? source.Provider.Execute<double?>(expression)
-            //        : source.Provider.Execute<double>(expression);
-            //if (type == typeof(long))
-            //    return isNullableType
-            //        ? source.Provider.Execute<long?>(expression)
-            //        : source.Provider.Execute<long>(expression);
-            //if (type == typeof(int))
-            //    return isNullableType
-            //        ? source.Provider.Execute<int?>(expression)
-            //        : source.Provider.Execute<int>(expression);
-
-            throw new Exception("Call Linq Sum Error.");
-        }
-
-        /// <summary>
-        /// 用于：All、Any、Count
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="method"></param>
-        /// <param name="lambda"></param>
-        /// <returns></returns>
-        public static TResult Execute<TResult>(this IQueryable source, MethodInfo method, LambdaExpression lambda = null)
-        {
-            if (method.IsGenericMethod)
-                method = method.MakeGenericMethod(source.ElementType);
-
-            var expression = lambda == null
-                ? Expression.Call(method, source.Expression)
-                : Expression.Call(method, source.Expression, lambda);
-            return source.Provider.Execute<TResult>(expression);
         }
 
         #endregion

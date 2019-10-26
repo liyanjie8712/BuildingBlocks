@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Liyanjie.Linq.Expressions.Internals
+namespace Liyanjie.Linq.Expressions.Internal
 {
     /// <summary>
     /// 
@@ -298,7 +298,7 @@ namespace Liyanjie.Linq.Expressions.Internals
         /// -
         /// </summary>
         [Description("-")]
-        Subtract,
+        Minus,
 
         /// <summary>
         /// &lt;&lt;

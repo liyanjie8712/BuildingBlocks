@@ -5,7 +5,7 @@ using System.Text;
 
 using Liyanjie.Linq.Expressions.Exceptions;
 
-namespace Liyanjie.Linq.Expressions.Internals
+namespace Liyanjie.Linq.Expressions.Internal
 {
     /// <summary>
     /// 
@@ -27,76 +27,76 @@ namespace Liyanjie.Linq.Expressions.Internals
                 })
                 .ToList();
             var tokens = new List<Token>();
-            var charId = CharId.Empty;
-            var charIndex = 0;
+            var lastCharId = CharId.Empty;
+            var currCharIndex = 0;
             var sb = new StringBuilder();
             for (int i = 0; i < chars.Count; i++)
             {
-                var @char = chars[i];
-                switch (charId)
+                var currChar = chars[i];
+                switch (lastCharId)
                 {
                     case CharId.Unknow:
-                        goto Exception;
+                        goto ThrowException;
                     case CharId.Empty:
-                        charId = @char.Id;
-                        charIndex = i;
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         sb.Clear();
-                        sb.Append(@char.Value);
+                        sb.Append(currChar.Value);
                         break;
                     case CharId.Exclam:
                         #region !
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.NotEqual,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
+                            lastCharId = CharId.Empty;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Not,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.DoubleQuote:
                         #region "
-                        if (@char.Id == CharId.DoubleQuote)
+                        if (currChar.Id == CharId.DoubleQuote)
                         {
                             var s = sb.ToString().Trim('"');
                             tokens.Add(new Token
                             {
                                 Id = TokenId.String,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                                 Value = s,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
-                            sb.Append(@char.Value);
+                            sb.Append(currChar.Value);
                         #endregion
                         break;
                     case CharId.Sharp:
-                        goto Exception;
+                        goto ThrowException;
                     case CharId.Dollar:
                         #region $
-                        if (@char.Id == CharId.Underline || @char.Id == CharId.Letter || @char.Id == CharId.Digit)
-                            sb.Append(@char.Value);
+                        if (currChar.Id == CharId.Underline || currChar.Id == CharId.Letter || currChar.Id == CharId.Digit)
+                            sb.Append(currChar.Value);
                         else
                         {
                             var s = sb.ToString();
@@ -104,122 +104,122 @@ namespace Liyanjie.Linq.Expressions.Internals
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.Parameter,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                     Value = s,
                                 });
                             else
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.Variable,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                     Value = s,
                                 });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.Modulo:
                         #region %
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.ModuloAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Modulo,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.And:
                         #region &
-                        if (@char.Id == CharId.And)
+                        if (currChar.Id == CharId.And)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.AndAlso,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
-                        else if (@char.Id == CharId.Equal)
+                        else if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.AndAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.And,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.SingleQuote:
                         #region '
-                        if (@char.Id == CharId.SingleQuote)
+                        if (currChar.Id == CharId.SingleQuote)
                         {
                             var s = sb.ToString().Trim('\'');
                             if (s.Length == 1)
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.Char,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                     Value = char.Parse(s),
                                 });
                             else
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.String,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                     Value = s,
                                 });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
-                            sb.Append(@char.Value);
+                            sb.Append(currChar.Value);
                         #endregion
                         break;
                     case CharId.LeftParenthesis:
@@ -227,13 +227,13 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.LeftParenthesis,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.RightParenthesis:
@@ -241,82 +241,82 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.RightParenthesis,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Asterisk:
                         #region *
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.MultiplyAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Multiply,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.Plus:
                         #region +
-                        if (@char.Id == CharId.Plus)
+                        if (currChar.Id == CharId.Plus)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.IncrementAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
-                        else if (@char.Id == CharId.Equal)
+                        else if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.AddAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Add,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
@@ -325,53 +325,53 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.Comma,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Minus:
                         #region -
-                        if (@char.Id == CharId.Minus)
+                        if (currChar.Id == CharId.Minus)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.DecrementAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
-                        else if (@char.Id == CharId.Equal)
+                        else if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.SubtractAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
-                                Id = TokenId.Subtract,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Id = TokenId.Minus,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
@@ -380,48 +380,48 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.Access,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Slash:
                         #region /
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.DivideAssign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Divide,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.Digit:
                         #region [0-9]
-                        if (@char.Id == CharId.Digit || @char.Id == CharId.Letter || (@char.Id == CharId.Dot && sb.ToString().IndexOf('.') < 0))
-                            sb.Append(@char.Value);
+                        if (currChar.Id == CharId.Digit || currChar.Id == CharId.Letter || (currChar.Id == CharId.Dot && sb.ToString().IndexOf('.') < 0))
+                            sb.Append(currChar.Value);
                         else
                         {
                             var s = sb.ToString();
@@ -431,12 +431,12 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Decimal,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @uint,
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(decimal).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(decimal).Name, input, currCharIndex);
                             }
                             else if (s.EndsWith("D", StringComparison.OrdinalIgnoreCase))
                             {
@@ -444,12 +444,12 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Double,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @uint,
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(double).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(double).Name, input, currCharIndex);
                             }
                             else if (s.EndsWith("F", StringComparison.OrdinalIgnoreCase))
                             {
@@ -457,12 +457,12 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Float,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @uint,
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(float).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(float).Name, input, currCharIndex);
                             }
                             else if (s.EndsWith("UL", StringComparison.OrdinalIgnoreCase))
                             {
@@ -470,12 +470,12 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.ULong,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @uint,
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(ulong).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(ulong).Name, input, currCharIndex);
                             }
                             else if (s.EndsWith("L", StringComparison.OrdinalIgnoreCase))
                             {
@@ -483,12 +483,12 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Long,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @uint,
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(long).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(long).Name, input, currCharIndex);
                             }
                             else if (s.EndsWith("U", StringComparison.OrdinalIgnoreCase))
                             {
@@ -496,20 +496,20 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.UInt,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @uint,
                                     });
                                 else if (ulong.TryParse(s.Substring(0, s.Length - 1), out ulong @ulong))
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.ULong,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @ulong,
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(ulong).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(ulong).Name, input, currCharIndex);
                             }
                             else if (s.IndexOf('.') > 0)
                             {
@@ -517,12 +517,12 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Double,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = double.Parse(s),
                                     });
                                 else
-                                    ThrowConvertException(s, typeof(double).Name, input, charIndex);
+                                    ThrowConvertException(s, typeof(double).Name, input, currCharIndex);
                             }
                             else
                             {
@@ -530,25 +530,25 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Int,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @int,
                                     });
                                 else if (long.TryParse(s, out long @long))
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Long,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = @long,
                                     });
                                 else
-                                    ThrowConvertException(s, "Int", input, charIndex);
+                                    ThrowConvertException(s, "Int", input, currCharIndex);
                             }
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
@@ -557,178 +557,178 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.Option,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Semicolon:
-                        goto Exception;
+                        goto ThrowException;
                     case CharId.LessThan:
                         #region <
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             if (sb.Length == 2)
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.LeftShiftAssign,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             else
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.LessThanOrEqual,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
-                        else if (@char.Id == CharId.LessThan)
-                            sb.Append(@char.Value);
+                        else if (currChar.Id == CharId.LessThan)
+                            sb.Append(currChar.Value);
                         else
                         {
                             if (sb.Length == 2)
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.LeftShift,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             else
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.LessThan,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.Equal:
                         #region =
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Equal,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Assign,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.GreaterThan:
                         #region >
-                        if (@char.Id == CharId.Equal)
+                        if (currChar.Id == CharId.Equal)
                         {
                             if (sb.Length == 2)
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.RightShiftAssign,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             else
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.GreaterThanOrEqual,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
-                        else if (@char.Id == CharId.GreaterThan)
-                            sb.Append(@char.Value);
+                        else if (currChar.Id == CharId.GreaterThan)
+                            sb.Append(currChar.Value);
                         else
                         {
                             if (sb.Length == 2)
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.RightShift,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             else
                                 tokens.Add(new Token
                                 {
                                     Id = TokenId.GreaterThan,
-                                    Index = charIndex,
-                                    Length = i - charIndex,
+                                    Index = currCharIndex,
+                                    Length = i - currCharIndex,
                                 });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.Question:
                         #region ?
-                        if (@char.Id == CharId.Dot)
+                        if (currChar.Id == CharId.Dot)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.NullableAccess,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
-                        else if (@char.Id == CharId.Question)
+                        else if (currChar.Id == CharId.Question)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Coalesce,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Predicate,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
@@ -736,28 +736,30 @@ namespace Liyanjie.Linq.Expressions.Internals
                         break;
                     case CharId.Letter:
                         #region [a-zA-Z_]
-                        if (@char.Id == CharId.Underline || @char.Id == CharId.Letter || @char.Id == CharId.Digit)
-                            sb.Append(@char.Value);
+                        if (currChar.Id == CharId.Underline || currChar.Id == CharId.Letter || currChar.Id == CharId.Digit)
+                            sb.Append(currChar.Value);
                         else
                         {
-                            if ((@char.Id == CharId.LeftBrace || @char.Id == CharId.LeftBracket) && sb.ToString().Equals("new", StringComparison.OrdinalIgnoreCase))
+                            //new{} 或 new[]
+                            if ((currChar.Id == CharId.LeftBrace || currChar.Id == CharId.LeftBracket) && sb.ToString().Equals("new", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (@char.Id == CharId.LeftBrace)
+                                if (currChar.Id == CharId.LeftBrace)//new{}
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.NewObject,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                     });
-                                else if (@char.Id == CharId.LeftBracket)
+                                else if (currChar.Id == CharId.LeftBracket)//new{}
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.NewArray,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                     });
                             }
-                            else if (@char.Id == CharId.LeftParenthesis)
+                            //string|char|int|uint|long|ulong|double|float|decimal|bool|guid|datetime|datetimeoffset()
+                            else if (currChar.Id == CharId.LeftParenthesis)
                             {
                                 var s = sb.ToString().ToUpper();
                                 switch (s)
@@ -766,112 +768,112 @@ namespace Liyanjie.Linq.Expressions.Internals
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseString,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "CHAR":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseChar,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "INT":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseInt,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "UINT":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseUInt,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "LONG":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseLong,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "ULONG":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseULong,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "DOUBLE":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseDouble,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "FLOAT":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseFloat,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "DECIMAL":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseDecimal,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "BOOL":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseBool,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "GUID":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseGuid,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "DATETIME":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseDateTime,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     case "DATETIMEOFFSET":
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.ParseDateTimeOffset,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                         });
                                         break;
                                     default:
                                         tokens.Add(new Token
                                         {
                                             Id = TokenId.MethodCall,
-                                            Index = charIndex,
-                                            Length = i - charIndex,
+                                            Index = currCharIndex,
+                                            Length = i - currCharIndex,
                                             Value = s,
                                         });
                                         break;
@@ -884,47 +886,47 @@ namespace Liyanjie.Linq.Expressions.Internals
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Bool,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = bool.Parse(s),
                                     });
                                 else if ("in".Equals(s))
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.In,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                     });
                                 else
                                     tokens.Add(new Token
                                     {
                                         Id = TokenId.Property,
-                                        Index = charIndex,
-                                        Length = i - charIndex,
+                                        Index = currCharIndex,
+                                        Length = i - currCharIndex,
                                         Value = s,
                                     });
                             }
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.LeftBracket:
                         #region [
-                        if (@char.Id == CharId.LeftBracket)
-                            goto Exception;
+                        if (currChar.Id == CharId.LeftBracket)
+                            goto ThrowException;
                         tokens.Add(new Token
                         {
                             Id = TokenId.LeftBracket,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Backslash:
@@ -934,13 +936,13 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.RightBracket,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Caret:
@@ -948,82 +950,82 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.ExclusiveOr,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Underline:
                         #region _
-                        if (@char.Id == CharId.Underline || @char.Id == CharId.Letter || @char.Id == CharId.Digit)
+                        if (currChar.Id == CharId.Underline || currChar.Id == CharId.Letter || currChar.Id == CharId.Digit)
                         {
-                            sb.Append(@char.Value);
-                            charId = CharId.Letter;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = CharId.Letter;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Property,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
                     case CharId.Backquote:
-                        goto Exception;
+                        goto ThrowException;
                     case CharId.LeftBrace:
                         #region {
-                        if (@char.Id == CharId.LeftBrace)
-                            goto Exception;
+                        if (currChar.Id == CharId.LeftBrace)
+                            goto ThrowException;
                         tokens.Add(new Token
                         {
                             Id = TokenId.LeftBrace,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Bar:
                         #region |
-                        if (@char.Id == CharId.Bar)
+                        if (currChar.Id == CharId.Bar)
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.OrElse,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            charId = CharId.Empty;
-                            charIndex = i;
+                            lastCharId = CharId.Empty;
+                            currCharIndex = i;
                         }
                         else
                         {
                             tokens.Add(new Token
                             {
                                 Id = TokenId.Or,
-                                Index = charIndex,
-                                Length = i - charIndex,
+                                Index = currCharIndex,
+                                Length = i - currCharIndex,
                             });
                             sb.Clear();
-                            sb.Append(@char.Value);
-                            charId = @char.Id;
-                            charIndex = i;
+                            sb.Append(currChar.Value);
+                            lastCharId = currChar.Id;
+                            currCharIndex = i;
                         }
                         #endregion
                         break;
@@ -1032,13 +1034,13 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.RightBrace,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     case CharId.Tilde:
@@ -1046,24 +1048,24 @@ namespace Liyanjie.Linq.Expressions.Internals
                         tokens.Add(new Token
                         {
                             Id = TokenId.BitComplement,
-                            Index = charIndex,
-                            Length = i - charIndex,
+                            Index = currCharIndex,
+                            Length = i - currCharIndex,
                         });
                         sb.Clear();
-                        sb.Append(@char.Value);
-                        charId = @char.Id;
-                        charIndex = i;
+                        sb.Append(currChar.Value);
+                        lastCharId = currChar.Id;
+                        currCharIndex = i;
                         #endregion
                         break;
                     default:
-                        goto Exception;
+                        goto ThrowException;
                 }
 
                 continue;
 
-                Exception:
-                var segment_Before = charIndex + sb.Length - 7 >= 0 ? input.Substring(charIndex + sb.Length - 7, 7) : input.Substring(0, charIndex + sb.Length);
-                throw new TokenParseException($"无法识别的“{@char.Value}”，在索引位置“{charIndex + sb.Length}”：…{segment_Before}`{@char.Value}`");
+            ThrowException:
+                var segment_Before = currCharIndex + sb.Length - 7 >= 0 ? input.Substring(currCharIndex + sb.Length - 7, 7) : input.Substring(0, currCharIndex + sb.Length);
+                throw new TokenParseException($"无法识别的“{currChar.Value}”，在索引位置“{currCharIndex + sb.Length}”：…{segment_Before}`{currChar.Value}`");
             }
 
             //if (tokens.Any(_ => _.Id == TokenId.Assign || _.Id == TokenId.DivideAssign || _.Id == TokenId.MultiplyAssign || _.Id == TokenId.ModuloAssign || _.Id == TokenId.AddAssign || _.Id == TokenId.SubtractAssign || _.Id == TokenId.LeftShiftAssign || _.Id == TokenId.RightShiftAssign || _.Id == TokenId.AndAssign || _.Id == TokenId.ExclusiveOrAssign || _.Id == TokenId.OrAssign))
@@ -1119,7 +1121,7 @@ namespace Liyanjie.Linq.Expressions.Internals
                             index_RightParenthesis = i;
                     }
                 }
-                var _tokens = tokens.Where((_, i) => i > index_LeftParenthesis && i < index_RightParenthesis).ToList();
+                var _tokens = tokens.Skip(index_LeftParenthesis).Take(index_RightParenthesis - index_LeftParenthesis - 1).ToList();
                 for (int i = index_LeftParenthesis; i <= index_RightParenthesis; i++)
                 {
                     tokens.RemoveAt(index_LeftParenthesis);
@@ -1161,7 +1163,7 @@ namespace Liyanjie.Linq.Expressions.Internals
                             index_RightBra = i;
                     }
                 }
-                var _tokens = tokens.Where((_, i) => i > index_LeftBra && i < index_RightBra).ToList();
+                var _tokens = tokens.Skip(index_LeftBra).Take(index_RightBra - index_LeftBra - 1).ToList();
                 for (int i = index_LeftBra; i <= index_RightBra; i++)
                 {
                     tokens.RemoveAt(index_LeftBra);

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 using Liyanjie.Linq.Expressions.Exceptions;
-using Liyanjie.Linq.Expressions.Internals;
+using Liyanjie.Linq.Expressions.Internal;
 using Liyanjie.TypeBuilder;
 
 namespace Liyanjie.Linq.Expressions
@@ -244,32 +244,32 @@ namespace Liyanjie.Linq.Expressions
 
                 if (token.Id == TokenId.Divide)
                 {
-                    Convert(TokenId.Divide, ref valueLeft, ref valueRight);
+                    MakeTypeConsistent(TokenId.Divide, ref valueLeft, ref valueRight);
                     token.Value = Expression.Divide(valueLeft, valueRight);
                 }
                 if (token.Id == TokenId.Multiply)
                 {
-                    Convert(TokenId.Multiply, ref valueLeft, ref valueRight);
+                    MakeTypeConsistent(TokenId.Multiply, ref valueLeft, ref valueRight);
                     token.Value = Expression.Multiply(valueLeft, valueRight);
                 }
                 if (token.Id == TokenId.Modulo)
                 {
-                    Convert(TokenId.Modulo, ref valueLeft, ref valueRight);
+                    MakeTypeConsistent(TokenId.Modulo, ref valueLeft, ref valueRight);
                     token.Value = Expression.Modulo(valueLeft, valueRight);
                 }
                 token.Id = TokenId.Expression;
             }
             #endregion
             #region +, -
-            while (tokens.Any(_ => _.Id == TokenId.Add || _.Id == TokenId.Subtract))
+            while (tokens.Any(_ => _.Id == TokenId.Add || _.Id == TokenId.Minus))
             {
-                var token = tokens.First(_ => _.Id == TokenId.Add || _.Id == TokenId.Subtract);
+                var token = tokens.First(_ => _.Id == TokenId.Add || _.Id == TokenId.Minus);
 
                 var valueLeft = (Expression)Expression.Constant(0);
                 if (tokens.IndexOf(token) > 0)
                     valueLeft = Expression_TokenLeft(token, tokens);
                 var valueRight = Expression_TokenRight(token, tokens);
-                Convert(token.Id, ref valueLeft, ref valueRight);
+                MakeTypeConsistent(token.Id, ref valueLeft, ref valueRight);
 
                 if (token.Id == TokenId.Add)
                 {
@@ -278,7 +278,7 @@ namespace Liyanjie.Linq.Expressions
                     else
                         token.Value = Expression.Add(valueLeft, valueRight);
                 }
-                if (token.Id == TokenId.Subtract)
+                if (token.Id == TokenId.Minus)
                     token.Value = Expression.Subtract(valueLeft, valueRight);
                 token.Id = TokenId.Expression;
             }
@@ -303,7 +303,7 @@ namespace Liyanjie.Linq.Expressions
                 var token = tokens.First(_ => _.Id == TokenId.GreaterThan || _.Id == TokenId.GreaterThanOrEqual || _.Id == TokenId.LessThan || _.Id == TokenId.LessThanOrEqual);
                 var valueLeft = Expression_TokenLeft(token, tokens);
                 var valueRight = Expression_TokenRight(token, tokens);
-                Convert(token.Id, ref valueLeft, ref valueRight);
+                MakeTypeConsistent(token.Id, ref valueLeft, ref valueRight);
 
                 if (token.Id == TokenId.GreaterThan)
                     token.Value = Expression.GreaterThan(valueLeft, valueRight);
@@ -322,7 +322,7 @@ namespace Liyanjie.Linq.Expressions
                 var token = tokens.First(_ => _.Id == TokenId.Equal || _.Id == TokenId.NotEqual);
                 var valueLeft = Expression_TokenLeft(token, tokens);
                 var valueRight = Expression_TokenRight(token, tokens);
-                Convert(token.Id, ref valueLeft, ref valueRight);
+                MakeTypeConsistent(token.Id, ref valueLeft, ref valueRight);
 
                 if (token.Id == TokenId.Equal)
                     token.Value = Expression.Equal(valueLeft, valueRight);
@@ -446,7 +446,7 @@ namespace Liyanjie.Linq.Expressions
                     throw new ExpressionParseException("赋值运算符左侧必须是变量", Input, token);
                 var token_Left = Expression_TokenLeft(token, tokens);
                 var token_Right = Expression_TokenRight(token, tokens);
-                Convert(token.Id, ref token_Left, ref token_Right);
+                MakeTypeConsistent(token.Id, ref token_Left, ref token_Right);
                 switch (token.Id)
                 {
                     case TokenId.Assign:
@@ -548,33 +548,39 @@ namespace Liyanjie.Linq.Expressions
 
         Expression Expression_TokenRight(Token token, IList<Token> tokens)
         {
+            #region 取到右侧token
             var token_Right = tokens.IndexOf(token) + 1 < tokens.Count ? tokens[tokens.IndexOf(token) + 1] : null;
             if (token_Right == null)
                 return null;
             tokens.RemoveAt(tokens.IndexOf(token) + 1);
 
             var minus = false;
-            if (token_Right.Id == TokenId.Add || token_Right.Id == TokenId.Subtract)
+            if (token_Right.Id == TokenId.Add || token_Right.Id == TokenId.Minus)
             {
-                minus = token_Right.Id == TokenId.Subtract;
-                token_Right = token_Right = tokens.IndexOf(token) + 1 < tokens.Count ? tokens[tokens.IndexOf(token) + 1] : null;
+                minus = token_Right.Id == TokenId.Minus;
+                token_Right = tokens.IndexOf(token) + 1 < tokens.Count ? tokens[tokens.IndexOf(token) + 1] : null;
                 if (token_Right == null)
                     return null;
                 tokens.RemoveAt(tokens.IndexOf(token) + 1);
             }
+            #endregion
 
             var expression = GetExpression(token_Right);
 
             Token token_RightRight;
-            bool token_RightRightIsAccess;
+            bool token_RightRight_IsAccess;
             do
             {
                 token_RightRight = tokens.IndexOf(token) + 1 < tokens.Count ? tokens[tokens.IndexOf(token) + 1] : null;
                 if (token_RightRight == null)
                     break;
 
-                token_RightRightIsAccess = token_RightRight.Id == TokenId.Access || token_RightRight.Id == TokenId.NullableAccess || token_RightRight.Id == TokenId.In;
-                if (token_RightRightIsAccess)
+                token_RightRight_IsAccess = false
+                    || token_RightRight.Id == TokenId.Access
+                    || token_RightRight.Id == TokenId.NullableAccess
+                    || token_RightRight.Id == TokenId.In;
+                //如果右侧token的右侧是 in 或访问符，继续处理更右侧token
+                if (token_RightRight_IsAccess)
                 {
                     if (token_RightRight.Id == TokenId.In)
                     {
@@ -611,7 +617,7 @@ namespace Liyanjie.Linq.Expressions
                             throw new ExpressionParseException($"访问符“{token_RightRight.Id.Description()}”右侧必须是属性或方法。", Input, token_RightRight);
                     }
                 }
-            } while (token_RightRightIsAccess);
+            } while (token_RightRight_IsAccess);
 
             if (minus)
                 expression = Expression.Negate(expression);
@@ -706,17 +712,17 @@ namespace Liyanjie.Linq.Expressions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="operator"></param>
+        /// <param name="tokenId"></param>
         /// <param name="left"></param>
         /// <param name="right"></param>
-        static void Convert(TokenId @operator, ref Expression left, ref Expression right)
+        static void MakeTypeConsistent(TokenId tokenId, ref Expression left, ref Expression right)
         {
             var type_Left = left.Type;
             var type_Right = right.Type;
             if (type_Left == type_Right)
                 return;
             #region string
-            if (@operator == TokenId.Add)
+            if (tokenId == TokenId.Add)
             {
                 if (type_Left == typeof(string))
                 {
@@ -1039,7 +1045,7 @@ namespace Liyanjie.Linq.Expressions
                 }
             }
             #endregion
-            throw new ExpressionParseException($"运算符“{@operator.Description()}”无法应用于“{type_Left.Name}”和“{type_Right.Name}”类型的操作数");
+            throw new ExpressionParseException($"运算符“{tokenId.Description()}”无法应用于“{type_Left.Name}”和“{type_Right.Name}”类型的操作数");
         }
 
         /// <summary>

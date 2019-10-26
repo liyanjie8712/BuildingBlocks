@@ -1,4 +1,4 @@
-﻿namespace Liyanjie.Linq.Expressions.Internals
+﻿namespace Liyanjie.Linq.Expressions.Internal
 {
     /// <summary>
     /// 
