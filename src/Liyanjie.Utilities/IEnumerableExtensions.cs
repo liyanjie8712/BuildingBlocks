@@ -30,7 +30,7 @@ namespace System.Collections.Generic
                 throw new ArgumentNullException(nameof(source));
 
             toString ??= _ => _.ToString();
-            
+
             return string.Join(separator, source.Select(toString));
         }
 
@@ -50,13 +50,13 @@ namespace System.Collections.Generic
                 throw new ArgumentNullException(nameof(source));
 
             var output = new List<IEnumerable<T>>();
-            var i = 0;
+            var i = -1;
             var length = source.Count();
             for (int j = 0; j < length; j++)
             {
                 if (separatorSelector(source.ElementAt(j)))
                 {
-                    var item = source.Skip(i).Take(j);
+                    var item = source.Skip(i + 1).Take(j);
                     if (item.Count() > 0)
                         output.Add(item);
                     i = j;
@@ -64,7 +64,7 @@ namespace System.Collections.Generic
             }
             if (i < length - 1)
             {
-                var item = source.Where((_, index) => index > i);
+                var item = source.Skip(i + 1);
                 if (item.Count() > 0)
                     output.Add(item);
             }

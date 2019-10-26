@@ -1121,7 +1121,7 @@ namespace Liyanjie.Linq.Expressions.Internal
                             index_RightParenthesis = i;
                     }
                 }
-                var _tokens = tokens.Skip(index_LeftParenthesis).Take(index_RightParenthesis - index_LeftParenthesis - 1).ToList();
+                var _tokens = tokens.Skip(index_LeftParenthesis + 1).Take(index_RightParenthesis - index_LeftParenthesis - 1).ToList();
                 for (int i = index_LeftParenthesis; i <= index_RightParenthesis; i++)
                 {
                     tokens.RemoveAt(index_LeftParenthesis);
@@ -1163,7 +1163,7 @@ namespace Liyanjie.Linq.Expressions.Internal
                             index_RightBra = i;
                     }
                 }
-                var _tokens = tokens.Skip(index_LeftBra).Take(index_RightBra - index_LeftBra - 1).ToList();
+                var _tokens = tokens.Skip(index_LeftBra + 1).Take(index_RightBra - index_LeftBra - 1).ToList();
                 for (int i = index_LeftBra; i <= index_RightBra; i++)
                 {
                     tokens.RemoveAt(index_LeftBra);

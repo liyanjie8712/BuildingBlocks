@@ -115,13 +115,13 @@ namespace Liyanjie.Linq.Expressions.Internal
                 throw new ArgumentNullException(nameof(source), $"参数 {nameof(separatorSelector)} 值不能为 null。");
 
             var output = new List<IEnumerable<T>>();
-            var i = 0;
+            var i = -1;
             var length = source.Count();
             for (int j = 0; j < length; j++)
             {
                 if (separatorSelector(source.ElementAt(j)))
                 {
-                    var item = source.Skip(i).Take(j - i - 1);
+                    var item = source.Skip(i + 1).Take(j - i - 1);
                     if (item.Count() > 0)
                         output.Add(item);
                     i = j;
@@ -129,7 +129,7 @@ namespace Liyanjie.Linq.Expressions.Internal
             }
             if (i < length - 1)
             {
-                var item = source.Where((_, index) => index > i).ToList();
+                var item = source.Skip(i + 1).ToList();
                 if (item.Count() > 0)
                     output.Add(item);
             }
