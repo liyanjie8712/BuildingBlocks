@@ -50,13 +50,13 @@ namespace System.Collections.Generic
                 throw new ArgumentNullException(nameof(source));
 
             var output = new List<IEnumerable<T>>();
-            var i = -1;
+            var i = 0;
             var length = source.Count();
             for (int j = 0; j < length; j++)
             {
                 if (separatorSelector(source.ElementAt(j)))
                 {
-                    var item = source.Where((_, index) => index > i && index < j).ToList();
+                    var item = source.Skip(i).Take(j);
                     if (item.Count() > 0)
                         output.Add(item);
                     i = j;
@@ -64,7 +64,7 @@ namespace System.Collections.Generic
             }
             if (i < length - 1)
             {
-                var item = source.Where((_, index) => index > i).ToList();
+                var item = source.Where((_, index) => index > i);
                 if (item.Count() > 0)
                     output.Add(item);
             }

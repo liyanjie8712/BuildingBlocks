@@ -56,8 +56,7 @@ namespace Liyanjie.Linq.Expressions
         public Expression Parse(string input)
         {
             this.Input = input;
-            var tokens = Tokenizer.Parse(input);
-            return Parse(tokens);
+            return Parse(Tokenizer.Parse(input));
         }
 
         /// <summary>
@@ -699,7 +698,7 @@ namespace Liyanjie.Linq.Expressions
                     expression = Parse(item.ToList());
                 }
                 else
-                    throw new ExpressionParseException("", Input, item.First());
+                    throw new ExpressionParseException("出错了", Input, item.First());
                 properties.Add(name, expression.Type);
                 expressions.Add(expression);
             }
