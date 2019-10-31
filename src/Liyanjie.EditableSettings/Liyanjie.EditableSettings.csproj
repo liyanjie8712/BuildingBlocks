@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
-        <Description>Liyanjie.Drawing.Extensions</Description>
+        <Description>Liyanjie.EditableSettings</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
         <Company>Liyanjie.me</Company>
@@ -23,12 +23,12 @@
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="D:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
         <PackageReference Include="System.ValueTuple" Version="4.3.0" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.0.0"/>
     </ItemGroup>
 
 </Project>
