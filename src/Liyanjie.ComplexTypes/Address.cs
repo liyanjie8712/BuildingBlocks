@@ -13,11 +13,6 @@ namespace Liyanjie.ComplexTypes
         public string ADCode { get; set; }
 
         /// <summary>
-        /// 行政区划详细
-        /// </summary>
-        public string ADDetail { get; set; }
-
-        /// <summary>
         /// 详细地址
         /// </summary>
         public string Detail { get; set; }
@@ -29,7 +24,6 @@ namespace Liyanjie.ComplexTypes
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return ADCode;
-            yield return ADDetail;
             yield return Detail;
         }
     }
