@@ -6,7 +6,7 @@ namespace Liyanjie.AspNetCore.Mvc.Extensions
     /// <summary>
     /// 
     /// </summary>
-    public class LoggingExceptionFilterAttribute : ExceptionFilterAttribute
+    public class ExceptionLoggingFilterAttribute : ExceptionFilterAttribute
     {
         readonly ILogger logger;
 
@@ -14,7 +14,7 @@ namespace Liyanjie.AspNetCore.Mvc.Extensions
         /// 
         /// </summary>
         /// <param name="logger"></param>
-        public LoggingExceptionFilterAttribute(ILogger<LoggingExceptionFilterAttribute> logger)
+        public ExceptionLoggingFilterAttribute(ILogger<ExceptionLoggingFilterAttribute> logger)
         {
             this.logger = logger;
         }
