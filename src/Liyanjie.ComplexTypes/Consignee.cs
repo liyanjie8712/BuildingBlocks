@@ -23,11 +23,8 @@ namespace Liyanjie.ComplexTypes
         /// <returns></returns>
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return Address.ADCode;
-            yield return Address.Detail;
-            yield return Contact.Type;
-            yield return Contact.Name;
-            yield return Contact.Number;
+            yield return Address;
+            yield return Contact;
         }
     }
 }
