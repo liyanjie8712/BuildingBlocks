@@ -24,8 +24,8 @@ namespace Liyanjie.ComplexTypes
             {
                 if (type_ComplexType.IsAssignableFrom(property.PropertyType))
                     (property.GetValue(origin) as ValueObject).Assign(property.GetValue(value) as ValueObject);
-                else if (property.CanWrite)
-                    property.SetValue(origin, value == null ? null : property.GetValue(value));
+                else if (property.CanWrite && value != null)
+                    property.SetValue(origin, property.GetValue(value));
             }
             return origin;
         }
