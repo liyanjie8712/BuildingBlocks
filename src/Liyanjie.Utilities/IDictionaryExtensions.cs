@@ -15,7 +15,7 @@ namespace System.Collections.Generic
         /// <param name="dictionary"></param>
         /// <returns></returns>
         public static TModel BuildModel<TModel>(this IDictionary<string, object> dictionary)
-        where TModel : new()
+            where TModel : new()
         {
             var output = new TModel();
 
@@ -24,11 +24,10 @@ namespace System.Collections.Generic
             {
                 if (!property.CanWrite)
                     continue;
-
-                var objectValue = dictionary[property.Name.ToLower()];
+                if (!dictionary.TryGetValue(property.Name.ToLower(), out var objectValue))
+                    continue;
 
                 object value = null;
-
                 if (property.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 {
                     var propertyElementType = property.PropertyType.HasElementType
