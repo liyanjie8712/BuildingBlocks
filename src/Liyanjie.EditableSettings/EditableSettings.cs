@@ -13,7 +13,7 @@ namespace Liyanjie.EditableSettings
     /// </summary>
     public class EditableSettings
     {
-        readonly ConcurrentDictionary<Type, (string FileName, object Instance)> store = new ConcurrentDictionary<Type, (string, object)>();
+        readonly ConcurrentDictionary<Type, (string FileName, object Instance)> storage = new ConcurrentDictionary<Type, (string, object)>();
 
         readonly string rootPath;
         readonly Func<object, string> serialize;
@@ -50,7 +50,7 @@ namespace Liyanjie.EditableSettings
         public EditableSettings Map<TSettings>(string fileName)
         {
             var type = typeof(TSettings);
-            store[type] = (fileName, Get(fileName, type));
+            storage[type] = (fileName, Get(fileName, type));
 
 #if NETSTANDARD2_0
             ChangeToken.OnChange(() => fileProvider.Watch(Path.GetFileName(fileName)), () => Get<TSettings>());
@@ -67,12 +67,12 @@ namespace Liyanjie.EditableSettings
         public TSettings Get<TSettings>()
         {
             var type = typeof(TSettings);
-            if (store.TryGetValue(type, out var settings))
+            if (storage.TryGetValue(type, out var settings))
             {
                 if (settings.Instance == null)
                 {
                     settings.Instance = Get(settings.FileName, typeof(TSettings));
-                    store[type] = settings;
+                    storage[type] = settings;
                 }
                 return (TSettings)settings.Instance;
             }
@@ -88,10 +88,10 @@ namespace Liyanjie.EditableSettings
         public void Set<TSettings>(TSettings settings)
         {
             var type = typeof(TSettings);
-            if (store.ContainsKey(type))
+            if (storage.ContainsKey(type))
             {
-                store[type] = (store[type].FileName, settings);
-                Set(store[type].FileName, settings);
+                storage[type] = (storage[type].FileName, settings);
+                Set(storage[type].FileName, settings);
             }
         }
 
