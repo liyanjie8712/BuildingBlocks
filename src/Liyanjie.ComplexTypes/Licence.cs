@@ -35,8 +35,6 @@ namespace Liyanjie.ComplexTypes
         {
             yield return Type;
             yield return Number;
-            yield return Name;
-            yield return Picture;
         }
     }
 

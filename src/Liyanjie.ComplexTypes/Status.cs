@@ -43,8 +43,6 @@ namespace Liyanjie.ComplexTypes
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Value;
-            yield return ChangeTime;
-            yield return Remark;
         }
     }
 

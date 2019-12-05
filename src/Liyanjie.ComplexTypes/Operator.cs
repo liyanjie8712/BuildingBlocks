@@ -20,22 +20,15 @@ namespace Liyanjie.ComplexTypes
         public Guid? Identity { get; set; }
 
         /// <summary>
-        /// 备注
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="status"></param>
         /// <param name="identity"></param>
-        /// <param name="remark"></param>
         /// <returns></returns>
-        public static Operator<TStatus> Create(TStatus status, Guid? identity, string remark = default) => new Operator<TStatus>
+        public static Operator<TStatus> Create(TStatus status, Guid? identity) => new Operator<TStatus>
         {
             Status = status,
             Identity = identity,
-            Remark = remark,
         };
 
         /// <summary>
@@ -46,7 +39,6 @@ namespace Liyanjie.ComplexTypes
         {
             yield return Status;
             yield return Identity;
-            yield return Remark;
         }
     }
 

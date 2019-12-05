@@ -18,22 +18,15 @@ namespace Liyanjie.ComplexTypes
         public TValue Value { get; set; }
 
         /// <summary>
-        /// 备注
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="type"></param>
         /// <param name="value"></param>
-        /// <param name="remark"></param>
         /// <returns></returns>
-        public static Identity<TType, TValue> Create(TType type, TValue value, string remark = default) => new Identity<TType, TValue>
+        public static Identity<TType, TValue> Create(TType type, TValue value) => new Identity<TType, TValue>
         {
             Type = type,
             Value = value,
-            Remark = remark,
         };
 
         /// <summary>
