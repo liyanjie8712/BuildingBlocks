@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Liyanjie.ComplexTypes
 {
@@ -7,7 +6,8 @@ namespace Liyanjie.ComplexTypes
     /// 操作人
     /// </summary>
     /// <typeparam name="TStatus"></typeparam>
-    public class Operator<TStatus> : ValueObject
+    /// <typeparam name="TIdentity"></typeparam>
+    public class Operator<TStatus, TIdentity> : ValueObject
     {
         /// <summary>
         /// 类型
@@ -17,7 +17,7 @@ namespace Liyanjie.ComplexTypes
         /// <summary>
         /// 标识
         /// </summary>
-        public Guid? Identity { get; set; }
+        public TIdentity Identity { get; set; }
 
         /// <summary>
         /// 
@@ -25,7 +25,7 @@ namespace Liyanjie.ComplexTypes
         /// <param name="status"></param>
         /// <param name="identity"></param>
         /// <returns></returns>
-        public static Operator<TStatus> Create(TStatus status, Guid? identity) => new Operator<TStatus>
+        public static Operator<TStatus, TIdentity> Create(TStatus status, TIdentity identity) => new Operator<TStatus, TIdentity>
         {
             Status = status,
             Identity = identity,
@@ -45,5 +45,5 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Operator : Operator<int> { }
+    public class Operator : Operator<int, string> { }
 }
