@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 
-namespace System.Collections.Generic
+namespace System.Linq
 {
     /// <summary>
     /// 
@@ -70,6 +70,27 @@ namespace System.Collections.Generic
             }
 
             return output;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ifPredicate"></param>
+        /// <param name="wherePredicate"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> IfWhere<T>(this IEnumerable<T> source, Func<bool> ifPredicate, Func<T, bool> wherePredicate)
+        {
+            if (ifPredicate == null)
+                throw new ArgumentNullException(nameof(ifPredicate));
+            
+            if (wherePredicate == null)
+                throw new ArgumentNullException(nameof(wherePredicate));
+
+            return ifPredicate.Invoke()
+                ? source.Where(wherePredicate)
+                : source;
         }
     }
 }
