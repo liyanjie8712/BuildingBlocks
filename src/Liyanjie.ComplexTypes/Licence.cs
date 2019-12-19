@@ -41,5 +41,5 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 证件
     /// </summary>
-    public class Licence : Licence<int> { }
+    public class Licence : Licence<string> { }
 }

@@ -11,8 +11,8 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
-        <DocumentationFile>bin\Release\net45\Liyanjie.TemplateMatching.xml</DocumentationFile>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DocumentationFile>bin\Release\Liyanjie.TemplateMatching.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">

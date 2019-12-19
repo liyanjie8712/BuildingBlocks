@@ -45,5 +45,5 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Operator : Operator<int, string> { }
+    public class Operator : Operator<string, string> { }
 }

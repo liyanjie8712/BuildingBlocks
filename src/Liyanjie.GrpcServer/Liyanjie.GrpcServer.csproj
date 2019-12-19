@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
-        <Description>扩展方法合集</Description>
+        <Description>Liyanjie.GrpcServer</Description>
         <Copyright>© Liyanjie.me</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
         <Company>Liyanjie.me</Company>
@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <DocumentationFile>bin\Release\Liyanjie.Utilities.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\Liyanjie.Http.xml</DocumentationFile>
     </PropertyGroup>
 
     <Target Name="MovePackage" AfterTargets="Pack">
@@ -20,7 +20,13 @@
     </Target>
 
     <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+        <PackageReference Include="Grpc.Core" Version="2.26.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <PackageReference Include="Grpc.Core" Version="2.26.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.0" />
     </ItemGroup>
 
 </Project>

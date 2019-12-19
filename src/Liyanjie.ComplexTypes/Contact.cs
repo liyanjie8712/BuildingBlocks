@@ -37,5 +37,5 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Contact : Contact<int> { }
+    public class Contact : Contact<string> { }
 }

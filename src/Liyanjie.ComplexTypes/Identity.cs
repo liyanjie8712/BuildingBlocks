@@ -43,7 +43,7 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Identity : Identity<int, string>
+    public class Identity : Identity<string, string>
     {
     }
 }

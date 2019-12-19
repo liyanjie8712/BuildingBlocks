@@ -49,5 +49,5 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Status : Status<int> { }
+    public class Status : Status<string> { }
 }

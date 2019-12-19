@@ -5,17 +5,12 @@ namespace Liyanjie.ComplexTypes
     /// <summary>
     /// 
     /// </summary>
-    public class Delivery<TMode> : ValueObject
+    public class Delivery<TIdentity> : ValueObject
     {
         /// <summary>
         /// 
         /// </summary>
-        public TMode Mode { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Identity { get; set; }
+        public TIdentity Identity { get; set; }
 
         /// <summary>
         /// 
@@ -28,7 +23,6 @@ namespace Liyanjie.ComplexTypes
         /// <returns></returns>
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return Mode;
             yield return Identity;
             yield return TrackingNumber;
         }
