@@ -20,7 +20,7 @@ namespace Liyanjie.ComplexTypes
         /// <summary>
         /// 姓名
         /// </summary>
-        public string Name { get; set; }
+        public Name Name { get; set; }
 
         /// <summary>
         /// 照片
