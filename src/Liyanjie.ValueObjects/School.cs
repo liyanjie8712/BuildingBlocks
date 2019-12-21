@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     public class School<TType> : ValueObject
     {
@@ -14,6 +14,8 @@ namespace Liyanjie.ComplexTypes
             yield return Type;
             yield return Name;
         }
+
+        public override string ToString() => Name;
     }
     public class School : School<string> { }
 }

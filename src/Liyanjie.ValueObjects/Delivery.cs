@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 
@@ -26,6 +26,8 @@ namespace Liyanjie.ComplexTypes
             yield return Identity;
             yield return TrackingNumber;
         }
+
+        public override string ToString() => $"{Identity} {TrackingNumber}";
     }
 
     /// <summary>

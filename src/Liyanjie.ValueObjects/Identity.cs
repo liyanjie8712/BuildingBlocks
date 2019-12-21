@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// Identity
@@ -20,6 +20,18 @@ namespace Liyanjie.ComplexTypes
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Type;
+            yield return Value;
+        }
+
+        public override string ToString() => Type.ToString();
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -28,16 +40,6 @@ namespace Liyanjie.ComplexTypes
             Type = type,
             Value = value,
         };
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return Type;
-            yield return Value;
-        }
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 位置
@@ -26,5 +26,7 @@ namespace Liyanjie.ComplexTypes
             yield return Longitude;
             yield return Latitude;
         }
+
+        public override string ToString() => $"{Longitude.ToString("0.000000")},{Latitude.ToString("0.000000")}";
     }
 }

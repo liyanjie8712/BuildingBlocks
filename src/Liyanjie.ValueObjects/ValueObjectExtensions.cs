@@ -1,11 +1,11 @@
-﻿using Liyanjie.ComplexTypes;
+﻿using System.Reflection;
 
-namespace System.Reflection
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class ExtendMethods
+    public static class ValueObjectExtensions
     {
         /// <summary>
         /// 

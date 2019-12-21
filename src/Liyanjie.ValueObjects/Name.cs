@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 
@@ -26,5 +26,7 @@ namespace Liyanjie.ComplexTypes
             yield return FirstName;
             yield return LastName;
         }
+
+        public override string ToString() => $"{FirstName} {LastName}";
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 地址
@@ -26,5 +26,7 @@ namespace Liyanjie.ComplexTypes
             yield return ADCode;
             yield return Detail;
         }
+
+        public override string ToString() => $"{ADCode} {Detail}";
     }
 }

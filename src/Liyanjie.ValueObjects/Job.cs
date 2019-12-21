@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     public class Job<TIndustry> : ValueObject
     {
@@ -19,6 +19,8 @@ namespace Liyanjie.ComplexTypes
             yield return Position;
             yield return Address;
         }
+
+        public override string ToString() => $"{Company} {Position}";
     }
     public class Job : Job<string> { }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 状态
@@ -27,6 +27,17 @@ namespace Liyanjie.ComplexTypes
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Value;
+        }
+
+        public override string ToString() => Value.ToString();
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="status"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
@@ -35,15 +46,6 @@ namespace Liyanjie.ComplexTypes
             Value = status,
             Remark = remark,
         };
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return Value;
-        }
     }
 
     /// <summary>

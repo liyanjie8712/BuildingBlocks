@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 联系人
@@ -32,6 +32,8 @@ namespace Liyanjie.ComplexTypes
             yield return Name;
             yield return Number;
         }
+
+        public override string ToString() => $"{Name} {Number}";
     }
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 评分
@@ -37,5 +37,7 @@ namespace Liyanjie.ComplexTypes
             yield return Total;
             yield return Count;
         }
+
+        public override string ToString() => GetAverage().ToString();
     }
 }

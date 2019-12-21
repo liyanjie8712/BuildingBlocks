@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Liyanjie.ComplexTypes
+namespace Liyanjie.ValueObjects
 {
     /// <summary>
     /// 收件人
@@ -26,5 +26,7 @@ namespace Liyanjie.ComplexTypes
             yield return Address;
             yield return Contact;
         }
+
+        public override string ToString() => $"{Contact} {Address}";
     }
 }
