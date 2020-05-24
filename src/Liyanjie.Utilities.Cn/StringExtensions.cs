@@ -139,7 +139,7 @@ namespace System
         /// </summary>
         /// <param name="zhHantInput"></param>
         /// <returns></returns>
-        public static string ZHChangeHantToHans(string zhHantInput)
+        public static string ChangeToZHHans(this string zhHantInput)
         {
             var builder = new StringBuilder(zhHantInput.Length);
             foreach (var item in zhHantInput)
@@ -154,7 +154,7 @@ namespace System
         /// </summary>
         /// <param name="zhHansInput"></param>
         /// <returns></returns>
-        public static string ZHChangeHansToHant(string zhHansInput)
+        public static string ChangeToZHHant(this string zhHansInput)
         {
             var builder = new StringBuilder(zhHansInput.Length);
             foreach (var item in zhHansInput)
