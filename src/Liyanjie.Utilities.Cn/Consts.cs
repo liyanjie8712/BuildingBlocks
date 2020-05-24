@@ -8,7 +8,7 @@
         /// <summary>
         /// 正则表达式：Cellnumber
         /// </summary>
-        public const string RegexPattern_PhoneNumber = @"1[345678]\d{9}";
+        public const string RegexPattern_PhoneNumber = @"1[3-9]\d{9}";
 
         /// <summary>
         /// 正则表达式：IdNumber
