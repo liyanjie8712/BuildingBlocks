@@ -41,15 +41,19 @@ namespace Liyanjie.GrpcServer
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="serviceDefinitionFactory"></param>
+        /// <param name="serviceFactory"></param>
         /// <returns></returns>
-        public GrpcServerOptions AddService(Func<IServiceProvider, ServerServiceDefinition> serviceDefinitionFactory)
+        public GrpcServerOptions AddService(Func<IServiceProvider, ServerServiceDefinition> serviceFactory)
         {
-            ServiceFactories.Add(serviceDefinitionFactory);
+            ServiceFactories.Add(serviceFactory);
             return this;
         }
 #endif
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Grpc.Core.Server CreateServer(
 #if NETSTANDARD2_0
             IServiceProvider serviceProvider
