@@ -2,21 +2,21 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
     (global = global || self, factory((global.liyanjie = global.liyanjie || {}, global.liyanjie.linq = {})));
-}(this, function (exports) { 'use strict';
+}(this, (function (exports) { 'use strict';
 
     /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
+    Copyright (c) Microsoft Corporation.
 
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted.
 
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
     /* global Reflect, Promise */
 
@@ -31,6 +31,14 @@
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
+
+    function __spreadArrays() {
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var r = Array(s), k = 0, i = 0; i < il; i++)
+            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                r[k] = a[j];
+        return r;
     }
 
     /**
@@ -99,11 +107,11 @@
          * @param elements 元素
          */
         Enumerable.prototype.append = function () {
+            var _a;
             var elements = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 elements[_i] = arguments[_i];
             }
-            var _a;
             Enumerable._check(elements);
             (_a = this.source).push.apply(_a, elements);
             return this;
@@ -120,11 +128,11 @@
          * @param targets 目标
          */
         Enumerable.prototype.concat = function () {
+            var _a;
             var targets = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 targets[_i] = arguments[_i];
             }
-            var _a;
             Enumerable._check(targets);
             return new Enumerable((_a = this.source).concat.apply(_a, targets));
         };
@@ -366,7 +374,7 @@
                 elements[_i] = arguments[_i];
             }
             Enumerable._check(elements);
-            this.source = new (Array.bind.apply(Array, [void 0].concat(elements, this.source)))();
+            this.source = new (Array.bind.apply(Array, __spreadArrays([void 0], elements, this.source)))();
             return this;
         };
         /**
@@ -397,7 +405,7 @@
          * 对可枚举对象中的元素反向排序
          */
         Enumerable.prototype.reverse = function () {
-            return new Enumerable(new (Array.bind.apply(Array, [void 0].concat(this.source)))().reverse());
+            return new Enumerable(new (Array.bind.apply(Array, __spreadArrays([void 0], this.source)))().reverse());
         };
         /**
          * 遍历可枚举对象并生成一个新的可枚举对象
@@ -567,7 +575,7 @@
         Enumerable.prototype.union = function (target, comparer) {
             Enumerable._check(target);
             comparer = comparer || (function (item1, item2) { return item1 === item2; });
-            var result = new (Array.bind.apply(Array, [void 0].concat(this.source)))();
+            var result = new (Array.bind.apply(Array, __spreadArrays([void 0], this.source)))();
             target.forEach(function (item) {
                 if (result.some(function (item2) { return comparer(item, item2); }) === false)
                     result.push(item);
@@ -722,4 +730,4 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
