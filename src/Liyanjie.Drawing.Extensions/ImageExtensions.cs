@@ -116,8 +116,9 @@ namespace System.Drawing
         /// <param name="width">宽</param>
         /// <param name="height">高</param>
         /// <param name="zoom">等比缩放</param>
+        /// <param name="coverSize">Ture：在同时指定宽和高并且等比缩放的情况下，将裁剪图片以满足宽高比</param>
         /// <returns></returns>
-        public static Image Resize(this Image image, int? width, int? height, bool zoom = true)
+        public static Image Resize(this Image image, int? width, int? height, bool zoom = true, bool coverSize = false)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -128,26 +129,42 @@ namespace System.Drawing
             if (width == null && height == null)
                 return image;
 
-            int
-                w = image.Width,
-                h = image.Height;
+            var w = image.Width;
+            var h = image.Height;
 
             if (width.HasValue && height.HasValue)
             {
-                double
-                    wW = (double)image.Width / width.Value,
-                    hH = (double)image.Height / height.Value;
+                var wW = (double)image.Width / width.Value;
+                var hH = (double)image.Height / height.Value;
                 if (zoom)
                 {
-                    if (wW > hH)
+                    if (coverSize)
                     {
                         w = width.Value;
-                        h = (int)(image.Height / wW);
+                        h = height.Value;
+                        if (wW > hH)
+                        {
+                            var _width = (int)(w * hH);
+                            image = image.Crop(Math.Abs(image.Width - _width) / 2, 0, _width, image.Height);
+                        }
+                        else
+                        {
+                            var _height = (int)(h * wW);
+                            image = image.Crop(0, Math.Abs(image.Height - _height) / 2, image.Width, _height);
+                        }
                     }
                     else
                     {
-                        w = (int)(image.Width / hH);
-                        h = height.Value;
+                        if (wW > hH)
+                        {
+                            w = width.Value;
+                            h = (int)(image.Height / wW);
+                        }
+                        else
+                        {
+                            w = (int)(image.Width / hH);
+                            h = height.Value;
+                        }
                     }
                 }
                 else
