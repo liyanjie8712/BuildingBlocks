@@ -5,9 +5,9 @@
         <IsPackable>True</IsPackable>
         <TargetFrameworks>netstandard2.0;netcoreapp3.0;</TargetFrameworks>
         <Description>Code.Authentication</Description>
-        <Copyright>© Liyanjie.me</Copyright>
+        <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
-        <Company>Liyanjie.me</Company>
+        <Company>Liyanjie.net</Company>
         <RepositoryUrl>https://github.com/liyanjie8712/BuildingBlocks</RepositoryUrl>
         <PackageProjectUrl>https://github.com/liyanjie8712/BuildingBlocks</PackageProjectUrl>
         <RepositoryType>Git</RepositoryType>
