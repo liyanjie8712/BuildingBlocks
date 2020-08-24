@@ -77,20 +77,15 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="ifPredicate"></param>
-        /// <param name="wherePredicate"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public static IEnumerable<T> IfWhere<T>(this IEnumerable<T> source, Func<bool> ifPredicate, Func<T, bool> wherePredicate)
+        public static IEnumerable<T> RandomTake<T>(this IEnumerable<T> source, int count = 0)
         {
-            if (ifPredicate == null)
-                throw new ArgumentNullException(nameof(ifPredicate));
+            var random = new Random();
+            if (count == 0)
+                count = random.Next(source.Count());
 
-            if (wherePredicate == null)
-                throw new ArgumentNullException(nameof(wherePredicate));
-
-            return ifPredicate.Invoke()
-                ? source.Where(wherePredicate)
-                : source;
+            return source.OrderBy(_ => random.NextDouble()).Take(count);
         }
     }
 }
