@@ -19,10 +19,8 @@ namespace Microsoft.AspNetCore.Http
         public static TModel BuildModel<TModel>(this QueryString queryString)
             where TModel : new()
         {
-            var output = new TModel();
-
             if (!queryString.HasValue)
-                return output;
+                return new TModel();
 
             return QueryHelpers.ParseNullableQuery(queryString.Value)
                 .ToDictionary(_ => _.Key, _ => (object)_.Value)

@@ -13,15 +13,13 @@ namespace System.Drawing
         /// 将图片转码为base64字符串
         /// </summary>
         /// <param name="image"></param>
+        /// <param name="format"></param>
         /// <returns></returns>
-        public static string Encode(this Image image)
+        public static string Encode(this Image image, ImageFormat format = default)
         {
-            using var stream = new MemoryStream();
-            image.Save(stream, image.RawFormat);
-            var bytes = new byte[stream.Length];
-            stream.Position = 0;
-            stream.Read(bytes, 0, (int)stream.Length);
-            return Convert.ToBase64String(bytes);
+            using var memory = new MemoryStream();
+            image.Save(memory, format ?? image.RawFormat);
+            return Convert.ToBase64String(memory.ToArray());
         }
 
         /// <summary>
@@ -185,7 +183,6 @@ namespace System.Drawing
             }
 
             var output = new Bitmap(w, h);
-
             using var graphics = Graphics.FromImage(output);
             graphics.DrawImage(image, 0, 0, w, h);
 

@@ -75,7 +75,7 @@ namespace System
         /// <param name="number"></param>
         /// <returns></returns>
         public static List<short> Divisors(this short number)
-            => _Divisors(number).Cast<short>().ToList();
+            => _Divisors(number).Select(_ => (short)_).ToList();
 
         /// <summary>
         /// 获取一个非负整型的所有正约数
@@ -83,7 +83,7 @@ namespace System
         /// <param name="number"></param>
         /// <returns></returns>
         public static List<int> Divisors(this int number)
-            => _Divisors(number).Cast<int>().ToList();
+            => _Divisors(number).Select(_ => (int)_).ToList();
 
         /// <summary>
         /// 获取一个非负整型的所有正约数

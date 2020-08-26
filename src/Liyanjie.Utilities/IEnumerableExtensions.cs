@@ -81,11 +81,10 @@ namespace System.Linq
         /// <returns></returns>
         public static IEnumerable<T> RandomTake<T>(this IEnumerable<T> source, int count = 0)
         {
-            var random = new Random();
             if (count == 0)
-                count = random.Next(source.Count());
+                count = new Random(Guid.NewGuid().GetHashCode()).Next(source.Count());
 
-            return source.OrderBy(_ => random.NextDouble()).Take(count);
+            return source.OrderBy(_ => Guid.NewGuid()).Take(count);
         }
     }
 }

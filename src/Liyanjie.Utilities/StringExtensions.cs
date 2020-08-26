@@ -243,11 +243,10 @@ namespace System
         /// <returns></returns>
         public static string Random(this string input, int? length = null)
         {
-            var random = new Random();
             var chars = input
                 .ToCharArray()
-                .OrderBy(_ => random.Next())
-                .Take(length ?? random.Next(input.Length + 1));
+                .OrderBy(_ => Guid.NewGuid())
+                .Take(length ?? new Random(Guid.NewGuid().GetHashCode()).Next(input.Length + 1));
             return string.Join(string.Empty, chars);
         }
 
