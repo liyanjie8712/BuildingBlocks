@@ -255,7 +255,8 @@ namespace System.Drawing
         /// <param name="image"></param>
         /// <param name="path"></param>
         /// <param name="quality">质量，0~100</param>
-        public static void CompressSave(this Image image, string path, long quality)
+        /// <param name="format"></param>
+        public static void CompressSave(this Image image, string path, long quality, ImageFormat format = default)
         {
             if (quality < 0)
                 quality = 0;
@@ -270,7 +271,7 @@ namespace System.Drawing
                 image.Save(path, imageCodecInfo, encoderParameters);
             }
             else
-                image.Save(path, image.RawFormat);
+                image.Save(path, format ?? image.RawFormat);
         }
 
         static ImageFormat GetFormat(string extension)
