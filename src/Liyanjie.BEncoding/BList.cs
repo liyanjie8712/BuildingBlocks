@@ -40,7 +40,7 @@ namespace Liyanjie.BEncoding
             writer.Write('l');
 
             // Write elements
-            foreach (IBEncodingType item in this)
+            foreach (var item in this)
             {
                 item.Encode(writer);
             }
@@ -51,9 +51,7 @@ namespace Liyanjie.BEncoding
 
         public bool Equals(BList obj)
         {
-            IList<IBEncodingType> other = obj;
-
-            return Equals(other);
+            return Equals((IList<IBEncodingType>)obj);
         }
         public bool Equals(IList<IBEncodingType> other)
         {
@@ -83,12 +81,10 @@ namespace Liyanjie.BEncoding
         public override int GetHashCode()
         {
             var i = 1;
-
             foreach (var item in this)
             {
                 i ^= item.GetHashCode();
             }
-
             return i;
         }
 
@@ -114,7 +110,7 @@ namespace Liyanjie.BEncoding
             if (values == null)
                 throw new ArgumentNullException("values");
 
-            foreach (IBEncodingType value in values)
+            foreach (var value in values)
             {
                 base.Add(value ?? throw new ArgumentNullException("values"));
             }

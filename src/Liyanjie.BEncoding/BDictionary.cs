@@ -20,25 +20,22 @@ namespace Liyanjie.BEncoding
             inputStream.ReadByte();
 
             bytesConsumed++;
-            BDictionary res = new BDictionary();
+            var result = new BDictionary();
 
             // Read elements till an 'e'
             while (inputStream.PeekChar() != 'e')
             {
-                // Key
-                BString key = BString.Decode(inputStream, ref bytesConsumed);
+                var key = BString.Decode(inputStream, ref bytesConsumed);    // Key
+                var value = Utils.Decode(inputStream, ref bytesConsumed);  // Value
 
-                // Value
-                IBEncodingType value = Utils.Decode(inputStream, ref bytesConsumed);
-
-                res[key.Value] = value;
+                result[key.Value] = value;
             }
 
             // Get past 'e'
             inputStream.Read();
             bytesConsumed++;
 
-            return res;
+            return result;
         }
 
         public void Encode(BinaryWriter writer)
@@ -50,7 +47,7 @@ namespace Liyanjie.BEncoding
             foreach (KeyValuePair<string, IBEncodingType> item in this)
             {
                 // Write key
-                BString key = new BString
+                var key = new BString
                 {
                     Value = item.Key
                 };
@@ -67,9 +64,7 @@ namespace Liyanjie.BEncoding
 
         public bool Equals(BDictionary obj)
         {
-            Dictionary<string, IBEncodingType> other = obj;
-
-            return Equals(other);
+            return Equals((Dictionary<string, IBEncodingType>)obj);
         }
         public bool Equals(Dictionary<string, IBEncodingType> other)
         {
@@ -79,7 +74,7 @@ namespace Liyanjie.BEncoding
             if (other.Count != Count)
                 return false;
 
-            foreach (string key in Keys)
+            foreach (var key in Keys)
             {
                 if (!other.ContainsKey(key))
                     return false;
@@ -94,17 +89,17 @@ namespace Liyanjie.BEncoding
 
             return true;
         }
-       
+
         public override bool Equals(object obj)
         {
-            BDictionary other = obj as BDictionary;
-
+            if (!(obj is BDictionary other))
+                return false;
             return Equals(other);
         }
         public override int GetHashCode()
         {
             var output = 1;
-            foreach (KeyValuePair<string, IBEncodingType> pair in this)
+            foreach (var pair in this)
             {
                 output ^= pair.GetHashCode();
             }
@@ -120,10 +115,7 @@ namespace Liyanjie.BEncoding
         /// <exception cref="ArgumentNullException">If the value is null</exception>
         public new void Add(string key, IBEncodingType value)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
-
-            base.Add(key, value);
+            base.Add(key, value ?? throw new ArgumentNullException("value"));
         }
 
         /// <summary>
@@ -136,13 +128,7 @@ namespace Liyanjie.BEncoding
         public new IBEncodingType this[string index]
         {
             get { return base[index]; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                base[index] = value;
-            }
+            set { base[index] = value ?? throw new ArgumentNullException("value"); }
         }
     }
 }

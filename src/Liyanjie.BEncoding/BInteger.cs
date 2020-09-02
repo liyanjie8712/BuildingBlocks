@@ -31,21 +31,18 @@ namespace Liyanjie.BEncoding
             bytesConsumed++;
 
             // Read numbers till an 'e'
-            string number = "";
+            var number = string.Empty;
             char ch;
 
             while ((ch = inputStream.ReadChar()) != 'e')
             {
                 number += ch;
-
                 bytesConsumed++;
             }
 
             bytesConsumed++;
 
-            BInteger res = new BInteger { Value = long.Parse(number) };
-
-            return res;
+            return new BInteger { Value = long.Parse(number) };
         }
 
         public void Encode(BinaryWriter writer)
@@ -98,8 +95,8 @@ namespace Liyanjie.BEncoding
 
         public override bool Equals(object obj)
         {
-            BInteger other = obj as BInteger;
-
+            if (!(obj is BInteger other))
+                return false;
             return Equals(other);
         }
         public override int GetHashCode()
