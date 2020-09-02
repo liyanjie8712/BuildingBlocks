@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Liyanjie.Utilities
+namespace System.Security.Cryptography
 {
     /// <summary>
     /// 

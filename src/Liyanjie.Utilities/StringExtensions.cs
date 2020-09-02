@@ -3,8 +3,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-using Liyanjie.Utilities;
-
 namespace System
 {
     /// <summary>
@@ -20,7 +18,7 @@ namespace System
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static string Encode(this string input, EncodeMode encodeMode, Encoding encoding = null)
-            => BitConverter.ToString((encoding ?? Encoding.UTF8).GetBytes(input).Encode(encodeMode));
+            => (encoding ?? Encoding.Unicode).GetBytes(input).Encode(encodeMode).ToString(true);
 
         /// <summary>
         /// 
@@ -29,7 +27,7 @@ namespace System
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static string Base64Encode(this string input, Encoding encoding = null)
-            => Convert.ToBase64String((encoding ?? Encoding.UTF8).GetBytes(input));
+            => Convert.ToBase64String((encoding ?? Encoding.Unicode).GetBytes(input));
 
         /// <summary>
         /// 
@@ -38,7 +36,7 @@ namespace System
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static string Base64Decode(this string input, Encoding encoding = null)
-            => (encoding ?? Encoding.UTF8).GetString(Convert.FromBase64String(input));
+            => (encoding ?? Encoding.Unicode).GetString(Convert.FromBase64String(input));
 
         /// <summary>
         /// Aes加密
@@ -46,19 +44,19 @@ namespace System
         /// <param name="input"></param>
         /// <param name="key">长度32字符</param>
         /// <param name="iv">长度16字符，为空时使用ECB模式，非空时使用CBC模式</param>
-        /// <returns></returns>
+        /// <returns>Base64String</returns>
         public static string AesEncrypt(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).AesEncrypt(key, iv));
+            => Convert.ToBase64String(Encoding.Unicode.GetBytes(input).AesEncrypt(key, iv));
 
         /// <summary>
         /// Aes解密
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="base64String"></param>
         /// <param name="key">长度32字符</param>
         /// <param name="iv">长度16字符，为空时使用ECB模式，非空时使用CBC模式</param>
         /// <returns></returns>
-        public static string AesDecrypt(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).AesDecrypt(key, iv));
+        public static string AesDecrypt(this string base64String, string key, string iv = null)
+            => Encoding.Unicode.GetString(Convert.FromBase64String(base64String).AesDecrypt(key, iv));
 
         /// <summary>
         /// 加密
@@ -66,37 +64,37 @@ namespace System
         /// <param name="input"></param>
         /// <param name="iv">长度8字符</param>
         /// <param name="key">长度24字符</param>
-        /// <returns></returns>
+        /// <returns>Base64String</returns>
         public static string TripleDESEncrypt(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).TripleDESEncrypt(key, iv));
+            => Convert.ToBase64String(Encoding.Unicode.GetBytes(input).TripleDESEncrypt(key, iv));
 
         /// <summary>
         /// 解密
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="base64String"></param>
         /// <param name="iv">长度8字符</param>
         /// <param name="key">长度24字符</param>
         /// <returns></returns>
-        public static string TripleDESDecrypt(this string input, string key, string iv = null)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).TripleDESDecrypt(key, iv));
+        public static string TripleDESDecrypt(this string base64String, string key, string iv = null)
+            => Encoding.Unicode.GetString(Convert.FromBase64String(base64String).TripleDESDecrypt(key, iv));
 
         /// <summary>
-        /// 
+        /// 加密
         /// </summary>
         /// <param name="input"></param>
         /// <param name="publicKeyString">公钥</param>
-        /// <returns></returns>
+        /// <returns>Base64String</returns>
         public static string RSAEncrypt(this string input, string publicKeyString)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).RSAEncrypt(publicKeyString));
+            => Convert.ToBase64String(Encoding.Unicode.GetBytes(input).RSAEncrypt(publicKeyString));
 
         /// <summary>
-        /// 
+        /// 解密
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="base64String"></param>
         /// <param name="privateKeyString">私钥</param>
         /// <returns></returns>
-        public static string RSADecrypt(this string input, string privateKeyString)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).RSADecrypt(privateKeyString));
+        public static string RSADecrypt(this string base64String, string privateKeyString)
+            => Encoding.Unicode.GetString(Convert.FromBase64String(base64String).RSADecrypt(privateKeyString));
 
 #if NETSTANDARD1_3
         /// <summary>
@@ -105,9 +103,9 @@ namespace System
         /// <param name="input"></param>
         /// <param name="publicKeyString">公钥</param>
         /// <param name="encryptionPadding">OaepSHA1|OaepSHA256|OaepSHA384|OaepSHA512|Pkcs1</param>
-        /// <returns></returns>
+        /// <returns>Base64String</returns>
         public static string RSAEncrypt(this string input, string publicKeyString, RSAEncryptionPadding encryptionPadding)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).RSAEncrypt(publicKeyString, encryptionPadding));
+            => Convert.ToBase64String(Encoding.Unicode.GetBytes(input).RSAEncrypt(publicKeyString, encryptionPadding));
 
         /// <summary>
         /// 
@@ -116,8 +114,8 @@ namespace System
         /// <param name="privateKeyString">私钥</param>
         /// <param name="encryptionPadding"></param>
         /// <returns></returns>
-        public static string RSADecrypt(this string input, string privateKeyString, RSAEncryptionPadding encryptionPadding)
-            => Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input).RSADecrypt(privateKeyString, encryptionPadding));
+        public static string RSADecrypt(this string base64String, string privateKeyString, RSAEncryptionPadding encryptionPadding)
+            => Encoding.Unicode.GetString(Convert.FromBase64String(base64String).RSADecrypt(privateKeyString, encryptionPadding));
 #endif
 
         /// <summary>

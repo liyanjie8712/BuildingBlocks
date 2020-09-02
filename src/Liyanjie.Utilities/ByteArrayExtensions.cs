@@ -1,8 +1,28 @@
 ﻿using System.IO;
 using System.Text;
 
-using Liyanjie.Utilities;
-
+namespace System
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class ByteArrayExtensions
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="trimHyphen"></param>
+        /// <returns></returns>
+        public static string ToString(this byte[] input, bool trimHyphen)
+        {
+            var output = BitConverter.ToString(input);
+            return trimHyphen
+                ? output.Replace("-", "")
+                : output;
+        }
+    }
+}
 namespace System.Security.Cryptography
 {
     /// <summary>
@@ -25,7 +45,7 @@ namespace System.Security.Cryptography
                 EncodeMode.SHA256 => SHA256.Create(),
                 EncodeMode.SHA384 => SHA384.Create(),
                 EncodeMode.SHA512 => SHA512.Create(),
-                _ => null,
+                _ => throw new ArgumentOutOfRangeException(nameof(encodeMode)),
             };
             return encoder?.ComputeHash(input);
         }
@@ -262,5 +282,36 @@ namespace System.Security.Cryptography
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum EncodeMode
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        MD5,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        SHA1,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        SHA256,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        SHA384,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        SHA512,
     }
 }
