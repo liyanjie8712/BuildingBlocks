@@ -13,18 +13,14 @@ namespace System.Reflection
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TInput"></typeparam>
         /// <typeparam name="TOutput"></typeparam>
         /// <param name="input"></param>
-        /// <param name="additional"></param>
         /// <returns></returns>
-        public static TOutput Translate<TInput, TOutput>(this TInput input, Action<TInput, TOutput> additional = null)
+        public static TOutput Translate<TOutput>(this object input)
         {
             var translated = new Dictionary<(Type, Type, object), object>();
 
-            var output = (TOutput)Translate(typeof(TOutput), typeof(TInput), input, translated);
-
-            additional?.Invoke(input, output);
+            var output = (TOutput)Translate(typeof(TOutput),  input, translated);
 
             translated.Clear();
 
@@ -39,24 +35,39 @@ namespace System.Reflection
         /// <param name="input"></param>
         /// <param name="additional"></param>
         /// <returns></returns>
-        public static async Task<TOutput> TranslateAsync<TInput, TOutput>(this TInput input, Func<TInput, TOutput, Task> additional = null)
+        public static TOutput Translate<TInput, TOutput>(this TInput input, Action<TInput, TOutput> additional)
         {
-            var translated = new Dictionary<(Type, Type, object), object>();
+            var output = Translate<TOutput>(input);
 
-            var output = (TOutput)Translate(typeof(TOutput), typeof(TInput), input, translated);
-
-            if (additional != null)
-                await additional.Invoke(input, output);
-
-            translated.Clear();
+            additional?.Invoke(input, output);
 
             return output;
         }
 
-        static object Translate(Type outputType, Type inputType, object input, Dictionary<(Type, Type, object), object> translated)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="additional"></param>
+        /// <returns></returns>
+        public static async Task<TOutput> TranslateAsync<TInput, TOutput>(this TInput input, Func<TInput, TOutput, Task> additional)
+        {
+            var output = Translate<TOutput>(input);
+
+            if (additional != null)
+                await additional.Invoke(input, output);
+
+            return output;
+        }
+
+        static object Translate(Type outputType,  object input, Dictionary<(Type, Type, object), object> translated)
         {
             if (input == null)
                 return null;
+
+            var inputType = input.GetType();
 
             if (translated.TryGetValue((outputType, inputType, input), out object output))
                 return output;
@@ -87,7 +98,7 @@ namespace System.Reflection
                         : null;
                 var inputArray = Enumerable.ToArray((input as IEnumerable).Cast<object>());
                 var outputArray = Array.CreateInstance(outputElementType ?? typeof(object), inputArray.Length);
-                inputArray.Select(_ => outputElementType == null ? _ : Translate(outputElementType, _.GetType(), _, translated)).ToArray().CopyTo(outputArray, 0);
+                inputArray.Select(_ => outputElementType == null ? _ : Translate(outputElementType,  _, translated)).ToArray().CopyTo(outputArray, 0);
                 return outputArray;
             }
 
@@ -134,7 +145,7 @@ namespace System.Reflection
                 if (inputProperty == null || !inputProperty.CanRead)
                     continue;
 
-                outputProperty.SetValue(output, Translate(outputProperty.PropertyType, inputProperty.PropertyType, inputProperty.GetValue(input), translated));
+                outputProperty.SetValue(output, Translate(outputProperty.PropertyType, inputProperty.GetValue(input), translated));
             }
 
             return output;
