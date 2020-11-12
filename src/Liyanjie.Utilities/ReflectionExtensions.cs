@@ -20,7 +20,7 @@ namespace System.Reflection
         {
             var translated = new Dictionary<(Type, Type, object), object>();
 
-            var output = (TOutput)Translate(typeof(TOutput),  input, translated);
+            var output = (TOutput)Translate(typeof(TOutput), input, translated);
 
             translated.Clear();
 
@@ -62,7 +62,7 @@ namespace System.Reflection
             return output;
         }
 
-        static object Translate(Type outputType,  object input, Dictionary<(Type, Type, object), object> translated)
+        static object Translate(Type outputType, object input, Dictionary<(Type, Type, object), object> translated)
         {
             if (input == null)
                 return null;
@@ -98,7 +98,7 @@ namespace System.Reflection
                         : null;
                 var inputArray = Enumerable.ToArray((input as IEnumerable).Cast<object>());
                 var outputArray = Array.CreateInstance(outputElementType ?? typeof(object), inputArray.Length);
-                inputArray.Select(_ => outputElementType == null ? _ : Translate(outputElementType,  _, translated)).ToArray().CopyTo(outputArray, 0);
+                inputArray.Select(_ => outputElementType == null ? _ : Translate(outputElementType, _, translated)).ToArray().CopyTo(outputArray, 0);
                 return outputArray;
             }
 

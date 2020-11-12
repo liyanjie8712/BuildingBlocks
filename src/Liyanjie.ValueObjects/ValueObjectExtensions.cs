@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Liyanjie.ValueObjects
 {
@@ -14,23 +15,24 @@ namespace Liyanjie.ValueObjects
         /// <param name="origin"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static void Assign<T>(this T origin, T value)
-            where T : ValueObject
+        public static void AssignValue<T>(this T origin, T value)
+          where T : ValueObject
         {
-            if (origin == null || value == null)
+            if (origin == null)
+                throw new ArgumentNullException(nameof(origin));
+
+            if (value == null)
                 return;
-            else
+
+            var type = origin.GetType();
+            var type_ComplexType = typeof(ValueObject);
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
             {
-                var type = origin.GetType();
-                var type_ComplexType = typeof(ValueObject);
-                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (var property in properties)
-                {
-                    if (type_ComplexType.IsAssignableFrom(property.PropertyType))
-                        Assign(property.GetValue(origin) as ValueObject, property.GetValue(value) as ValueObject);
-                    else if (property.CanWrite && value != null)
-                        property.SetValue(origin, property.GetValue(value));
-                }
+                if (type_ComplexType.IsAssignableFrom(property.PropertyType) && property.GetValue(origin) != null)
+                    AssignValue(property.GetValue(origin) as ValueObject, property.GetValue(value) as ValueObject);
+                else if (property.CanWrite && value != null)
+                    property.SetValue(origin, property.GetValue(value));
             }
         }
     }
