@@ -13,6 +13,11 @@ namespace Liyanjie.ValueObjects
         public string ADCode { get; set; }
 
         /// <summary>
+        /// 行政区划名称
+        /// </summary>
+        public string ADDisplay { get; set; }
+
+        /// <summary>
         /// 详细地址
         /// </summary>
         public string Detail { get; set; }
