@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.GrpcServer", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.ValueObjects", "src\Liyanjie.ValueObjects\Liyanjie.ValueObjects.csproj", "{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.MongoDB.Driver.Extensions", "src\Liyanjie.MongoDB.Driver.Extensions\Liyanjie.MongoDB.Driver.Extensions.csproj", "{D9A5E98F-0483-430B-AAD9-7068F06E272C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9A5E98F-0483-430B-AAD9-7068F06E272C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9A5E98F-0483-430B-AAD9-7068F06E272C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9A5E98F-0483-430B-AAD9-7068F06E272C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9A5E98F-0483-430B-AAD9-7068F06E272C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -159,6 +165,7 @@ Global
 		{E4E9A686-2F1E-46C7-87D7-83562F8BDD80} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 		{8D232286-BAE5-4743-9587-0EA352A4E80E} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
+		{D9A5E98F-0483-430B-AAD9-7068F06E272C} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8F8E1D8-848B-4EE7-B1FD-9200F7EF1AD2}
