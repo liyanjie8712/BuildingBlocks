@@ -7,16 +7,12 @@ namespace Liyanjie.ValueObjects
     /// </summary>
     public class Name : ValueObject
     {
-        /// <summary>
-        /// 名
-        /// </summary>
         public string FirstName { get; set; }
-        
-        /// <summary>
-        /// 姓（无姓氏不填）
-        /// </summary>
-        public string LastName { get; set; }
-        
+
+        public string MiddleName { get; set; }
+
+        public string FamilyName { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -24,9 +20,8 @@ namespace Liyanjie.ValueObjects
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return FirstName;
-            yield return LastName;
+            yield return MiddleName;
+            yield return FamilyName;
         }
-
-        public override string ToString() => $"{FirstName} {LastName}";
     }
 }
