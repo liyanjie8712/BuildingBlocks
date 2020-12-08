@@ -5,7 +5,7 @@ namespace Liyanjie.ValueObjects
     /// <summary>
     /// 联系人
     /// </summary>
-    public class Contact<TType> : ValueObject
+    public class Contact<TType, TName> : ValueObject
     {
         /// <summary>
         /// 联系方式
@@ -15,7 +15,7 @@ namespace Liyanjie.ValueObjects
         /// <summary>
         /// 姓名
         /// </summary>
-        public Name Name { get; set; }
+        public TName Name { get; set; }
 
         /// <summary>
         /// 号码
@@ -39,5 +39,5 @@ namespace Liyanjie.ValueObjects
     /// <summary>
     /// 
     /// </summary>
-    public class Contact : Contact<string> { }
+    public class Contact : Contact<string, string> { }
 }
