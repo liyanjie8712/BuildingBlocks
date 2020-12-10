@@ -64,12 +64,12 @@ namespace Liyanjie.ValueObjects
 
         public static bool operator ==(ValueObject a, ValueObject b)
         {
-            return a.Equals(b);
+            return a is null ? b is null : a.Equals(b);
         }
 
         public static bool operator !=(ValueObject a, ValueObject b)
         {
-            return !a.Equals(b);
+            return !(a is null ? b is null : a.Equals(b));
         }
     }
 }
