@@ -61,5 +61,15 @@ namespace Liyanjie.ValueObjects
         {
             return MemberwiseClone() as ValueObject;
         }
+
+        public static bool operator ==(ValueObject a, ValueObject b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(ValueObject a, ValueObject b)
+        {
+            return !a.Equals(b);
+        }
     }
 }
