@@ -1,4 +1,5 @@
-﻿
+﻿import { isArray } from "util";
+
 /**
  * 可枚举对象类
  */
@@ -19,7 +20,7 @@ export class Enumerable<T> {
     }
 
     private static _check<T>(array: T[]): void {
-        if (array === null || array === undefined)
+        if (array === null || array === undefined || Array.isArray(array))
             throw new Error('Array parameter can not be null or undefined!');
     }
 
@@ -206,7 +207,7 @@ export class Enumerable<T> {
         let result: GroupedEnumerable<T, TKey>[] = [];
         this.source.forEach(item => {
             let key = keySelector(item);
-            let array = result.filter(_ => comparer(_.key, key) === true);
+            let array = result.filter(_ => comparer(_.key, key));
             array.length > 0
                 ? array[0].source.push(item)
                 : result.push(new GroupedEnumerable({ key: key, source: [item] }));
@@ -229,7 +230,7 @@ export class Enumerable<T> {
         for (let i = 0; i < this.source.length; i++) {
             let item1 = this.source[i];
             let key = keySelector(item1);
-            let item2 = target.filter(_ => comparer(key, targetKeySelector(_)) === true);
+            let item2 = target.filter(_ => comparer(key, targetKeySelector(_)));
             let selected = resultSelector(item1, item2, key);
             selected && result.push(selected);
         }
@@ -274,7 +275,7 @@ export class Enumerable<T> {
         for (let i = 0; i < this.source.length; i++) {
             let item1 = this.source[i];
             let key = keySelector(item1);
-            let filteredTarget = target.filter(_ => comparer(key, targetKeySelector(_)) === true);
+            let filteredTarget = target.filter(_ => comparer(key, targetKeySelector(_)));
             let item2 = filteredTarget.length > 0 ? filteredTarget[0] : null;
             let selected = resultSelector(item1, item2, key);
             selected && result.push(selected);
@@ -325,14 +326,14 @@ export class Enumerable<T> {
         this.source.forEach(item => {
             let key = keySelector(item);
             keys.indexOf(key) < 0 && keys.push(key);
-            let array = group.filter(_ => comparer(_.key, key) === true);
+            let array = group.filter(_ => comparer(_.key, key));
             array.length > 0
                 ? array[0].source.push(item)
                 : group.push({ key: key, source: [item] });
         });
         let result: GroupedEnumerable<T, any>[] = [];
         keys.sort().forEach(item => {
-            result.push(new GroupedEnumerable(group.filter(_ => comparer(item, _.key) === true)[0]));
+            result.push(new GroupedEnumerable(group.filter(_ => comparer(item, _.key))[0]));
         });
         keys = null;
         group = null;
@@ -422,7 +423,7 @@ export class Enumerable<T> {
         for (let i = 0; i < this.source.length; i++) {
             let item1 = this.source[i];
             let item2 = target.length > i ? target[i] : null;
-            if (comparer(item1, item2) === false) {
+            if (!comparer(item1, item2)) {
                 result = false;
                 break;
             }
@@ -453,7 +454,7 @@ export class Enumerable<T> {
         let flag: boolean = false;
         for (let i = 0; i < this.source.length; i++) {
             let item = this.source[i];
-            if (predicate(item, i) === false) {
+            if (!predicate(item, i)) {
                 if (!flag)
                     flag = true;
                 result.push(item);
@@ -461,7 +462,7 @@ export class Enumerable<T> {
                 break;
         }
         this.source.forEach((item, index) => {
-            if (predicate(item, index) === false)
+            if (!predicate(item, index))
                 result.push(item);
         });
         return new Enumerable(result);
@@ -503,7 +504,7 @@ export class Enumerable<T> {
         let flag: boolean = false;
         for (let i = 0; i < this.source.length; i++) {
             let item = this.source[i];
-            if (predicate(item, i) === true) {
+            if (predicate(item, i)) {
                 if (!flag)
                     flag = true;
                 result.push(item);
@@ -575,7 +576,7 @@ export class Enumerable<T> {
     where(predicate: (item: T, index?: number) => boolean): Enumerable<T> {
         let result: T[] = [];
         this.source.forEach((item, index) => {
-            if (predicate(item, index) === true)
+            if (predicate(item, index))
                 result.push(item);
         });
         return new Enumerable(result);

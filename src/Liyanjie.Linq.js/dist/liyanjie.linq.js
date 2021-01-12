@@ -54,7 +54,7 @@
             this.source = source;
         }
         Enumerable._check = function (array) {
-            if (array === null || array === undefined)
+            if (array === null || array === undefined || Array.isArray(array))
                 throw new Error('Array parameter can not be null or undefined!');
         };
         /**
@@ -232,7 +232,7 @@
             var result = [];
             this.source.forEach(function (item) {
                 var key = keySelector(item);
-                var array = result.filter(function (_) { return comparer(_.key, key) === true; });
+                var array = result.filter(function (_) { return comparer(_.key, key); });
                 array.length > 0
                     ? array[0].source.push(item)
                     : result.push(new GroupedEnumerable({ key: key, source: [item] }));
@@ -254,7 +254,7 @@
             var _loop_1 = function (i) {
                 var item1 = this_1.source[i];
                 var key = keySelector(item1);
-                var item2 = target.filter(function (_) { return comparer(key, targetKeySelector(_)) === true; });
+                var item2 = target.filter(function (_) { return comparer(key, targetKeySelector(_)); });
                 var selected = resultSelector(item1, item2, key);
                 selected && result.push(selected);
             };
@@ -300,7 +300,7 @@
             var _loop_2 = function (i) {
                 var item1 = this_2.source[i];
                 var key = keySelector(item1);
-                var filteredTarget = target.filter(function (_) { return comparer(key, targetKeySelector(_)) === true; });
+                var filteredTarget = target.filter(function (_) { return comparer(key, targetKeySelector(_)); });
                 var item2 = filteredTarget.length > 0 ? filteredTarget[0] : null;
                 var selected = resultSelector(item1, item2, key);
                 selected && result.push(selected);
@@ -351,14 +351,14 @@
             this.source.forEach(function (item) {
                 var key = keySelector(item);
                 keys.indexOf(key) < 0 && keys.push(key);
-                var array = group.filter(function (_) { return comparer(_.key, key) === true; });
+                var array = group.filter(function (_) { return comparer(_.key, key); });
                 array.length > 0
                     ? array[0].source.push(item)
                     : group.push({ key: key, source: [item] });
             });
             var result = [];
             keys.sort().forEach(function (item) {
-                result.push(new GroupedEnumerable(group.filter(function (_) { return comparer(item, _.key) === true; })[0]));
+                result.push(new GroupedEnumerable(group.filter(function (_) { return comparer(item, _.key); })[0]));
             });
             keys = null;
             group = null;
@@ -445,7 +445,7 @@
             for (var i = 0; i < this.source.length; i++) {
                 var item1 = this.source[i];
                 var item2 = target.length > i ? target[i] : null;
-                if (comparer(item1, item2) === false) {
+                if (!comparer(item1, item2)) {
                     result = false;
                     break;
                 }
@@ -474,7 +474,7 @@
             var flag = false;
             for (var i = 0; i < this.source.length; i++) {
                 var item = this.source[i];
-                if (predicate(item, i) === false) {
+                if (!predicate(item, i)) {
                     if (!flag)
                         flag = true;
                     result.push(item);
@@ -483,7 +483,7 @@
                     break;
             }
             this.source.forEach(function (item, index) {
-                if (predicate(item, index) === false)
+                if (!predicate(item, index))
                     result.push(item);
             });
             return new Enumerable(result);
@@ -522,7 +522,7 @@
             var flag = false;
             for (var i = 0; i < this.source.length; i++) {
                 var item = this.source[i];
-                if (predicate(item, i) === true) {
+                if (predicate(item, i)) {
                     if (!flag)
                         flag = true;
                     result.push(item);
@@ -590,7 +590,7 @@
         Enumerable.prototype.where = function (predicate) {
             var result = [];
             this.source.forEach(function (item, index) {
-                if (predicate(item, index) === true)
+                if (predicate(item, index))
                     result.push(item);
             });
             return new Enumerable(result);
