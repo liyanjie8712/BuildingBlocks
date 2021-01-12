@@ -20,7 +20,7 @@ export class Enumerable<T> {
     }
 
     private static _check<T>(array: T[]): void {
-        if (array === null || array === undefined || Array.isArray(array))
+        if (array === null || array === undefined || !Array.isArray(array))
             throw new Error('Array parameter can not be null or undefined!');
     }
 

@@ -54,7 +54,7 @@
             this.source = source;
         }
         Enumerable._check = function (array) {
-            if (array === null || array === undefined || Array.isArray(array))
+            if (array === null || array === undefined || !Array.isArray(array))
                 throw new Error('Array parameter can not be null or undefined!');
         };
         /**
