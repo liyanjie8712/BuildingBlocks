@@ -150,5 +150,59 @@ namespace System.Reflection
 
             return output;
         }
+
+        public static void UpdateModel(this object value, object model)
+        {
+            if (value == null)
+                return;
+
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            var properties_value = value.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(_ => _.CanRead);
+            var type_model = model.GetType();
+            foreach (var property_value in properties_value)
+            {
+                var property_model = type_model.GetProperty(property_value.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                if (property_model == null || property_model.CanWrite == false)
+                    continue;
+
+                var _value = property_value.GetValue(value);
+
+                if (property_model.PropertyType.IsValueType && property_value.PropertyType == property_model.PropertyType)
+                    property_model.SetValue(model, _value);
+                else if (property_model.PropertyType == typeof(string) && property_value.PropertyType == typeof(string))
+                    property_model.SetValue(model, _value);
+                else if (property_model.PropertyType == typeof(string) && typeof(IEnumerable).IsAssignableFrom(property_value.PropertyType))
+                    property_model.SetValue(model, string.Join(",", Enumerable.Cast<string>((IEnumerable)_value)));
+                else if (property_model.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(property_model.PropertyType))
+                {
+                    if (_value is string s)
+                        _value = s.Split(',');
+
+                    var propertyElementType = property_model.PropertyType.HasElementType
+                        ? property_model.PropertyType.GetElementType()
+                        : property_model.PropertyType.IsConstructedGenericType
+                            ? property_model.PropertyType.GenericTypeArguments[0]
+                            : null;
+                    var inputArray = Enumerable.Cast<object>((IEnumerable)_value);
+                    var outputArray = Array.CreateInstance(propertyElementType ?? typeof(object), inputArray.Count());
+                    inputArray
+                        .Select(_ => propertyElementType == null ? _ : Convert.ChangeType(_, propertyElementType))
+                        .ToArray()
+                        .CopyTo(outputArray, 0);
+                    property_model.SetValue(model, outputArray);
+                }
+                else if (property_model.PropertyType != typeof(string) && property_model.PropertyType.IsClass)
+                {
+                    if (property_value.PropertyType != typeof(string) && property_value.PropertyType.IsClass)
+                        property_model.GetValue(model).UpdateModel(_value);
+                }
+                else
+                    property_model.SetValue(model, Convert.ChangeType(_value, property_model.PropertyType));
+            }
+        }
     }
 }

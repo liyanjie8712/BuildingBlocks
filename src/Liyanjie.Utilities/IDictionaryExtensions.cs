@@ -31,58 +31,96 @@ namespace System.Reflection
         {
             var output = Activator.CreateInstance(modelType);
 
+            dictionary.UpdateModel(output);
+
+            return output;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <param name="model"></param>
+        public static void UpdateModel(this IDictionary<string, object> dictionary, object model)
+        {
+            if (dictionary.IsNullOrEmpty())
+                return;
+
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
             dictionary = dictionary.ToDictionary(_ => _.Key.ToLower(), _ => _.Value);
-            foreach (var property in modelType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            dictionary = PreProcessDictionary(dictionary);
+
+            foreach (var property in model.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 if (!property.CanWrite)
                     continue;
 
-                object value = null;
-                if (property.PropertyType != typeof(string) && property.PropertyType.IsClass)
-                {
-                    var _prev = $"{property.Name.ToLower()}.";
-                    var _dic = dictionary
-                        .Where(_ => _.Key.StartsWith(_prev))
-                        .ToDictionary(_ => _.Key.Substring(_prev.Length), _ => _.Value);
-                    value = _dic.BuildModel(property.PropertyType);
-                }
-                else
-                {
-                    if (!dictionary.TryGetValue(property.Name.ToLower(), out var objectValue))
-                        continue;
-
-                    if (property.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
-                    {
-                        var propertyElementType = property.PropertyType.HasElementType
-                            ? property.PropertyType.GetElementType()
-                            : property.PropertyType.IsConstructedGenericType
-                                ? property.PropertyType.GenericTypeArguments[0]
-                                : null;
-                        var inputArray = Enumerable.Cast<object>((IEnumerable)objectValue);
-                        var outputArray = Array.CreateInstance(propertyElementType ?? typeof(object), inputArray.Count());
-                        inputArray
-                            .Select(_ => propertyElementType == null ? _ : Convert.ChangeType(_, propertyElementType))
-                            .ToArray()
-                            .CopyTo(outputArray, 0);
-                        value = outputArray;
-                    }
-                    else if (property.PropertyType != typeof(string) && property.PropertyType.IsClass)
-                    {
-                        var _prev = $"{property.Name.ToLower()}.";
-                        var _dic = dictionary.Where(_ => _.Key.StartsWith(_prev)).ToDictionary(_ => _.Key, _ => _.Value);
-                        value = _dic.BuildModel(property.PropertyType);
-                    }
-                    else
-                        value = Convert.ChangeType(objectValue, property.PropertyType);
-                }
-
-                if (value == null)
+                if (!dictionary.TryGetValue(property.Name.ToLower(), out var objectValue))
                     continue;
 
-                property.SetValue(output, value);
-            }
+                if (property.PropertyType == objectValue.GetType())
+                    property.SetValue(model, objectValue);
+                else if (property.PropertyType == typeof(string) && objectValue is IEnumerable enumerable)
+                    property.SetValue(model, string.Join(",", Enumerable.Cast<string>(enumerable)));
+                else if (property.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                {
+                    if (objectValue is string s)
+                        objectValue = s.Split(',');
 
-            return output;
+                    var propertyElementType = property.PropertyType.HasElementType
+                        ? property.PropertyType.GetElementType()
+                        : property.PropertyType.IsConstructedGenericType
+                            ? property.PropertyType.GenericTypeArguments[0]
+                            : null;
+                    var inputArray = Enumerable.Cast<object>((IEnumerable)objectValue);
+                    var outputArray = Array.CreateInstance(propertyElementType ?? typeof(object), inputArray.Count());
+                    inputArray
+                        .Select(_ => propertyElementType == null ? _ : Convert.ChangeType(_, propertyElementType))
+                        .ToArray()
+                        .CopyTo(outputArray, 0);
+                    property.SetValue(model, outputArray);
+                }
+                else if (property.PropertyType != typeof(string) && property.PropertyType.IsClass)
+                {
+                    if (objectValue is IDictionary<string, object> _dic)
+                    {
+                        var modelValue = property.GetValue(model);
+                        if (modelValue == null)
+                            property.SetValue(model, _dic.BuildModel(property.PropertyType));
+                        else
+                        {
+                            _dic.UpdateModel(modelValue);
+                            property.SetValue(model, modelValue);
+                        }
+                    }
+                }
+                else
+                    property.SetValue(model, Convert.ChangeType(objectValue, property.PropertyType));
+            }
+        }
+
+        static IDictionary<string, object> PreProcessDictionary(IDictionary<string, object> dictionary)
+        {
+            if (dictionary.Keys.Any(_ => _.IndexOf('.') > 0))
+            {
+                var newDictionary = dictionary
+                    .Where(_ => _.Key.IndexOf('.') <= 0)
+                    .ToDictionary(_ => _.Key, _ => _.Value);
+                var subDictionaries = dictionary
+                    .Where(_ => _.Key.IndexOf('.') > 0)
+                    .GroupBy(_ => _.Key.Substring(_.Key.IndexOf('.')));
+                foreach (var item in subDictionaries)
+                {
+                    var subDictionary = item.ToDictionary(_ => _.Key.Substring(item.Key.Length + 1), _ => _.Value);
+                    newDictionary[item.Key] = PreProcessDictionary(subDictionary);
+                }
+
+                return newDictionary;
+            }
+            else
+                return dictionary;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Liyanjie.Linq.Expressions
     public class ExpressionParser
     {
         readonly ParameterExpression parameterExpression;
-        readonly DynamicBase variablesObject;
+        readonly object variablesObject;
         readonly ConstantExpression variablesExpression;
 
         /// <summary>
@@ -27,13 +27,7 @@ namespace Liyanjie.Linq.Expressions
         public ExpressionParser(ParameterExpression parameterExpression, IDictionary<string, object> variables)
         {
             this.parameterExpression = parameterExpression;
-            variables ??= new Dictionary<string, object>();
-            var variablesType = TypeFactory.CreateType(variables.ToDictionary(_ => _.Key, _ => (Type)_.Value.GetType()));
-            this.variablesObject = Activator.CreateInstance(variablesType) as DynamicBase;
-            foreach (var item in variables)
-            {
-                variablesObject.SetPropertyValue(item.Key, item.Value);
-            }
+            this.variablesObject = TypeFactory.CreateObject(variables ?? new Dictionary<string, object>());
             this.variablesExpression = Expression.Constant(variablesObject);
         }
 

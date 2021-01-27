@@ -115,6 +115,24 @@ namespace Liyanjie.TypeBuilder
             return type;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static object CreateObject(IDictionary<string, object> values)
+        {
+            var properties = values.ToDictionary(_ => _.Key, _ => _.Value.GetType());
+            var type = CreateType(properties);
+            var @object = Activator.CreateInstance(type) as DynamicBase;
+            foreach (var item in values)
+            {
+                @object.SetPropertyValue(item.Key, item.Value);
+            }
+
+            return @object;
+        }
+
         static string GetMD5(string input)
         {
             using var md5 = MD5.Create();
