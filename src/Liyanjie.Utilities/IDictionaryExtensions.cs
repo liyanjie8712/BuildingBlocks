@@ -84,15 +84,15 @@ namespace System.Reflection
                 }
                 else if (property.PropertyType != typeof(string) && property.PropertyType.IsClass)
                 {
-                    if (objectValue is IDictionary<string, object> _dic)
+                    if (objectValue is IDictionary<string, object> dic)
                     {
-                        var modelValue = property.GetValue(model);
-                        if (modelValue == null)
-                            property.SetValue(model, _dic.BuildModel(property.PropertyType));
+                        var value_model = property.GetValue(model);
+                        if (value_model == null)
+                            property.SetValue(model, dic.BuildModel(property.PropertyType));
                         else
                         {
-                            _dic.UpdateModel(modelValue);
-                            property.SetValue(model, modelValue);
+                            dic.UpdateModel(value_model);
+                            property.SetValue(model, value_model);
                         }
                     }
                 }

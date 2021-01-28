@@ -169,25 +169,25 @@ namespace System.Reflection
                 if (property_model == null || property_model.CanWrite == false)
                     continue;
 
-                var _value = property_value.GetValue(value);
+                var value_ = property_value.GetValue(value);
 
                 if (property_model.PropertyType.IsValueType && property_value.PropertyType == property_model.PropertyType)
-                    property_model.SetValue(model, _value);
+                    property_model.SetValue(model, value_);
                 else if (property_model.PropertyType == typeof(string) && property_value.PropertyType == typeof(string))
-                    property_model.SetValue(model, _value);
+                    property_model.SetValue(model, value_);
                 else if (property_model.PropertyType == typeof(string) && typeof(IEnumerable).IsAssignableFrom(property_value.PropertyType))
-                    property_model.SetValue(model, string.Join(",", Enumerable.Cast<string>((IEnumerable)_value)));
+                    property_model.SetValue(model, string.Join(",", Enumerable.Cast<string>((IEnumerable)value_)));
                 else if (property_model.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(property_model.PropertyType))
                 {
-                    if (_value is string s)
-                        _value = s.Split(',');
+                    if (value_ is string s)
+                        value_ = s.Split(',');
 
                     var propertyElementType = property_model.PropertyType.HasElementType
                         ? property_model.PropertyType.GetElementType()
                         : property_model.PropertyType.IsConstructedGenericType
                             ? property_model.PropertyType.GenericTypeArguments[0]
                             : null;
-                    var inputArray = Enumerable.Cast<object>((IEnumerable)_value);
+                    var inputArray = Enumerable.Cast<object>((IEnumerable)value_);
                     var outputArray = Array.CreateInstance(propertyElementType ?? typeof(object), inputArray.Count());
                     inputArray
                         .Select(_ => propertyElementType == null ? _ : Convert.ChangeType(_, propertyElementType))
@@ -198,10 +198,14 @@ namespace System.Reflection
                 else if (property_model.PropertyType != typeof(string) && property_model.PropertyType.IsClass)
                 {
                     if (property_value.PropertyType != typeof(string) && property_value.PropertyType.IsClass)
-                        property_model.GetValue(model).UpdateModel(_value);
+                    {
+                        var value_model = property_model.GetValue(model) ?? Activator.CreateInstance(property_model.PropertyType);
+                        value_.UpdateModel(value_model);
+                        property_model.SetValue(model, value_model);
+                    }
                 }
                 else
-                    property_model.SetValue(model, Convert.ChangeType(_value, property_model.PropertyType));
+                    property_model.SetValue(model, Convert.ChangeType(value_, property_model.PropertyType));
             }
         }
     }
