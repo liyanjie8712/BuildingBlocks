@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard2.0;netstandard2.1;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.1;</TargetFrameworks>
         <Description>Liyanjie.TypeBuilder</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -18,10 +18,6 @@
     <Target Name="MovePackage" AfterTargets="Pack">
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
     </Target>
-
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
-    </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
         <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />

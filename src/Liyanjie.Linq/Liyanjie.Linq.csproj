@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard2.0;netstandard2.1;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.1;</TargetFrameworks>
         <Description>Dynamic Linq</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
