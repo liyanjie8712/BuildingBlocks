@@ -3,7 +3,7 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <IsPackable>True</IsPackable>
-        <TargetFrameworks>netstandard2.0;netcoreapp3.0;</TargetFrameworks>
+        <TargetFrameworks>net5.0;</TargetFrameworks>
         <Description>AspNetCore.Http扩展</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -21,13 +21,7 @@
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.0.0" />
-        <ProjectReference Include="..\Liyanjie.Utilities\Liyanjie.Utilities.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.0'">
+    <ItemGroup>
         <ProjectReference Include="..\Liyanjie.Utilities\Liyanjie.Utilities.csproj" />
     </ItemGroup>
 

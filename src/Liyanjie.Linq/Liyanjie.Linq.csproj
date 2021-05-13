@@ -19,15 +19,7 @@
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+    <ItemGroup>
         <ProjectReference Include="..\Liyanjie.Linq.Expressions\Liyanjie.Linq.Expressions.csproj" />
     </ItemGroup>
 

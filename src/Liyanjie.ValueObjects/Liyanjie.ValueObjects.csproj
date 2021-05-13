@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;netstandard2.1;</TargetFrameworks>
         <Description>常用值对象</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>

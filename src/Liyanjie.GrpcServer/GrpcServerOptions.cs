@@ -36,7 +36,7 @@ namespace Liyanjie.GrpcServer
             return this;
         }
 
-#if NETSTANDARD2_0 
+#if NETSTANDARD
         readonly IList<Func<IServiceProvider, ServerServiceDefinition>> ServiceFactories = new List<Func<IServiceProvider, ServerServiceDefinition>>();
         /// <summary>
         /// 
@@ -55,7 +55,7 @@ namespace Liyanjie.GrpcServer
         /// </summary>
         /// <returns></returns>
         public Grpc.Core.Server CreateServer(
-#if NETSTANDARD2_0
+#if NETSTANDARD
             IServiceProvider serviceProvider
 #endif
             )
@@ -69,7 +69,7 @@ namespace Liyanjie.GrpcServer
             {
                 server.Services.Add(service);
             }
-#if NETSTANDARD2_0
+#if NETSTANDARD
             foreach (var factory in ServiceFactories)
             {
                 server.Services.Add(factory.Invoke(serviceProvider));

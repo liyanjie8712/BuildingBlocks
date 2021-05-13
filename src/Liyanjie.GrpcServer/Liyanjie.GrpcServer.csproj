@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
+        <TargetFrameworks>net45;netstandard2.0;netstandard2.1;</TargetFrameworks>
         <Description>Liyanjie.GrpcServer</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -19,14 +19,18 @@
         <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
     </Target>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-        <PackageReference Include="Grpc.Core" Version="2.26.0" />
+    <ItemGroup>
+        <PackageReference Include="Grpc.Core" Version="2.37.1" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="Grpc.Core" Version="2.26.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     </ItemGroup>
 
 </Project>
