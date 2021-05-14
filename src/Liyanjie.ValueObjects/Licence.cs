@@ -20,7 +20,7 @@ namespace Liyanjie.ValueObjects
         /// <summary>
         /// 姓名
         /// </summary>
-        public Name Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 照片
