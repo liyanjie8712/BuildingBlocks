@@ -30,12 +30,11 @@ namespace System.Reflection
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TInput"></typeparam>
         /// <typeparam name="TOutput"></typeparam>
         /// <param name="input"></param>
         /// <param name="additional"></param>
         /// <returns></returns>
-        public static TOutput Translate<TInput, TOutput>(this TInput input, Action<TInput, TOutput> additional)
+        public static TOutput Translate<TOutput>(this object input, Action<dynamic, TOutput> additional)
         {
             var output = Translate<TOutput>(input);
 
@@ -47,12 +46,11 @@ namespace System.Reflection
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="TInput"></typeparam>
         /// <typeparam name="TOutput"></typeparam>
         /// <param name="input"></param>
         /// <param name="additional"></param>
         /// <returns></returns>
-        public static async Task<TOutput> TranslateAsync<TInput, TOutput>(this TInput input, Func<TInput, TOutput, Task> additional)
+        public static async Task<TOutput> TranslateAsync<TOutput>(this object input, Func<dynamic, TOutput, Task> additional)
         {
             var output = Translate<TOutput>(input);
 
@@ -116,12 +114,12 @@ namespace System.Reflection
                     {
                         return null;
                     }
-
-                try
-                {
-                    return Convert.ChangeType(input, outputType);
-                }
-                catch { }
+                else
+                    try
+                    {
+                        return Convert.ChangeType(input, outputType);
+                    }
+                    catch { }
             }
 
             if (outputTypeInfo.IsInterface)
