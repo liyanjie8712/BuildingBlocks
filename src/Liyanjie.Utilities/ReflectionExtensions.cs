@@ -34,11 +34,11 @@ namespace System.Reflection
         /// <param name="input"></param>
         /// <param name="additional"></param>
         /// <returns></returns>
-        public static TOutput Translate<TOutput>(this object input, Action<dynamic, TOutput> additional)
+        public static TOutput Translate<TOutput>(this object input, Action<TOutput> additional)
         {
             var output = Translate<TOutput>(input);
 
-            additional?.Invoke(input, output);
+            additional?.Invoke(output);
 
             return output;
         }
@@ -50,12 +50,12 @@ namespace System.Reflection
         /// <param name="input"></param>
         /// <param name="additional"></param>
         /// <returns></returns>
-        public static async Task<TOutput> TranslateAsync<TOutput>(this object input, Func<dynamic, TOutput, Task> additional)
+        public static async Task<TOutput> TranslateAsync<TOutput>(this object input, Func<TOutput, Task> additional)
         {
             var output = Translate<TOutput>(input);
 
             if (additional != null)
-                await additional.Invoke(input, output);
+                await additional.Invoke(output);
 
             return output;
         }
