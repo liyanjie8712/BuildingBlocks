@@ -22,29 +22,14 @@ namespace Liyanjie.Utilities
         {
             var next = (char)reader.PeekChar();
 
-            switch (next)
+            return next switch
             {
-                case 'i':
-                    return DecodeInteger(reader, ref bytesConsumed);
-                case 'l':
-                    return DecodeList(reader, ref bytesConsumed);
-                case 'd':
-                    return DecodeDictionary(reader, ref bytesConsumed);
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    // String
-                    return DecodeBytes(reader, ref bytesConsumed);
-            }
-
-            return null;
+                'i' => DecodeInteger(reader, ref bytesConsumed),
+                'l' => DecodeList(reader, ref bytesConsumed),
+                'd' => DecodeDictionary(reader, ref bytesConsumed),
+                '0' or '1' or '2' or '3' or '4' or '5' or '6' or '7' or '8' or '9' => DecodeBytes(reader, ref bytesConsumed),// String
+                _ => null,
+            };
         }
         static Dictionary<string, object> DecodeDictionary(BinaryReader reader, ref int bytesConsumed)
         {
