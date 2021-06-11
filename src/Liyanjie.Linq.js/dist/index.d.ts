@@ -154,11 +154,18 @@ export declare class Enumerable<T> {
      */
     min(selector: (item: T) => number): number;
     /**
-     * 对可枚举对象中的元素进行排序
+     * 对可枚举对象中的元素进行排序（升序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
     orderBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T>;
+    /**
+     * 对可枚举对象中的元素进行排序（降序）
+     * @param keySelector
+     * @param comparer
+     */
+    orderByDescending<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T>;
+    private __orderBy;
     /**
      * 向可枚举对象的开头添加元素
      * @param elements 目标元素
@@ -313,9 +320,15 @@ export declare class OrderedEnumerable<T> extends Enumerable<T> {
     groupedSource: GroupedEnumerable<T, any>[];
     constructor(groupedSource: GroupedEnumerable<T, any>[]);
     /**
-     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序
+     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（升序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
     thenBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T>;
+    /**
+     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（降序）
+     * @param keySelector 属性选择器
+     * @param comparer 属性对比器
+     */
+    thenByDescending<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T>;
 }

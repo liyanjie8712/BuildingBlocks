@@ -315,11 +315,24 @@ export class Enumerable<T> {
     }
 
     /**
-     * 对可枚举对象中的元素进行排序
+     * 对可枚举对象中的元素进行排序（升序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
     orderBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        return this.__orderBy(keySelector, false, comparer);
+    }
+
+    /**
+     * 对可枚举对象中的元素进行排序（降序）
+     * @param keySelector
+     * @param comparer
+     */
+    orderByDescending<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        return this.__orderBy(keySelector, true, comparer);
+    }
+
+    private __orderBy<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
         comparer = comparer || ((item1, item2) => item1 === item2);
         let keys: TKey[] = [];
         let group: { key: TKey, source: T[] }[] = [];
@@ -331,8 +344,11 @@ export class Enumerable<T> {
                 ? array[0].source.push(item)
                 : group.push({ key: key, source: [item] });
         });
+        keys = keys.sort();
+        if (descending)
+            keys = keys.reverse();
         let result: GroupedEnumerable<T, any>[] = [];
-        keys.sort().forEach(item => {
+        keys.forEach(item => {
             result.push(new GroupedEnumerable(group.filter(_ => comparer(item, _.key))[0]));
         });
         keys = null;
@@ -698,7 +714,7 @@ export class OrderedEnumerable<T> extends Enumerable<T> {
     }
 
     /**
-     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序
+     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（升序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
@@ -707,6 +723,22 @@ export class OrderedEnumerable<T> extends Enumerable<T> {
         let result: GroupedEnumerable<T, any>[] = [];
         this.groupedSource.forEach(item => {
             item.orderBy(keySelector, comparer).groupedSource.forEach(item2 => {
+                result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
+            });
+        });
+        return new OrderedEnumerable(result);
+    }
+
+    /**
+     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（降序）
+     * @param keySelector 属性选择器
+     * @param comparer 属性对比器
+     */
+    thenByDescending<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        comparer = comparer || ((item1, item2) => item1 === item2);
+        let result: GroupedEnumerable<T, any>[] = [];
+        this.groupedSource.forEach(item => {
+            item.orderByDescending(keySelector, comparer).groupedSource.forEach(item2 => {
                 result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
             });
         });

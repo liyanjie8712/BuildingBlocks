@@ -7,17 +7,17 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderedEnumerable = exports.NumberEnumerable = exports.GroupedEnumerable = exports.Enumerable = void 0;
@@ -320,11 +320,22 @@ var Enumerable = /** @class */ (function () {
         return selector(this.source.sort(function (item1, item2) { return selector(item1) - selector(item2); })[0]);
     };
     /**
-     * 对可枚举对象中的元素进行排序
+     * 对可枚举对象中的元素进行排序（升序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
     Enumerable.prototype.orderBy = function (keySelector, comparer) {
+        return this.__orderBy(keySelector, false, comparer);
+    };
+    /**
+     * 对可枚举对象中的元素进行排序（降序）
+     * @param keySelector
+     * @param comparer
+     */
+    Enumerable.prototype.orderByDescending = function (keySelector, comparer) {
+        return this.__orderBy(keySelector, true, comparer);
+    };
+    Enumerable.prototype.__orderBy = function (keySelector, descending, comparer) {
         comparer = comparer || (function (item1, item2) { return item1 === item2; });
         var keys = [];
         var group = [];
@@ -336,8 +347,11 @@ var Enumerable = /** @class */ (function () {
                 ? array[0].source.push(item)
                 : group.push({ key: key, source: [item] });
         });
+        keys = keys.sort();
+        if (descending)
+            keys = keys.reverse();
         var result = [];
-        keys.sort().forEach(function (item) {
+        keys.forEach(function (item) {
             result.push(new GroupedEnumerable(group.filter(function (_) { return comparer(item, _.key); })[0]));
         });
         keys = null;
@@ -354,7 +368,7 @@ var Enumerable = /** @class */ (function () {
             elements[_i] = arguments[_i];
         }
         Enumerable._check(elements);
-        this.source = new (Array.bind.apply(Array, __spreadArrays([void 0], elements, this.source)))();
+        this.source = new (Array.bind.apply(Array, __spreadArray(__spreadArray([void 0], elements), this.source)))();
         return this;
     };
     /**
@@ -385,7 +399,7 @@ var Enumerable = /** @class */ (function () {
      * 对可枚举对象中的元素反向排序
      */
     Enumerable.prototype.reverse = function () {
-        return new Enumerable(new (Array.bind.apply(Array, __spreadArrays([void 0], this.source)))().reverse());
+        return new Enumerable(new (Array.bind.apply(Array, __spreadArray([void 0], this.source)))().reverse());
     };
     /**
      * 遍历可枚举对象并生成一个新的可枚举对象
@@ -555,7 +569,7 @@ var Enumerable = /** @class */ (function () {
     Enumerable.prototype.union = function (target, comparer) {
         Enumerable._check(target);
         comparer = comparer || (function (item1, item2) { return item1 === item2; });
-        var result = new (Array.bind.apply(Array, __spreadArrays([void 0], this.source)))();
+        var result = new (Array.bind.apply(Array, __spreadArray([void 0], this.source)))();
         target.forEach(function (item) {
             if (result.some(function (item2) { return comparer(item, item2); }) === false)
                 result.push(item);
@@ -689,7 +703,7 @@ var OrderedEnumerable = /** @class */ (function (_super) {
         return _this;
     }
     /**
-     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序
+     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（升序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
@@ -698,6 +712,21 @@ var OrderedEnumerable = /** @class */ (function (_super) {
         var result = [];
         this.groupedSource.forEach(function (item) {
             item.orderBy(keySelector, comparer).groupedSource.forEach(function (item2) {
+                result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
+            });
+        });
+        return new OrderedEnumerable(result);
+    };
+    /**
+     * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（降序）
+     * @param keySelector 属性选择器
+     * @param comparer 属性对比器
+     */
+    OrderedEnumerable.prototype.thenByDescending = function (keySelector, descending, comparer) {
+        comparer = comparer || (function (item1, item2) { return item1 === item2; });
+        var result = [];
+        this.groupedSource.forEach(function (item) {
+            item.orderByDescending(keySelector, comparer).groupedSource.forEach(function (item2) {
                 result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
             });
         });

@@ -47,7 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.GrpcServer", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.ValueObjects", "src\Liyanjie.ValueObjects\Liyanjie.ValueObjects.csproj", "{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "test\ConsoleApp\ConsoleApp.csproj", "{65045F48-BCC5-4746-9C38-34FBA12ACE8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "test\ConsoleApp\ConsoleApp.csproj", "{65045F48-BCC5-4746-9C38-34FBA12ACE8C}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "NodejsConsoleApp", "test\NodejsConsoleApp\NodejsConsoleApp.njsproj", "{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,10 @@ Global
 		{65045F48-BCC5-4746-9C38-34FBA12ACE8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65045F48-BCC5-4746-9C38-34FBA12ACE8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65045F48-BCC5-4746-9C38-34FBA12ACE8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +151,7 @@ Global
 		{8D232286-BAE5-4743-9587-0EA352A4E80E} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{65045F48-BCC5-4746-9C38-34FBA12ACE8C} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
+		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8F8E1D8-848B-4EE7-B1FD-9200F7EF1AD2}

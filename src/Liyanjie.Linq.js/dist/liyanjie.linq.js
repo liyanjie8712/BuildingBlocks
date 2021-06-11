@@ -340,11 +340,22 @@
             return selector(this.source.sort(function (item1, item2) { return selector(item1) - selector(item2); })[0]);
         };
         /**
-         * 对可枚举对象中的元素进行排序
+         * 对可枚举对象中的元素进行排序（升序）
          * @param keySelector 属性选择器
          * @param comparer 属性对比器
          */
         Enumerable.prototype.orderBy = function (keySelector, comparer) {
+            return this.__orderBy(keySelector, false, comparer);
+        };
+        /**
+         * 对可枚举对象中的元素进行排序（降序）
+         * @param keySelector
+         * @param comparer
+         */
+        Enumerable.prototype.orderByDescending = function (keySelector, comparer) {
+            return this.__orderBy(keySelector, true, comparer);
+        };
+        Enumerable.prototype.__orderBy = function (keySelector, descending, comparer) {
             comparer = comparer || (function (item1, item2) { return item1 === item2; });
             var keys = [];
             var group = [];
@@ -356,8 +367,11 @@
                     ? array[0].source.push(item)
                     : group.push({ key: key, source: [item] });
             });
+            keys = keys.sort();
+            if (descending)
+                keys = keys.reverse();
             var result = [];
-            keys.sort().forEach(function (item) {
+            keys.forEach(function (item) {
                 result.push(new GroupedEnumerable(group.filter(function (_) { return comparer(item, _.key); })[0]));
             });
             keys = null;
@@ -706,7 +720,7 @@
             return _this;
         }
         /**
-         * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序
+         * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（升序）
          * @param keySelector 属性选择器
          * @param comparer 属性对比器
          */
@@ -715,6 +729,21 @@
             var result = [];
             this.groupedSource.forEach(function (item) {
                 item.orderBy(keySelector, comparer).groupedSource.forEach(function (item2) {
+                    result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
+                });
+            });
+            return new OrderedEnumerable(result);
+        };
+        /**
+         * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（降序）
+         * @param keySelector 属性选择器
+         * @param comparer 属性对比器
+         */
+        OrderedEnumerable.prototype.thenByDescending = function (keySelector, descending, comparer) {
+            comparer = comparer || (function (item1, item2) { return item1 === item2; });
+            var result = [];
+            this.groupedSource.forEach(function (item) {
+                item.orderByDescending(keySelector, comparer).groupedSource.forEach(function (item2) {
                     result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
                 });
             });
