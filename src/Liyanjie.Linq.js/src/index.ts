@@ -1,4 +1,4 @@
-﻿import { isArray } from "util";
+﻿import { isArray, isString } from "util";
 
 /**
  * 可枚举对象类
@@ -319,8 +319,8 @@ export class Enumerable<T> {
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
-    orderBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
-        return this.__orderBy(keySelector, false, comparer);
+    orderBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => number, keyEqualizer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        return this.__orderBy(keySelector, false, comparer, keyEqualizer);
     }
 
     /**
@@ -328,28 +328,28 @@ export class Enumerable<T> {
      * @param keySelector
      * @param comparer
      */
-    orderByDescending<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
-        return this.__orderBy(keySelector, true, comparer);
+    orderByDescending<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => number, keyEqualizer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        return this.__orderBy(keySelector, true, comparer, keyEqualizer);
     }
 
-    private __orderBy<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
-        comparer = comparer || ((item1, item2) => item1 === item2);
+    private __orderBy<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => number, keyEqualizer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        keyEqualizer = keyEqualizer || ((item1, item2) => item1 === item2);
         let keys: TKey[] = [];
         let group: { key: TKey, source: T[] }[] = [];
         this.source.forEach(item => {
             let key = keySelector(item);
             keys.indexOf(key) < 0 && keys.push(key);
-            let array = group.filter(_ => comparer(_.key, key));
+            let array = group.filter(_ => keyEqualizer(_.key, key));
             array.length > 0
                 ? array[0].source.push(item)
                 : group.push({ key: key, source: [item] });
         });
-        keys = keys.sort();
+        keys = comparer ? keys.sort(comparer) : keys.sort();
         if (descending)
             keys = keys.reverse();
         let result: GroupedEnumerable<T, any>[] = [];
         keys.forEach(item => {
-            result.push(new GroupedEnumerable(group.filter(_ => comparer(item, _.key))[0]));
+            result.push(new GroupedEnumerable(group.filter(_ => keyEqualizer(item, _.key))[0]));
         });
         keys = null;
         group = null;
@@ -718,15 +718,8 @@ export class OrderedEnumerable<T> extends Enumerable<T> {
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
-    thenBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
-        comparer = comparer || ((item1, item2) => item1 === item2);
-        let result: GroupedEnumerable<T, any>[] = [];
-        this.groupedSource.forEach(item => {
-            item.orderBy(keySelector, comparer).groupedSource.forEach(item2 => {
-                result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
-            });
-        });
-        return new OrderedEnumerable(result);
+    thenBy<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => number, keyEqualizer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        return this.__thenBy(keySelector, false, comparer, keyEqualizer);
     }
 
     /**
@@ -734,11 +727,18 @@ export class OrderedEnumerable<T> extends Enumerable<T> {
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
-    thenByDescending<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
-        comparer = comparer || ((item1, item2) => item1 === item2);
+    thenByDescending<TKey>(keySelector: (item: T) => TKey, comparer?: (item1: TKey, item2: TKey) => number, keyEqualizer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        return this.__thenBy(keySelector, true, comparer, keyEqualizer);
+    }
+
+    private __thenBy<TKey>(keySelector: (item: T) => TKey, descending: boolean, comparer?: (item1: TKey, item2: TKey) => number, keyEqualizer?: (item1: TKey, item2: TKey) => boolean): OrderedEnumerable<T> {
+        keyEqualizer = keyEqualizer || ((item1, item2) => item1 === item2);
         let result: GroupedEnumerable<T, any>[] = [];
         this.groupedSource.forEach(item => {
-            item.orderByDescending(keySelector, comparer).groupedSource.forEach(item2 => {
+            let enumerable = descending
+                ? item.orderByDescending(keySelector, comparer, keyEqualizer)
+                : item.orderBy(keySelector, comparer, keyEqualizer);
+            enumerable.groupedSource.forEach(item2 => {
                 result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
             });
         });

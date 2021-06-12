@@ -324,35 +324,35 @@ var Enumerable = /** @class */ (function () {
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
-    Enumerable.prototype.orderBy = function (keySelector, comparer) {
-        return this.__orderBy(keySelector, false, comparer);
+    Enumerable.prototype.orderBy = function (keySelector, comparer, keyEqualizer) {
+        return this.__orderBy(keySelector, false, comparer, keyEqualizer);
     };
     /**
      * 对可枚举对象中的元素进行排序（降序）
      * @param keySelector
      * @param comparer
      */
-    Enumerable.prototype.orderByDescending = function (keySelector, comparer) {
-        return this.__orderBy(keySelector, true, comparer);
+    Enumerable.prototype.orderByDescending = function (keySelector, comparer, keyEqualizer) {
+        return this.__orderBy(keySelector, true, comparer, keyEqualizer);
     };
-    Enumerable.prototype.__orderBy = function (keySelector, descending, comparer) {
-        comparer = comparer || (function (item1, item2) { return item1 === item2; });
+    Enumerable.prototype.__orderBy = function (keySelector, descending, comparer, keyEqualizer) {
+        keyEqualizer = keyEqualizer || (function (item1, item2) { return item1 === item2; });
         var keys = [];
         var group = [];
         this.source.forEach(function (item) {
             var key = keySelector(item);
             keys.indexOf(key) < 0 && keys.push(key);
-            var array = group.filter(function (_) { return comparer(_.key, key); });
+            var array = group.filter(function (_) { return keyEqualizer(_.key, key); });
             array.length > 0
                 ? array[0].source.push(item)
                 : group.push({ key: key, source: [item] });
         });
-        keys = keys.sort();
+        keys = comparer ? keys.sort(comparer) : keys.sort();
         if (descending)
             keys = keys.reverse();
         var result = [];
         keys.forEach(function (item) {
-            result.push(new GroupedEnumerable(group.filter(function (_) { return comparer(item, _.key); })[0]));
+            result.push(new GroupedEnumerable(group.filter(function (_) { return keyEqualizer(item, _.key); })[0]));
         });
         keys = null;
         group = null;
@@ -707,26 +707,25 @@ var OrderedEnumerable = /** @class */ (function (_super) {
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
-    OrderedEnumerable.prototype.thenBy = function (keySelector, comparer) {
-        comparer = comparer || (function (item1, item2) { return item1 === item2; });
-        var result = [];
-        this.groupedSource.forEach(function (item) {
-            item.orderBy(keySelector, comparer).groupedSource.forEach(function (item2) {
-                result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
-            });
-        });
-        return new OrderedEnumerable(result);
+    OrderedEnumerable.prototype.thenBy = function (keySelector, comparer, keyEqualizer) {
+        return this.__thenBy(keySelector, false, comparer, keyEqualizer);
     };
     /**
      * 对已排序的可枚举对象在保持原有排序结果的情况下再次排序（降序）
      * @param keySelector 属性选择器
      * @param comparer 属性对比器
      */
-    OrderedEnumerable.prototype.thenByDescending = function (keySelector, descending, comparer) {
-        comparer = comparer || (function (item1, item2) { return item1 === item2; });
+    OrderedEnumerable.prototype.thenByDescending = function (keySelector, comparer, keyEqualizer) {
+        return this.__thenBy(keySelector, true, comparer, keyEqualizer);
+    };
+    OrderedEnumerable.prototype.__thenBy = function (keySelector, descending, comparer, keyEqualizer) {
+        keyEqualizer = keyEqualizer || (function (item1, item2) { return item1 === item2; });
         var result = [];
         this.groupedSource.forEach(function (item) {
-            item.orderByDescending(keySelector, comparer).groupedSource.forEach(function (item2) {
+            var enumerable = descending
+                ? item.orderByDescending(keySelector, comparer, keyEqualizer)
+                : item.orderBy(keySelector, comparer, keyEqualizer);
+            enumerable.groupedSource.forEach(function (item2) {
                 result.push(new GroupedEnumerable({ key: item.key + ':' + item2.key, source: item2.source }));
             });
         });
