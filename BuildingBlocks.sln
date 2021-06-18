@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "test\ConsoleA
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "NodejsConsoleApp", "test\NodejsConsoleApp\NodejsConsoleApp.njsproj", "{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liyanjie.MongoDB.Driver.Extensions", "src\Liyanjie.MongoDB.Driver.Extensions\Liyanjie.MongoDB.Driver.Extensions.csproj", "{19BC5CB9-8EB7-4B63-834A-D11B0B6F3EB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19BC5CB9-8EB7-4B63-834A-D11B0B6F3EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19BC5CB9-8EB7-4B63-834A-D11B0B6F3EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19BC5CB9-8EB7-4B63-834A-D11B0B6F3EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19BC5CB9-8EB7-4B63-834A-D11B0B6F3EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +158,7 @@ Global
 		{FB2430A4-5E93-4EFE-B43F-6C2ECD4E7DE0} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{65045F48-BCC5-4746-9C38-34FBA12ACE8C} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 		{0FB962DF-922D-48A1-9E1C-9FAF8D35BBBF} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
+		{19BC5CB9-8EB7-4B63-834A-D11B0B6F3EB5} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8F8E1D8-848B-4EE7-B1FD-9200F7EF1AD2}

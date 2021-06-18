@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -10,21 +11,23 @@ namespace System.Linq
         /// <summary>
         /// 判断此集合为null或空集合
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source)
             => source == null || source.Count() == 0;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="separator"></param>
         /// <param name="toString"></param>
         /// <returns></returns>
-        public static string ToString<T>(this IEnumerable<T> source, string separator, Func<T, string> toString = default)
+        public static string ToString<TSource>(this IEnumerable<TSource> source,
+            string separator,
+            Func<TSource, string> toString = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -37,11 +40,12 @@ namespace System.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="separatorSelector"></param>
         /// <returns></returns>
-        public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, Func<T, bool> separatorSelector)
+        public static IEnumerable<IEnumerable<TSource>> Split<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> separatorSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -49,7 +53,7 @@ namespace System.Linq
             if (separatorSelector == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var output = new List<IEnumerable<T>>();
+            var output = new List<IEnumerable<TSource>>();
             var i = -1;
             var length = source.Count();
             for (int j = 0; j < length; j++)
@@ -75,16 +79,82 @@ namespace System.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static IEnumerable<T> RandomTake<T>(this IEnumerable<T> source, int count = 0)
+        public static IEnumerable<TSource> RandomTake<TSource>(this IEnumerable<TSource> source,
+            int count = 0)
         {
             if (count == 0)
                 count = new Random(Guid.NewGuid().GetHashCode()).Next(source.Count());
 
             return source.OrderBy(_ => Guid.NewGuid()).Take(count);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ifPredicate"></param>
+        /// <param name="wherePredicate"></param>
+        /// <returns></returns>
+        public static IEnumerable<TSource> IfWhere<TSource>(this IQueryable<TSource> source,
+            Func<bool> ifPredicate,
+            Func<TSource, bool> wherePredicate)
+        {
+            if (ifPredicate == null)
+                throw new ArgumentNullException(nameof(ifPredicate));
+
+            if (wherePredicate == null)
+                throw new ArgumentNullException(nameof(wherePredicate));
+
+            return ifPredicate.Invoke()
+                ? source.Where(wherePredicate)
+                : source;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<TResult>> SelectAsync<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
+        {
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var output = new List<TResult>();
+            foreach (var item in source)
+            {
+                output.Add(await selector.Invoke(item));
+            }
+            return output;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<TResult>> SelectManyAsync<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Task<IEnumerable<TResult>>> selector)
+        {
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            var output = new List<TResult>();
+            foreach (var item in source)
+            {
+                output.AddRange(await selector.Invoke(item));
+            }
+            return output;
         }
     }
 }

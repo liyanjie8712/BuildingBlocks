@@ -276,30 +276,18 @@ namespace System.Drawing
 
         static ImageFormat GetFormat(string extension)
         {
-            switch (extension.ToLower())
+            return extension.ToLower() switch
             {
-                case ".bmp":
-                    return ImageFormat.Bmp;
-                case ".emf":
-                    return ImageFormat.Emf;
-                case ".gif":
-                    return ImageFormat.Gif;
-                case ".ico":
-                case ".icon":
-                    return ImageFormat.Icon;
-                case ".jpg":
-                case ".jpeg":
-                    return ImageFormat.Jpeg;
-                case ".png":
-                    return ImageFormat.Png;
-                case ".tif":
-                case ".tiff":
-                    return ImageFormat.Tiff;
-                case ".wmf":
-                    return ImageFormat.Wmf;
-                default:
-                    return ImageFormat.Jpeg;
-            }
+                ".bmp" => ImageFormat.Bmp,
+                ".emf" => ImageFormat.Emf,
+                ".gif" => ImageFormat.Gif,
+                ".ico" or ".icon" => ImageFormat.Icon,
+                ".jpg" or ".jpeg" => ImageFormat.Jpeg,
+                ".png" => ImageFormat.Png,
+                ".tif" or ".tiff" => ImageFormat.Tiff,
+                ".wmf" => ImageFormat.Wmf,
+                _ => ImageFormat.Jpeg,
+            };
         }
     }
 }

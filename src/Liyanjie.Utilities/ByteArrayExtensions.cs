@@ -195,7 +195,7 @@ namespace System.Security.Cryptography
                 return
 #if NETSTANDARD
                     rsa.Encrypt(input, encryptionPadding)
-#elif NET45
+#elif NETFRAMEWORK
                     rsa.EncryptValue(input)
 #endif
                     ;
@@ -214,7 +214,7 @@ namespace System.Security.Cryptography
                     var tmpEncrypted =
 #if NETSTANDARD
                         rsa.Encrypt(tmpBuffer, encryptionPadding)
-#elif NET45
+#elif NETFRAMEWORK
                         rsa.EncryptValue(tmpBuffer)
 #endif
                         ;
@@ -243,7 +243,7 @@ namespace System.Security.Cryptography
                 return
 #if NETSTANDARD
                     rsa.Decrypt(input, encryptionPadding)
-#elif NET45
+#elif NETFRAMEWORK
                     rsa.DecryptValue(input)
 #endif
                     ;
@@ -262,7 +262,7 @@ namespace System.Security.Cryptography
                     var tmpDecrypted =
 #if NETSTANDARD
                         rsa.Decrypt(tmpBuffer, encryptionPadding)
-#elif NET45
+#elif NETFRAMEWORK
                         rsa.DecryptValue(tmpBuffer)
 #endif
                         ;

@@ -6,7 +6,7 @@ Date.prototype.format = function (format, weekDisplay) {
         "h{1,2}": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12,
         "H{1,2}": this.getHours(),
         "m{1,2}": this.getMinutes(),
-        "s{1,2}": this.getSeconds(),
+        "s{1,2}": this.getSeconds(), //秒
     };
     var w = {
         "0": weekDisplay.sun || "星期日",

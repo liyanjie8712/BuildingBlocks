@@ -10,12 +10,14 @@ namespace System.Linq
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="ifPredicate"></param>
         /// <param name="wherePredicate"></param>
         /// <returns></returns>
-        public static IQueryable<T> IfWhere<T>(this IQueryable<T> source, Func<bool> ifPredicate, Expression<Func<T, bool>> wherePredicate)
+        public static IQueryable<TSource> IfWhere<TSource>(this IQueryable<TSource> source,
+            Func<bool> ifPredicate,
+            Expression<Func<TSource, bool>> wherePredicate)
         {
             if (ifPredicate == null)
                 throw new ArgumentNullException(nameof(ifPredicate));

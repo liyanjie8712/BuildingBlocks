@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>net452;netstandard2.1;</TargetFrameworks>
-        <Description>常用值对象</Description>
+        <Description>MongoDB.Driver Extensions</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
         <Company>Liyanjie.net</Company>
@@ -11,12 +11,8 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <DocumentationFile>bin\Release\Liyanjie.ValueObjects.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <Target Name="MovePackage" AfterTargets="Pack">
-        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
-    </Target>
+    <ItemGroup>
+        <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
+    </ItemGroup>
 
 </Project>
