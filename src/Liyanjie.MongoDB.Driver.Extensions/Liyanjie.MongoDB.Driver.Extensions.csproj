@@ -11,6 +11,14 @@
         <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DocumentationFile>bin\Release\Liyanjie.MongoDB.Driver.Extensions.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <Target Name="MovePackage" AfterTargets="Pack">
+        <Move SourceFiles="$(OutputPath)$(PackageId).$(PackageVersion).nupkg" DestinationFolder="C:\_NugetPackages\" />
+    </Target>
+
     <ItemGroup>
         <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
     </ItemGroup>
