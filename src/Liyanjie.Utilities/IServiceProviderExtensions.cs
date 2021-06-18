@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace System
 {
-#if NET45
+#if NETFRAMEWORK
     /// <summary>
     /// 
     /// </summary>
