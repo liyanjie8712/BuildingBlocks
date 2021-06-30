@@ -26,6 +26,9 @@ namespace Liyanjie.Utilities.Cn
                     continue;
 
                 var array = @string.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (chineseChars.ContainsKey(array[1][0]))
+                    continue;
+
                 chineseChars.Add(array[1][0], (array[0], int.Parse(array[2]), array[3].Split(',')));
             }
         }
