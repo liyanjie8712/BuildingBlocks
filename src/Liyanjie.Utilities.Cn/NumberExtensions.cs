@@ -1,7 +1,36 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 
 namespace System
 {
+    public enum CnNumberType
+    {
+        /// <summary>
+        /// 12345.678 &gt;&gt; 一万二千三百四十五点六七八
+        /// </summary>
+        Normal,
+
+        /// <summary>
+        /// 12345.678 &gt;&gt; 壹万贰仟叁佰肆拾伍点陆柒捌
+        /// </summary>
+        NormalUpper,
+
+        /// <summary>
+        /// 12345.678 &gt;&gt; 一二三四五点六七八
+        /// </summary>
+        Direct,
+
+        /// <summary>
+        /// 12345.678 &gt;&gt; 壹贰叁肆伍点陆柒捌
+        /// </summary>
+        DirectUpper,
+
+        /// <summary>
+        /// 12345.678 &gt;&gt; 壹万贰仟叁佰肆拾伍圆陆角柒分捌厘
+        /// </summary>
+        Currency,
+    }
+
     /// <summary>
     /// 数值类型的扩展方法
     /// </summary>
@@ -11,67 +40,67 @@ namespace System
         /// 将数字转换成中文表示形式
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">是否输出中文大写货币</param>
+        /// <param name="numberType">Normal:中文数字,Currency:中文货币,Direct:仅转中文</param>
         /// <returns></returns>
-        public static string ToCN(this short number, bool isCurrency = false)
-            => ToCN((double)number, isCurrency);
+        public static string ToCn(this short number, CnNumberType numberType = default) => ToCn((double)number, numberType);
 
         /// <summary>
         /// 将数字转换成中文表示形式
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">是否输出中文大写货币</param>
+        /// <param name="numberType">Normal:中文数字,Currency:中文货币,Direct:仅转中文</param>
         /// <returns></returns>
-        public static string ToCN(this int number, bool isCurrency = false)
-            => ToCN((double)number, isCurrency);
+        public static string ToCn(this int number, CnNumberType numberType = default) => ToCn((double)number, numberType);
 
         /// <summary>
         /// 将数字转换成中文表示形式
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">是否输出中文大写货币</param>
+        /// <param name="numberType">Normal:中文数字,Currency:中文货币,Direct:仅转中文</param>
         /// <returns></returns>
-        public static string ToCN(this long number, bool isCurrency = false)
-            => ToCN((double)number, isCurrency);
+        public static string ToCn(this long number, CnNumberType numberType = default) => ToCn((double)number, numberType);
 
         /// <summary>
         /// 将数字转换成中文表示形式
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">是否输出中文大写货币</param>
+        /// <param name="numberType">Normal:中文数字,Currency:中文货币,Direct:仅转中文</param>
         /// <returns></returns>
-        public static string ToCN(this float number, bool isCurrency = false)
-            => ToCN(number, isCurrency);
+        public static string ToCn(this float number, CnNumberType numberType = default) => ToCn((double)number, numberType);
 
         /// <summary>
         /// 将数字转换成中文表示形式
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">是否输出中文大写货币</param>
+        /// <param name="numberType">Normal:中文数字,Currency:中文货币,Direct:仅转中文</param>
         /// <returns></returns>
-        public static string ToCN(this double number, bool isCurrency = false)
+        public static string ToCn(this double number, CnNumberType numberType = default)
         {
-            return _ToCN(number, isCurrency);
+            var @long = (long)Math.Truncate(number);
+            var @decimal = @long - number == 0d ? null : number.ToString();
+            return ToCn(@long, @decimal, numberType);
         }
 
         /// <summary>
         /// 将数字转换成中文表示形式
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">是否输出中文大写货币</param>
+        /// <param name="numberType">Normal:中文数字,Currency:中文货币,Direct:仅转中文</param>
         /// <returns></returns>
-        public static string ToCN(this decimal number, bool isCurrency = false)
+        public static string ToCn(this decimal number, CnNumberType numberType = default)
         {
-            return _ToCN(number, isCurrency);
+            var @long = (long)Math.Truncate(number);
+            var @decimal = @long - number == 0m ? null : number.ToString();
+            return ToCn(@long, @decimal, numberType);
         }
 
         /// <summary>
         /// 将 0-9，10，100，1000，10000，100000000等数字转换成中文
         /// </summary>
         /// <param name="number"></param>
-        /// <param name="isCurrency">true：中文货币大写</param>
+        /// <param name="uppercase">true：大写</param>
         /// <returns></returns>
-        public static string ToCNNumber(this long number, bool isCurrency = false)
+        public static string ToCnNumber(this long number, bool uppercase = false)
         {
             if (number >= 100000000)
                 number = 100000000;
@@ -85,199 +114,180 @@ namespace System
                 number = 10;
             else if (number < 0)
                 number = 0;
-            return _ToCNNumber(number, isCurrency);
+            return ToCnNumber_(number, uppercase);
         }
 
-        static string _ToCN(double number, bool isCurrency)
+        static string ToCn(long number, string @decimal, CnNumberType numberType)
         {
-            return _ToCN(number.ToString(), (long)Math.Truncate(number), isCurrency);
-        }
-
-        static string _ToCN(decimal number, bool isCurrency)
-        {
-            return _ToCN(number.ToString(), (long)Math.Truncate(number), isCurrency);
-        }
-
-        static string _ToCN(string numberString, long number, bool isCurrency)
-        {
-            var dec = string.Empty;
-
-            var index = numberString.IndexOf('.');
-            if (index >= 0)
-                dec = numberString.Substring(index + 1);
-
             var sb = new StringBuilder();
 
             if (number < 0)
                 sb.Append("负");
+            number = Math.Abs(number);
 
-            var outputZero = false;//输出0
-
-            if (number > 1)
+            sb.Append(numberType switch
             {
-                var l = number;
-                for (int ii = 4; ii >= 0; ii--)
-                {
-                    var level = (long)Math.Pow(10000, ii);
-                    if (number >= level)
-                    {
-                        l = number % level;
-                        number /= level;
-                        if (number > 19)
-                        {
-                            var j = 1000;
-                            while (number % (j * 10) >= 1)
-                            {
-                                var tmp = number / j;
+                CnNumberType.Normal => ProcessLong(number),
+                CnNumberType.NormalUpper => ProcessLong(number, uppercase: true),
+                CnNumberType.Direct => string.Join(string.Empty, number.ToString().Select(_ => ToCnNumber_(long.Parse(_.ToString()), false))),
+                CnNumberType.DirectUpper => string.Join(string.Empty, number.ToString().Select(_ => ToCnNumber_(long.Parse(_.ToString()), true))),
+                CnNumberType.Currency => ProcessLong(number, uppercase: true),
+                _ => string.Empty,
+            });
 
-                                if (tmp != 0)
-                                {
-                                    sb.Append(_ToCNNumber(tmp, isCurrency));
-                                    if (j > 1)
-                                        sb.Append(_ToCNNumber(j, isCurrency));
-                                    outputZero = true;
-                                }
-                                else if (outputZero)
-                                {
-                                    sb.Append(_ToCNNumber(0L, isCurrency));
-                                    outputZero = false;
-                                }
-
-                                if (j == 1)
-                                    break;
-
-                                number %= j;
-                                j /= 10;
-                            }
-                        }
-                        else if (number >= 10)
-                        {
-                            sb.Append(_ToCNNumber(10L, isCurrency));
-                            if (number % 10 > 0)
-                            {
-                                sb.Append(_ToCNNumber(number % 10, isCurrency));
-                                outputZero = true;
-                            }
-                        }
-                        else
-                            sb.Append(_ToCNNumber(number, isCurrency));
-
-                        if (level > 1)
-                            sb.Append(_ToCNNumber(level, isCurrency));
-                    }
-                    number = l;
-                }
-            }
-            else if (!isCurrency)
-                sb.Append(_ToCNNumber(number, isCurrency));
-
-            if (!string.IsNullOrEmpty(dec))
+            if (!string.IsNullOrEmpty(@decimal))
             {
-                #region 处理小数部分
-
-                if (isCurrency)
+                sb.Append(numberType switch
                 {
-                    if (sb.Length > 0)
-                        sb.Append("圆");
+                    CnNumberType.Normal => "点",
+                    CnNumberType.NormalUpper => "点",
+                    CnNumberType.Direct => "点",
+                    CnNumberType.DirectUpper => "点",
+                    CnNumberType.Currency => "圆",
+                    _ => string.Empty,
+                });
 
-                    //if (outputZero)
-                    //    sb.Append(toCNNumber(0L, isCurrency));
+                var index = @decimal.IndexOf('.');
+                if (index > 0)
+                    @decimal = @decimal.Substring(index + 1);
 
-                    for (int i = 0; i < dec.Length; i++)
-                    {
-                        var c = dec[i].ToString();
-                        var d = long.Parse(c.ToString());
-
-                        if (d > 0)
-                        {
-                            sb.Append(_ToCNNumber(d, isCurrency));
-                            sb.Append(_Unit(i));
-                            outputZero = true;
-                        }
-                        else if (dec.Length > i + 1 && outputZero)
-                        {
-                            sb.Append(_ToCNNumber(0L, isCurrency));
-                            outputZero = false;
-                        }
-                    }
-                }
-                else
+                sb.Append(numberType switch
                 {
-                    sb.Append("点");
-                    foreach (char c in dec)
-                    {
-                        sb.Append(_ToCNNumber(long.Parse(c.ToString()), isCurrency));
-                    }
-                }
-
-                #endregion
+                    CnNumberType.Normal => string.Join(string.Empty, @decimal.Select(_ => ToCnNumber_(long.Parse(_.ToString()), false))),
+                    CnNumberType.NormalUpper => string.Join(string.Empty, @decimal.Select(_ => ToCnNumber_(long.Parse(_.ToString()), true))),
+                    CnNumberType.Direct => string.Join(string.Empty, @decimal.Select(_ => ToCnNumber_(long.Parse(_.ToString()), false))),
+                    CnNumberType.DirectUpper => string.Join(string.Empty, @decimal.Select(_ => ToCnNumber_(long.Parse(_.ToString()), true))),
+                    CnNumberType.Currency => ProcessDecimal(@decimal),
+                    _ => string.Empty,
+                });
             }
-            else if (isCurrency)
+            else if (numberType == CnNumberType.Currency)
                 sb.Append("圆整");
 
             return sb.ToString();
-        }
 
-        static string _Unit(int i)
-        {
-            var output = string.Empty;
-            switch (i)
+            static string ProcessLong(long number, bool uppercase = false)
             {
-                case 0:
-                    output = "角";
-                    break;
-                case 1:
-                    output = "分";
-                    break;
-                case 2:
-                    output = "厘";
-                    break;
-                default:
-                    break;
-            }
-            return output;
-        }
+                var sb = new StringBuilder();
+                var zeroFlag = false;//输出0
+                if (number > 1)
+                {
+                    var l = number;
+                    for (int ii = 4; ii >= 0; ii--)
+                    {
+                        var level = (long)Math.Pow(10000, ii);
+                        if (number >= level)
+                        {
+                            l = number % level;
+                            number /= level;
+                            if (number > 19)
+                            {
+                                var j = 1000;
+                                while (number % (j * 10) >= 1)
+                                {
+                                    var tmp = number / j;
 
-        static string _ToCNNumber(long number, bool isCurrency)
+                                    if (tmp != 0)
+                                    {
+                                        sb.Append(ToCnNumber(tmp, uppercase));
+                                        if (j > 1)
+                                            sb.Append(ToCnNumber(j, uppercase));
+                                        zeroFlag = true;
+                                    }
+                                    else if (zeroFlag)
+                                    {
+                                        sb.Append(ToCnNumber(0L, uppercase));
+                                        zeroFlag = false;
+                                    }
+
+                                    if (j == 1)
+                                        break;
+
+                                    number %= j;
+                                    j /= 10;
+                                }
+                            }
+                            else if (number >= 10)
+                            {
+                                sb.Append(ToCnNumber(10L, uppercase));
+                                if (number % 10 > 0)
+                                {
+                                    sb.Append(ToCnNumber(number % 10, uppercase));
+                                    zeroFlag = true;
+                                }
+                            }
+                            else
+                                sb.Append(ToCnNumber(number, uppercase));
+
+                            if (level > 1)
+                                sb.Append(ToCnNumber(level, uppercase));
+                        }
+                        number = l;
+                    }
+                }
+                else
+                    sb.Append(ToCnNumber(number, uppercase));
+                return sb.ToString();
+            }
+            static string ProcessDecimal(string @decimal)
+            {
+                var sb = new StringBuilder();
+                var zeroFlag = false;//输出0
+                for (int i = 0; i < @decimal.Length; i++)
+                {
+                    var c = @decimal[i].ToString();
+                    var d = long.Parse(c.ToString());
+
+                    if (d > 0)
+                    {
+                        sb.Append(ToCnNumber_(d, true));
+                        sb.Append(Unit(i));
+                        zeroFlag = true;
+                    }
+                    else if (@decimal.Length > i + 1 && zeroFlag)
+                    {
+                        sb.Append(ToCnNumber_(0L, true));
+                        zeroFlag = false;
+                    }
+                }
+                return sb.ToString();
+
+                static string Unit(int i)
+                {
+                    return i switch
+                    {
+                        0 => "角",
+                        1 => "分",
+                        2 => "厘",
+                        _ => string.Empty,
+                    };
+                }
+            }
+        }
+        static string ToCnNumber_(long number, bool uppercase)
         {
             if (number > 100000000)
                 number /= 100000000;
 
-            switch (number)
+            return number switch
             {
-                case 0:
-                    return isCurrency ? "零" : "〇";
-                case 1:
-                    return isCurrency ? "壹" : "一";
-                case 2:
-                    return isCurrency ? "贰" : "二";
-                case 3:
-                    return isCurrency ? "叁" : "三";
-                case 4:
-                    return isCurrency ? "肆" : "四";
-                case 5:
-                    return isCurrency ? "伍" : "五";
-                case 6:
-                    return isCurrency ? "陆" : "六";
-                case 7:
-                    return isCurrency ? "柒" : "七";
-                case 8:
-                    return isCurrency ? "捌" : "八";
-                case 9:
-                    return isCurrency ? "玖" : "九";
-                case 10:
-                    return isCurrency ? "拾" : "十";
-                case 100:
-                    return isCurrency ? "佰" : "百";
-                case 1000:
-                    return isCurrency ? "仟" : "千";
-                case 10000:
-                    return isCurrency ? "万" : "万";
-                case 100000000:
-                    return isCurrency ? "亿" : "亿";
-                default:
-                    return string.Empty;
-            }
+                0 => uppercase ? "零" : "〇",
+                1 => uppercase ? "壹" : "一",
+                2 => uppercase ? "贰" : "二",
+                3 => uppercase ? "叁" : "三",
+                4 => uppercase ? "肆" : "四",
+                5 => uppercase ? "伍" : "五",
+                6 => uppercase ? "陆" : "六",
+                7 => uppercase ? "柒" : "七",
+                8 => uppercase ? "捌" : "八",
+                9 => uppercase ? "玖" : "九",
+                10 => uppercase ? "拾" : "十",
+                100 => uppercase ? "佰" : "百",
+                1000 => uppercase ? "仟" : "千",
+                10000 => uppercase ? "万" : "万",
+                100000000 => uppercase ? "亿" : "亿",
+                _ => string.Empty,
+            };
         }
     }
 }
