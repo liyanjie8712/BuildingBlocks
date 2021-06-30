@@ -127,7 +127,7 @@ namespace System
                 if ((input > 47 && input < 58) || (input > 64 && input < 91) || (input > 96 && input < 123))
                     return (input.ToString(), false);
 
-                if (PinyinHelper.TryGetPinyin(input, out var pinyins))
+                if (ChineseCharsHelper.TryGetPinyin(input, out var pinyins))
                     return (pinyins[0], true);
 
                 return ("*", false);

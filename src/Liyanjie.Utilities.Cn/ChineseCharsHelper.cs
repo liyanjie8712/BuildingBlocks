@@ -9,10 +9,10 @@ namespace Liyanjie.Utilities.Cn
     /// <summary>
     /// 
     /// </summary>
-    public class PinyinHelper
+    public class ChineseCharsHelper
     {
         static readonly Dictionary<char, (string, int, string[])> chineseChars;
-        static PinyinHelper()
+        static ChineseCharsHelper()
         {
             chineseChars = new();
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Liyanjie.Utilities.Cn.ChineseChars.txt");
