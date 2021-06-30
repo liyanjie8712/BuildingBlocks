@@ -35,7 +35,7 @@ namespace Liyanjie.Utilities.Cn
 
         public static IReadOnlyDictionary<char, (string Code, int StrokeCount, string[] Pinyins)> ChineseChars => chineseChars;
 
-        public static bool TryGetPinyin(char chineseChar, out string[] pinyins)
+        public static bool TryGetPinyins(char chineseChar, out string[] pinyins)
         {
             if (ChineseChars.ContainsKey(chineseChar))
             {
