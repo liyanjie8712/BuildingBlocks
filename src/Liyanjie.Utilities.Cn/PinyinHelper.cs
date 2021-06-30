@@ -20,7 +20,7 @@ namespace Liyanjie.Utilities.Cn
             while (true)
             {
                 var @string = reader.ReadLine();
-                if (@string is null)
+                if (string.IsNullOrEmpty(@string))
                     break;
                 if (@string.StartsWith("#"))
                     continue;
