@@ -114,8 +114,8 @@ namespace System
         /// <param name="privateKeyString">私钥</param>
         /// <param name="encryptionPadding"></param>
         /// <returns></returns>
-        public static string RSADecrypt(this string base64String, string privateKeyString, RSAEncryptionPadding encryptionPadding)
-            => Encoding.Unicode.GetString(Convert.FromBase64String(base64String).RSADecrypt(privateKeyString, encryptionPadding));
+        public static string RSADecrypt(this string input, string privateKeyString, RSAEncryptionPadding encryptionPadding)
+            => Encoding.Unicode.GetString(Convert.FromBase64String(input).RSADecrypt(privateKeyString, encryptionPadding));
 #endif
 
         /// <summary>

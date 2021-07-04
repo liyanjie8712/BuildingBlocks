@@ -121,14 +121,6 @@
     ```csharp
     IMongoQueryable<TSource> IfWhere<TSource>(this IMongoQueryable<TSource> source, Func<bool> ifPredicate, Expression<Func<TSource, bool>> wherePredicate);
     ```
-- #### Liyanjie.Pinyin
-    基于“结巴分词”的中文获取拼音实现 
-    - ExtendMethods
-    ```csharp
-    string[] GetPinyin(this string chineseInput);  //获取中文拼音
-    string[] GetChineseWordPinyin(this string chineseWord);  //尝试获取中文词语的拼音
-    string[] GetChineseCharPinyins(this char chineseChar);  //尝试获取中文字符的拼音
-    ```
 - #### Liyanjie.TemplateMatching
     适用于AspNet的模板匹配
     ```csharp
@@ -159,10 +151,29 @@
     //so many…
     ```
 - #### Liyanjie.Utility.Cn
-    中国常用的一些帮助类及扩展方法
-    - ChineseCharsHelper
+    中国(中文)常用的一些帮助类及扩展方法
+    - ChineseADHelper
+    ```csharp
+    bool TryGetChildren(string code, out Dictionary<string, string> children);
+    string[] Display(string code);
+    ```
+    - ChineseCharHelper
     ```csharp
     bool TryGetChineseCharInfo(char chineseChar, out (string Unicode, int StrokeCount, string[] Pinyins) info);
+    ```
+    - IPHelper
+    ```csharp
+    (string Area, string ISP) SearchIP(string ip);
+    ```
+    - PhoneNumberHelper
+    ```csharp
+    bool TryFindPhoneNumber(string phoneNumber, out PhoneNumber number);
+    ```
+    - PinyinHelper
+    ```csharp
+    string[] GetPinyin(this IEnumerable<string> chineseWords);  //获取中文拼音
+    string[] GetChineseWordPinyin(this string chineseWord);  //尝试获取中文词语的拼音
+    string[] GetChineseCharPinyins(this char chineseChar);  //尝试获取中文字符的拼音
     ```
     - ExtendMethods
     ```csharp
