@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Text;
 
 namespace Liyanjie.Utilities.Cn
@@ -11,42 +11,45 @@ namespace Liyanjie.Utilities.Cn
     /// </summary>
     public class ChineseCharsHelper
     {
-        static readonly Dictionary<char, (string, int, string[])> chineseChars;
-        static ChineseCharsHelper()
+        public static string ChineseCharsFile { get; set; } = "ChineseChars.txt";
+        static readonly Lazy<Dictionary<char, (string, int, string[])>> chineseChars_Lazy = new(() =>
         {
-            chineseChars = new();
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Liyanjie.Utilities.Cn.ChineseChars.txt");
-            using var reader = new StreamReader(stream, Encoding.UTF8);
-            while (true)
+            var chineseChars = new Dictionary<char, (string, int, string[])>();
+            if (!Path.IsPathRooted(ChineseCharsFile))
+                ChineseCharsFile = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ChineseCharsFile));
+            var data = File.ReadAllLines(ChineseCharsFile, Encoding.UTF8)
+                    .Where(_ => !string.IsNullOrWhiteSpace(_))
+                    .Where(_ => !_.StartsWith("#"))
+                    .Select(_ => _.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            foreach (var array in data)
             {
-                var @string = reader.ReadLine();
-                if (string.IsNullOrEmpty(@string))
-                    break;
-                if (@string.StartsWith("#"))
+                var @char = array[1][0];
+                if (chineseChars.ContainsKey(@char))
                     continue;
 
-                var array = @string.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (chineseChars.ContainsKey(array[1][0]))
-                    continue;
-
-                chineseChars.Add(array[1][0], (array[0], int.Parse(array[2]), array[3].Split(',')));
+                chineseChars.Add(@char, (array[0], int.Parse(array[2]), array[3].Split(',')));
             }
-        }
+            return chineseChars;
+        });
 
-        public static IReadOnlyDictionary<char, (string Code, int StrokeCount, string[] Pinyins)> ChineseChars => chineseChars;
+        public static IReadOnlyDictionary<char, (string UnicodeCode, int StrokeCount, string[] Pinyins)> ChineseChars => chineseChars_Lazy.Value;
 
-        public static bool TryGetPinyins(char chineseChar, out string[] pinyins)
+        public static bool TryGetChineseCharInfo(char chineseChar, out (string Unicode, int StrokeCount, string[] Pinyins) info)
         {
+            if ((chineseChar > 47 && chineseChar < 58) || (chineseChar > 64 && chineseChar < 91) || (chineseChar > 96 && chineseChar < 123))
+                goto Default;
+
             if (ChineseChars.ContainsKey(chineseChar))
             {
-                pinyins = ChineseChars[chineseChar].Pinyins;
+                info = ChineseChars[chineseChar];
                 return true;
             }
             else
-            {
-                pinyins = default;
-                return false;
-            }
+                goto Default;
+
+            Default:
+            info = default;
+            return false;
         }
     }
 }

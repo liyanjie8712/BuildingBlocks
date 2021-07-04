@@ -9,13 +9,22 @@ namespace System.Linq
     public static class IEnumerableExtensions
     {
         /// <summary>
-        /// 判断此集合为null或空集合
+        /// 判断此集合为null或为空集合
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
         public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source)
             => source == null || source.Count() == 0;
+
+        /// <summary>
+        /// 判断此集合非null且非空集合
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static bool IsNotNullOrEmpty<TSource>(this IEnumerable<TSource> source)
+            => !source.IsNullOrEmpty();
 
         /// <summary>
         /// 

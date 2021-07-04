@@ -34,7 +34,7 @@ namespace Liyanjie.EnglishPluralization
 
         readonly List<string> knownPluralWords;
 
-        readonly string[] uninflectiveSuffixes = new string[]
+        readonly string[] uninflectiveSuffixes = new[]
         {
             #region
             "fish",
@@ -47,7 +47,7 @@ namespace Liyanjie.EnglishPluralization
            #endregion
         };
 
-        readonly string[] uninflectiveWords = new string[]
+        readonly string[] uninflectiveWords = new[]
         {
             #region
             "bison",
@@ -137,7 +137,7 @@ namespace Liyanjie.EnglishPluralization
            #endregion
         };
 
-        readonly Dictionary<string, string> irregularVerbList = new Dictionary<string, string>
+        readonly Dictionary<string, string> irregularVerbList = new()
         {
             #region
             {
@@ -171,7 +171,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly List<string> pronounList = new List<string>
+        readonly List<string> pronounList = new()
         {
             #region
             "I",
@@ -244,7 +244,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly Dictionary<string, string> irregularPluralsList = new Dictionary<string, string>
+        readonly Dictionary<string, string> irregularPluralsList = new()
         {
             #region
             {
@@ -446,7 +446,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly Dictionary<string, string> assimilatedClassicalInflectionList = new Dictionary<string, string>
+        readonly Dictionary<string, string> assimilatedClassicalInflectionList = new()
         {
             #region
             {
@@ -568,7 +568,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly Dictionary<string, string> oSuffixList = new Dictionary<string, string>
+        readonly Dictionary<string, string> oSuffixList = new()
         {
             #region
             {
@@ -670,7 +670,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly Dictionary<string, string> classicalInflectionList = new Dictionary<string, string>
+        readonly Dictionary<string, string> classicalInflectionList = new()
         {
             #region
             {
@@ -1136,7 +1136,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly List<string> knownConflictingPluralList = new List<string>
+        readonly List<string> knownConflictingPluralList = new()
         {
             #region
             "they",
@@ -1149,7 +1149,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly Dictionary<string, string> wordsEndingWithSeList = new Dictionary<string, string>
+        readonly Dictionary<string, string> wordsEndingWithSeList = new()
         {
             #region
             {
@@ -1523,7 +1523,7 @@ namespace Liyanjie.EnglishPluralization
             #endregion
         };
 
-        readonly Dictionary<string, string> wordsEndingWithSisList = new Dictionary<string, string>
+        readonly Dictionary<string, string> wordsEndingWithSisList = new()
         {
             #region
             {

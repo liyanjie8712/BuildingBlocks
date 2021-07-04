@@ -28,7 +28,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="ChineseChars.txt" />
+      <Content Include="ChineseChars.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

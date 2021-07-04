@@ -47,7 +47,7 @@ export class Guid {
      * @param format
      * @returns
      */
-    toString(format?: string): string {
+    format(format: string = 'N'): string {
         if (format)
             switch (format) {
                 case 'N':
@@ -55,14 +55,14 @@ export class Guid {
                 case 'D':
                     return `${this.array.slice(0, 8)}-${this.array.slice(8, 12)}-${this.array.slice(12, 16)}-${this.array.slice(16, 20)}-${this.array.slice(20, 32)}`.replace(/,/g, '');
                 case 'B':
-                    return `{${this.toString('D')}}`;
+                    return `{${this.format('D')}}`;
                 case 'P':
-                    return `(${this.toString('D')})`;
+                    return `(${this.format('D')})`;
                 default:
                     throw new Error("Parameter “format” must be one of N|D|B|P]");
             }
         else
-            return this.toString('D');
+            return this.format('D');
     }
 
     /**

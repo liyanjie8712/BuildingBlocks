@@ -78,6 +78,44 @@
         return date;
     };
 
+    function __toCnNumber(number, uppercase) {
+        switch (number) {
+            case 0:
+                return uppercase ? '零' : '〇';
+            case 1:
+                return uppercase ? '壹' : '一';
+            case 2:
+                return uppercase ? '贰' : '二';
+            case 3:
+                return uppercase ? '叁' : '三';
+            case 4:
+                return uppercase ? '肆' : '四';
+            case 5:
+                return uppercase ? '伍' : '五';
+            case 6:
+                return uppercase ? '陆' : '六';
+            case 7:
+                return uppercase ? '柒' : '七';
+            case 8:
+                return uppercase ? '捌' : '八';
+            case 9:
+                return uppercase ? '玖' : '九';
+            case 10:
+                return uppercase ? '拾' : '十';
+            case 100:
+                return uppercase ? '佰' : '百';
+            case 1000:
+                return uppercase ? '仟' : '千';
+            case 10000:
+                return '万';
+            case 100000000:
+                return '亿';
+            case 1000000000000:
+                return '兆';
+            case 10000000000000000:
+                return '京';
+        }
+    }
     Number.prototype.plus = function (arg) {
         var r1, r2, m;
         try {
@@ -139,9 +177,13 @@
         r2 = Number(arg.toString().replace('.', ''));
         return (r1 / r2) * Math.pow(10, t2 - t1);
     };
-    Number.prototype.toCNNumber = function (upperOrLower) {
-        if (upperOrLower === void 0) { upperOrLower = false; }
-        var i = parseInt(this.toString()), f = '';
+    Number.prototype.toCnNumber = function (uppercase) {
+        if (uppercase === void 0) { uppercase = false; }
+        var i = parseInt(this.toString());
+        if (i >= 10000000000000000)
+            i = 10000000000000000;
+        if (i >= 1000000000000)
+            i = 1000000000000;
         if (i >= 100000000)
             i = 100000000;
         else if (i >= 10000)
@@ -154,213 +196,163 @@
             i = 10;
         else if (i < 0)
             i = 0;
-        if (i > 100000000)
-            i /= 100000000;
-        if (upperOrLower) {
-            switch (i) {
-                case 0:
-                    f = '零';
-                    break;
-                case 1:
-                    f = '壹';
-                    break;
-                case 2:
-                    f = '贰';
-                    break;
-                case 3:
-                    f = '叁';
-                    break;
-                case 4:
-                    f = '肆';
-                    break;
-                case 5:
-                    f = '伍';
-                    break;
-                case 6:
-                    f = '陆';
-                    break;
-                case 7:
-                    f = '柒';
-                    break;
-                case 8:
-                    f = '捌';
-                    break;
-                case 9:
-                    f = '玖';
-                    break;
-                case 10:
-                    f = '拾';
-                    break;
-                case 100:
-                    f = '佰';
-                    break;
-                case 1000:
-                    f = '仟';
-                    break;
-                case 10000:
-                    f = '万';
-                    break;
-                case 100000000:
-                    f = '亿';
-                    break;
-            }
-        }
-        else {
-            switch (i) {
-                case 0:
-                    f = '〇';
-                    break;
-                case 1:
-                    f = '一';
-                    break;
-                case 2:
-                    f = '二';
-                    break;
-                case 3:
-                    f = '三';
-                    break;
-                case 4:
-                    f = '四';
-                    break;
-                case 5:
-                    f = '五';
-                    break;
-                case 6:
-                    f = '六';
-                    break;
-                case 7:
-                    f = '七';
-                    break;
-                case 8:
-                    f = '八';
-                    break;
-                case 9:
-                    f = '九';
-                    break;
-                case 10:
-                    f = '十';
-                    break;
-                case 100:
-                    f = '百';
-                    break;
-                case 1000:
-                    f = '千';
-                    break;
-                case 10000:
-                    f = '万';
-                    break;
-                case 100000000:
-                    f = '亿';
-                    break;
-            }
-        }
-        return f;
+        return __toCnNumber(i, uppercase);
     };
-    Number.prototype.toCN = function (currency) {
-        if (currency === void 0) { currency = false; }
-        var num = 0, //整数部分
-        dec, //小数部分
-        output0 = false, //输出0
-        s = '', unit = function (i) {
-            var s;
+    Number.prototype.toCn = function (numberType) {
+        if (numberType === void 0) { numberType = 'Normal'; }
+        numberType = numberType.toLowerCase();
+        var number = this.toString();
+        var s = '';
+        if (number[0] == '-') {
+            s += '负';
+            number = number.substr(1);
+        }
+        var unit = function (i) {
             switch (i) {
                 case 0:
-                    s = '角';
-                    break;
+                    return '角';
                 case 1:
-                    s = '分';
-                    break;
+                    return '分';
                 case 2:
-                    s = '厘';
+                    return '厘';
+                default:
+                    return '';
+            }
+        }, processLong = function (number, uppercase) {
+            var sb = '';
+            var zeroFlag = false; //输出0
+            if (number > 1) {
+                var l = number;
+                for (var i = 4; i >= 0; i--) {
+                    var level = Math.pow(10000, i);
+                    if (number >= level) {
+                        l = number % level;
+                        number = parseInt((number / level).toString());
+                        if (number > 19) {
+                            var j = 1000;
+                            while (number % (j * 10) >= 1) {
+                                var tmp = parseInt((number / j).toString());
+                                if (tmp != 0) {
+                                    sb += __toCnNumber(tmp, uppercase);
+                                    if (j > 1)
+                                        sb += __toCnNumber(j, uppercase);
+                                    zeroFlag = true;
+                                }
+                                else if (zeroFlag) {
+                                    sb += __toCnNumber(0, uppercase);
+                                    zeroFlag = false;
+                                }
+                                if (j == 1)
+                                    break;
+                                number %= j;
+                                j = j.divide(10);
+                            }
+                        }
+                        else if (number >= 10) {
+                            sb += __toCnNumber(10, uppercase);
+                            if (number % 10 > 0) {
+                                sb += __toCnNumber(number % 10, uppercase);
+                                zeroFlag = true;
+                            }
+                        }
+                        else
+                            sb += __toCnNumber(number, uppercase);
+                        if (level > 1)
+                            sb += __toCnNumber(level, uppercase);
+                    }
+                    number = l;
+                }
+            }
+            else
+                sb += __toCnNumber(number, uppercase);
+            return sb;
+        }, processDecimal = function (decimal) {
+            var sb = '';
+            var zeroFlag = false; //输出0
+            for (var i = 0; i < decimal.length; i++) {
+                var d = parseInt(decimal[i]);
+                if (d > 0) {
+                    sb += __toCnNumber(d, true);
+                    sb += unit(i);
+                    zeroFlag = true;
+                }
+                else if (decimal.length > i + 1 && zeroFlag) {
+                    sb += __toCnNumber(0, true);
+                    zeroFlag = false;
+                }
+            }
+            return sb;
+        };
+        var int = parseInt(number);
+        switch (numberType) {
+            case 'normal':
+                s += processLong(int, false);
+                break;
+            case 'normalupper':
+                s += processLong(int, true);
+                break;
+            case 'direct':
+                {
+                    var s_ = int.toString();
+                    for (var i = 0; i < s_.length; i++) {
+                        s += __toCnNumber(parseInt(s_[i]), false);
+                    }
+                }
+                break;
+            case 'directupper':
+                {
+                    var s_ = int.toString();
+                    for (var i = 0; i < s_.length; i++) {
+                        s += __toCnNumber(parseInt(s_[i]), true);
+                    }
+                }
+                break;
+            case 'currency':
+                s += processLong(int, true);
+                break;
+        }
+        var dec, index = number.indexOf('.');
+        if (index > 0)
+            dec = number.substr(index + 1);
+        if (dec) {
+            switch (numberType) {
+                case 'normal':
+                case 'normalupper':
+                case 'direct':
+                case 'directupper':
+                    s += '点';
+                    break;
+                case 'currency':
+                    s += '圆';
                     break;
             }
-            return s;
-        };
-        num = parseInt(this.toString());
-        dec = this.minus(num);
-        if (num < 0)
-            s += '负';
-        if (num > 1) {
-            var l = num;
-            for (var ii = 4; ii >= 0; ii--) {
-                var level = Math.pow(10000, ii);
-                if (num >= level) {
-                    l = num % level;
-                    num = num.divide(level);
-                    if (num > 19) {
-                        var j = 1000;
-                        while (num % (j * 10) >= 1) {
-                            var tmp = parseInt((num / j).toString());
-                            if (tmp != 0) {
-                                s += (tmp).toCNNumber(currency);
-                                if (j > 1)
-                                    s += j.toCNNumber(currency);
-                                output0 = true;
-                            }
-                            else if (output0) {
-                                s += (0).toCNNumber(currency);
-                                output0 = false;
-                            }
-                            if (j == 1)
-                                break;
-                            num %= j;
-                            j = j.divide(10);
-                        }
+            switch (numberType) {
+                case 'normal':
+                    for (var i = 0; i < dec.length; i++) {
+                        s += __toCnNumber(parseInt(dec[i]), false);
                     }
-                    else if (num >= 10) {
-                        s += (10).toCNNumber(currency);
-                        if (num % 10 > 0) {
-                            s += (num % 10).toCNNumber(currency);
-                            output0 = true;
-                        }
+                    break;
+                case 'normalupper':
+                    for (var i = 0; i < dec.length; i++) {
+                        s += __toCnNumber(parseInt(dec[i]), true);
                     }
-                    else
-                        s += num.toCNNumber(currency);
-                    if (level > 1)
-                        s += level.toCNNumber(currency);
-                }
-                num = l;
+                    break;
+                case 'direct':
+                    for (var i = 0; i < dec.length; i++) {
+                        s += __toCnNumber(parseInt(dec[i]), false);
+                    }
+                    break;
+                case 'directupper':
+                    for (var i = 0; i < dec.length; i++) {
+                        s += __toCnNumber(parseInt(dec[i]), true);
+                    }
+                    break;
+                case 'currency':
+                    s += processDecimal(dec);
+                    break;
             }
         }
-        else
-            s += num.toCNNumber(currency);
-        if (dec > 0) {
-            //处理小数部分
-            s += currency ? '圆' : '点';
-            if (currency) {
-                if (output0) {
-                    s += (0).toCNNumber(currency);
-                    output0 = false;
-                }
-                var i = 0;
-                do {
-                    dec = dec.multipy(10);
-                    var dd = parseInt(dec.toString());
-                    dec = dec.minus(dd);
-                    if (dd > 0) {
-                        s += dd.toCNNumber(currency);
-                        s += unit(i);
-                        output0 = true;
-                    }
-                    else if (dec > 0 && output0) {
-                        s += (0).toCNNumber(currency);
-                        output0 = false;
-                    }
-                    i++;
-                    if (i > 2)
-                        break;
-                } while (dec > 0);
-            }
-            else {
-                do {
-                    dec = dec.multipy(10);
-                    var dd = parseInt(dec.toString());
-                    dec = dec.minus(dd);
-                    s += dd.toCNNumber(currency);
-                } while (dec > 0);
-            }
-        }
-        else if (currency)
+        else if (numberType == 'currency')
             s += '圆整';
         return s;
     };
@@ -410,7 +402,8 @@
          * @param format
          * @returns
          */
-        Guid.prototype.toString = function (format) {
+        Guid.prototype.format = function (format) {
+            if (format === void 0) { format = 'N'; }
             if (format)
                 switch (format) {
                     case 'N':
@@ -418,14 +411,14 @@
                     case 'D':
                         return (this.array.slice(0, 8) + "-" + this.array.slice(8, 12) + "-" + this.array.slice(12, 16) + "-" + this.array.slice(16, 20) + "-" + this.array.slice(20, 32)).replace(/,/g, '');
                     case 'B':
-                        return "{" + this.toString('D') + "}";
+                        return "{" + this.format('D') + "}";
                     case 'P':
-                        return "(" + this.toString('D') + ")";
+                        return "(" + this.format('D') + ")";
                     default:
                         throw new Error("Parameter “format” must be one of N|D|B|P]");
                 }
             else
-                return this.toString('D');
+                return this.format('D');
         };
         /**
          * 初始化 Guid 类的一个新实例

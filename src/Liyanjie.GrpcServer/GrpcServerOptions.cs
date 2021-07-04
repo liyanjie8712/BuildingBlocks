@@ -10,7 +10,7 @@ namespace Liyanjie.GrpcServer
     /// </summary>
     public class GrpcServerOptions
     {
-        readonly IList<ServerPort> Ports = new List<ServerPort>();
+        readonly List<ServerPort> Ports = new();
         /// <summary>
         /// 
         /// </summary>
@@ -24,7 +24,7 @@ namespace Liyanjie.GrpcServer
             return this;
         }
 
-        readonly IList<ServerServiceDefinition> Services = new List<ServerServiceDefinition>();
+        readonly List<ServerServiceDefinition> Services = new();
         /// <summary>
         /// 
         /// </summary>
@@ -37,7 +37,7 @@ namespace Liyanjie.GrpcServer
         }
 
 #if NETSTANDARD
-        readonly IList<Func<IServiceProvider, ServerServiceDefinition>> ServiceFactories = new List<Func<IServiceProvider, ServerServiceDefinition>>();
+        readonly List<Func<IServiceProvider, ServerServiceDefinition>> ServiceFactories = new();
         /// <summary>
         /// 
         /// </summary>
@@ -54,13 +54,13 @@ namespace Liyanjie.GrpcServer
         /// 
         /// </summary>
         /// <returns></returns>
-        public Grpc.Core.Server CreateServer(
+        public Server CreateServer(
 #if NETSTANDARD
             IServiceProvider serviceProvider
 #endif
             )
         {
-            var server = new Grpc.Core.Server();
+            var server = new Server();
             foreach (var port in Ports)
             {
                 server.Ports.Add(port);

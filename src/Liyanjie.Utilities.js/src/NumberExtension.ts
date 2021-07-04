@@ -3,10 +3,50 @@
     minus(arg: number): number;
     multipy(arg: number): number;
     divide(arg: number): number;
-    toCNNumber(upperOrLower?: boolean): string;
-    toCN(currency?: boolean): string;
+    toCnNumber(uppercase?: boolean): string;
+    toCn(numberType?: string): string;
 }
 
+function __toCnNumber(number: number, uppercase: boolean): string {
+    switch (number) {
+        case 0:
+            return uppercase ? '零' : '〇';
+        case 1:
+            return uppercase ? '壹' : '一';
+        case 2:
+            return uppercase ? '贰' : '二';
+        case 3:
+            return uppercase ? '叁' : '三';
+        case 4:
+            return uppercase ? '肆' : '四';
+        case 5:
+            return uppercase ? '伍' : '五';
+        case 6:
+            return uppercase ? '陆' : '六';
+        case 7:
+            return uppercase ? '柒' : '七';
+        case 8:
+            return uppercase ? '捌' : '八';
+        case 9:
+            return uppercase ? '玖' : '九';
+        case 10:
+            return uppercase ? '拾' : '十';
+        case 100:
+            return uppercase ? '佰' : '百';
+        case 1000:
+            return uppercase ? '仟' : '千';
+        case 10000:
+            return '万';
+        case 100000000:
+            return '亿';
+        case 1000000000000:
+            return '兆';
+        case 10000000000000000:
+            return '京';
+        default:
+            break;
+    }
+};
 Number.prototype.plus = function (arg: number) {
     let r1, r2, m;
     try {
@@ -60,8 +100,12 @@ Number.prototype.divide = function (arg: number) {
     r2 = Number(arg.toString().replace('.', ''));
     return (r1 / r2) * Math.pow(10, t2 - t1);
 };
-Number.prototype.toCNNumber = function (upperOrLower: boolean = false) {
-    let i = parseInt(this.toString()), f = '';
+Number.prototype.toCnNumber = function (uppercase: boolean = false) {
+    let i = parseInt(this.toString());
+    if (i >= 10000000000000000)
+        i = 10000000000000000;
+    if (i >= 1000000000000)
+        i = 1000000000000;
     if (i >= 100000000)
         i = 100000000;
     else if (i >= 10000)
@@ -74,219 +118,177 @@ Number.prototype.toCNNumber = function (upperOrLower: boolean = false) {
         i = 10;
     else if (i < 0)
         i = 0;
-    if (i > 100000000)
-        i /= 100000000;
-    if (upperOrLower) {
-        switch (i) {
-            case 0:
-                f = '零';
-                break;
-            case 1:
-                f = '壹';
-                break;
-            case 2:
-                f = '贰';
-                break;
-            case 3:
-                f = '叁';
-                break;
-            case 4:
-                f = '肆';
-                break;
-            case 5:
-                f = '伍';
-                break;
-            case 6:
-                f = '陆';
-                break;
-            case 7:
-                f = '柒';
-                break;
-            case 8:
-                f = '捌';
-                break;
-            case 9:
-                f = '玖';
-                break;
-            case 10:
-                f = '拾';
-                break;
-            case 100:
-                f = '佰';
-                break;
-            case 1000:
-                f = '仟';
-                break;
-            case 10000:
-                f = '万';
-                break;
-            case 100000000:
-                f = '亿';
-                break;
-            default:
-                break;
-        }
-    }
-    else {
-        switch (i) {
-            case 0:
-                f = '〇';
-                break;
-            case 1:
-                f = '一';
-                break;
-            case 2:
-                f = '二';
-                break;
-            case 3:
-                f = '三';
-                break;
-            case 4:
-                f = '四';
-                break;
-            case 5:
-                f = '五';
-                break;
-            case 6:
-                f = '六';
-                break;
-            case 7:
-                f = '七';
-                break;
-            case 8:
-                f = '八';
-                break;
-            case 9:
-                f = '九';
-                break;
-            case 10:
-                f = '十';
-                break;
-            case 100:
-                f = '百';
-                break;
-            case 1000:
-                f = '千';
-                break;
-            case 10000:
-                f = '万';
-                break;
-            case 100000000:
-                f = '亿';
-                break;
-            default:
-                break;
-        }
-    }
-    return f;
+    return __toCnNumber(i, uppercase);
 };
-Number.prototype.toCN = function (currency: boolean = false) {
-    let num = 0,//整数部分
-        dec,//小数部分
-        output0 = false,//输出0
-        s = '',
-        unit = function (i) {
-            let s;
+Number.prototype.toCn = function (numberType: string = 'Normal') {
+    numberType = numberType.toLowerCase();
+    let number = this.toString();
+    let s = '';
+    if (number[0] == '-') {
+        s += '负';
+        number = number.substr(1);
+    }
+    let
+        unit = function (i): string {
             switch (i) {
                 case 0:
-                    s = '角';
-                    break;
+                    return '角';
                 case 1:
-                    s = '分';
-                    break;
+                    return '分';
                 case 2:
-                    s = '厘';
-                    break;
+                    return '厘';
                 default:
+                    return '';
                     break;
             }
-            return s;
+        },
+        processLong = function (number: number, uppercase: boolean): string {
+            let sb = '';
+            let zeroFlag = false;//输出0
+            if (number > 1) {
+                let l = number;
+                for (let i = 4; i >= 0; i--) {
+                    let level = Math.pow(10000, i);
+                    if (number >= level) {
+                        l = number % level;
+                        number = parseInt((number / level).toString());
+                        if (number > 19) {
+                            let j = 1000;
+                            while (number % (j * 10) >= 1) {
+                                let tmp = parseInt((number / j).toString());
+                                if (tmp != 0) {
+                                    sb += __toCnNumber(tmp, uppercase);
+                                    if (j > 1)
+                                        sb += __toCnNumber(j, uppercase);
+                                    zeroFlag = true;
+                                }
+                                else if (zeroFlag) {
+                                    sb += __toCnNumber(0, uppercase);
+                                    zeroFlag = false;
+                                }
+                                if (j == 1)
+                                    break;
+
+                                number %= j;
+                                j = j.divide(10);
+                            }
+                        }
+                        else if (number >= 10) {
+                            sb += __toCnNumber(10, uppercase);
+                            if (number % 10 > 0) {
+                                sb += __toCnNumber(number % 10, uppercase);
+                                zeroFlag = true;
+                            }
+                        }
+                        else
+                            sb += __toCnNumber(number, uppercase);
+
+                        if (level > 1)
+                            sb += __toCnNumber(level, uppercase);
+                    }
+                    number = l;
+                }
+            }
+            else
+                sb += __toCnNumber(number, uppercase);
+            return sb;
+        },
+        processDecimal = function (decimal: string): string {
+            let sb = '';
+            let zeroFlag = false;//输出0
+            for (let i = 0; i < decimal.length; i++) {
+                let d = parseInt(decimal[i]);
+                if (d > 0) {
+                    sb += __toCnNumber(d, true);
+                    sb += unit(i);
+                    zeroFlag = true;
+                }
+                else if (decimal.length > i + 1 && zeroFlag) {
+                    sb += __toCnNumber(0, true);
+                    zeroFlag = false;
+                }
+            }
+            return sb;
         };
-    num = parseInt(this.toString());
-    dec = this.minus(num);
-    if (num < 0)
-        s += '负';
-    if (num > 1) {
-        let l = num;
-        for (let ii = 4; ii >= 0; ii--) {
-            let level = Math.pow(10000, ii);
-            if (num >= level) {
-                l = num % level;
-                num = num.divide(level);
-                if (num > 19) {
-                    let j = 1000;
-                    while (num % (j * 10) >= 1) {
-                        let tmp = parseInt((num / j).toString());
-                        if (tmp != 0) {
-                            s += (tmp).toCNNumber(currency);
-                            if (j > 1)
-                                s += j.toCNNumber(currency);
-                            output0 = true;
-                        }
-                        else if (output0) {
-                            s += (0).toCNNumber(currency);
-                            output0 = false;
-                        }
-                        if (j == 1)
-                            break;
-                        num %= j;
-                        j = j.divide(10);
-                    }
+    let int = parseInt(number);
+    switch (numberType) {
+        case 'normal':
+            s += processLong(int, false);
+            break;
+        case 'normalupper':
+            s += processLong(int, true);
+            break;
+        case 'direct':
+            {
+                let s_ = int.toString();
+                for (let i = 0; i < s_.length; i++) {
+                    s += __toCnNumber(parseInt(s_[i]), false);
                 }
-                else if (num >= 10) {
-                    s += (10).toCNNumber(currency);
-                    if (num % 10 > 0) {
-                        s += (num % 10).toCNNumber(currency);
-                        output0 = true;
-                    }
-                }
-                else
-                    s += num.toCNNumber(currency);
-                if (level > 1)
-                    s += level.toCNNumber(currency);
             }
-            num = l;
+            break;
+        case 'directupper':
+            {
+                let s_ = int.toString();
+                for (let i = 0; i < s_.length; i++) {
+                    s += __toCnNumber(parseInt(s_[i]), true);
+                }
+            }
+            break;
+        case 'currency':
+            s += processLong(int, true);
+            break;
+        default:
+            break;
+    }
+
+    let dec, index = number.indexOf('.');
+    if (index > 0)
+        dec = number.substr(index + 1);
+    if (dec) {
+        switch (numberType) {
+            case 'normal':
+            case 'normalupper':
+            case 'direct':
+            case 'directupper':
+                s += '点';
+                break;
+            case 'currency':
+                s += '圆';
+                break;
+            default:
+                break;
+        }
+
+        switch (numberType) {
+            case 'normal':
+                for (let i = 0; i < dec.length; i++) {
+                    s += __toCnNumber(parseInt(dec[i]), false);
+                }
+                break;
+            case 'normalupper':
+                for (let i = 0; i < dec.length; i++) {
+                    s += __toCnNumber(parseInt(dec[i]), true);
+                }
+                break;
+            case 'direct':
+                for (let i = 0; i < dec.length; i++) {
+                    s += __toCnNumber(parseInt(dec[i]), false);
+                }
+                break;
+            case 'directupper':
+                for (let i = 0; i < dec.length; i++) {
+                    s += __toCnNumber(parseInt(dec[i]), true);
+                }
+                break;
+            case 'currency':
+                s += processDecimal(dec);
+                break;
+            default:
+                break;
         }
     }
-    else
-        s += num.toCNNumber(currency);
-    if (dec > 0) {
-        //处理小数部分
-        s += currency ? '圆' : '点';
-        if (currency) {
-            if (output0) {
-                s += (0).toCNNumber(currency);
-                output0 = false;
-            }
-            let i = 0;
-            do {
-                dec = dec.multipy(10);
-                let dd = parseInt(dec.toString());
-                dec = dec.minus(dd);
-                if (dd > 0) {
-                    s += dd.toCNNumber(currency);
-                    s += unit(i);
-                    output0 = true;
-                }
-                else if (dec > 0 && output0) {
-                    s += (0).toCNNumber(currency);
-                    output0 = false;
-                }
-                i++;
-                if (i > 2)
-                    break;
-            } while (dec > 0);
-        }
-        else {
-            do {
-                dec = dec.multipy(10);
-                let dd = parseInt(dec.toString());
-                dec = dec.minus(dd);
-                s += dd.toCNNumber(currency);
-            } while (dec > 0)
-        }
-    }
-    else if (currency)
+    else if (numberType == 'currency')
         s += '圆整';
+
     return s;
 };

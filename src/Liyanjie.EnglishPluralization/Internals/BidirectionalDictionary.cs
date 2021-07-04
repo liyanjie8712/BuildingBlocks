@@ -38,7 +38,7 @@ namespace Liyanjie.EnglishPluralization.Internals
             {
                 return this.FirstToSecondDictionary[value];
             }
-            return default(TSecond);
+            return default;
         }
 
         public virtual TFirst GetFirstValue(TSecond value)
@@ -47,7 +47,7 @@ namespace Liyanjie.EnglishPluralization.Internals
             {
                 return this.SecondToFirstDictionary[value];
             }
-            return default(TFirst);
+            return default;
         }
 
         public void AddValue(TFirst firstValue, TSecond secondValue)

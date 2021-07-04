@@ -96,7 +96,7 @@ namespace System
         public static string RSADecrypt(this string base64String, string privateKeyString)
             => Encoding.Unicode.GetString(Convert.FromBase64String(base64String).RSADecrypt(privateKeyString));
 
-#if NETSTANDARD1_3
+#if NETSTANDARD
         /// <summary>
         /// 
         /// </summary>
@@ -125,7 +125,7 @@ namespace System
         /// <param name="radix"></param>
         /// <param name="radixCodes"></param>
         /// <returns></returns>
-        public static long GetLong(this string input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        public static long GetLong(this string input, int radix = 62, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             => RadixHelper.GetLong(input, radix, radixCodes);
 
         /// <summary>
@@ -137,12 +137,28 @@ namespace System
             => string.IsNullOrEmpty(input);
 
         /// <summary>
+        /// 非 null 并且非空字符
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsNotNullOrEmpty(this string input)
+            => !string.IsNullOrEmpty(input);
+
+        /// <summary>
         /// 为 null 或空字符，或空白字符
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool IsNullOrWhiteSpace(this string input)
             => string.IsNullOrWhiteSpace(input);
+
+        /// <summary>
+        /// 非 null 或并且非空字符，非空白字符
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsNotNullOrWhiteSpace(this string input)
+            => !string.IsNullOrWhiteSpace(input);
 
         /// <summary>
         /// 转换为骆驼命名法

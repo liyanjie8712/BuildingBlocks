@@ -27,7 +27,7 @@ namespace System.Drawing
         /// </summary>
         /// <param name="image"></param>
         /// <param name="opacity"></param>
-        public static Image Opacity(this Image image, float opacity)
+        public static Image SetOpacity(this Image image, float opacity)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -60,10 +60,12 @@ namespace System.Drawing
         /// <param name="image"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        public static void Clear(this Image image, Color color)
+        public static Image Clear(this Image image, Color color)
         {
             using var graphics = Graphics.FromImage(image);
             graphics.Clear(color);
+
+            return image;
         }
 
         /// <summary>
@@ -195,7 +197,7 @@ namespace System.Drawing
         /// <param name="image">底图</param>
         /// <param name="images">图片集合</param>
         /// <returns></returns>
-        public static void Combine(this Image image, params (Point Point, Size Size, Image Image)[] images)
+        public static Image Combine(this Image image, params (Point Point, Size Size, Image Image)[] images)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -203,13 +205,15 @@ namespace System.Drawing
                 throw new ArgumentNullException(nameof(images));
 
             if (images.Length == 0)
-                return;
+                return image;
 
             using var graphics = Graphics.FromImage(image);
             foreach (var item in images)
             {
                 graphics.DrawImage(item.Image, new Rectangle(item.Point, item.Size));
             }
+
+            return image;
         }
 
         /// <summary>

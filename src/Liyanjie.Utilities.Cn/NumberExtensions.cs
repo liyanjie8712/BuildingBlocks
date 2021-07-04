@@ -102,19 +102,18 @@ namespace System
         /// <returns></returns>
         public static string ToCnNumber(this long number, bool uppercase = false)
         {
-            if (number >= 100000000)
-                number = 100000000;
-            else if (number >= 10000)
-                number = 10000;
-            else if (number >= 1000)
-                number = 1000;
-            else if (number >= 100)
-                number = 100;
-            else if (number >= 10)
-                number = 10;
-            else if (number < 0)
-                number = 0;
-            return ToCnNumber_(number, uppercase);
+            return ToCnNumber_(number switch
+            {
+                >= 1_0000_0000_0000_0000L => 1_0000_0000_0000_0000L,  //京
+                >= 1_0000_0000_0000L => 1_0000_0000_0000L,  //兆
+                >= 1_0000_0000L => 1_0000_0000L,  //亿
+                >= 1_0000L => 1_0000L,  //万
+                >= 1000L => 1000L,
+                >= 100L => 100L,
+                >= 10L => 10L,
+                < 0L => 0L,
+                _ => number,
+            }, uppercase);
         }
 
         static string ToCn(long number, string @decimal, CnNumberType numberType)
@@ -173,9 +172,9 @@ namespace System
                 if (number > 1)
                 {
                     var l = number;
-                    for (int ii = 4; ii >= 0; ii--)
+                    for (int i = 4; i >= 0; i--)
                     {
-                        var level = (long)Math.Pow(10000, ii);
+                        var level = (long)Math.Pow(10000, i);
                         if (number >= level)
                         {
                             l = number % level;
@@ -189,14 +188,14 @@ namespace System
 
                                     if (tmp != 0)
                                     {
-                                        sb.Append(ToCnNumber(tmp, uppercase));
+                                        sb.Append(ToCnNumber_(tmp, uppercase));
                                         if (j > 1)
-                                            sb.Append(ToCnNumber(j, uppercase));
+                                            sb.Append(ToCnNumber_(j, uppercase));
                                         zeroFlag = true;
                                     }
                                     else if (zeroFlag)
                                     {
-                                        sb.Append(ToCnNumber(0L, uppercase));
+                                        sb.Append(ToCnNumber_(0L, uppercase));
                                         zeroFlag = false;
                                     }
 
@@ -209,24 +208,24 @@ namespace System
                             }
                             else if (number >= 10)
                             {
-                                sb.Append(ToCnNumber(10L, uppercase));
+                                sb.Append(ToCnNumber_(10L, uppercase));
                                 if (number % 10 > 0)
                                 {
-                                    sb.Append(ToCnNumber(number % 10, uppercase));
+                                    sb.Append(ToCnNumber_(number % 10, uppercase));
                                     zeroFlag = true;
                                 }
                             }
                             else
-                                sb.Append(ToCnNumber(number, uppercase));
+                                sb.Append(ToCnNumber_(number, uppercase));
 
                             if (level > 1)
-                                sb.Append(ToCnNumber(level, uppercase));
+                                sb.Append(ToCnNumber_(level, uppercase));
                         }
                         number = l;
                     }
                 }
                 else
-                    sb.Append(ToCnNumber(number, uppercase));
+                    sb.Append(ToCnNumber_(number, uppercase));
                 return sb.ToString();
             }
             static string ProcessDecimal(string @decimal)
@@ -266,9 +265,6 @@ namespace System
         }
         static string ToCnNumber_(long number, bool uppercase)
         {
-            if (number > 100000000)
-                number /= 100000000;
-
             return number switch
             {
                 0 => uppercase ? "零" : "〇",
@@ -284,8 +280,10 @@ namespace System
                 10 => uppercase ? "拾" : "十",
                 100 => uppercase ? "佰" : "百",
                 1000 => uppercase ? "仟" : "千",
-                10000 => uppercase ? "万" : "万",
-                100000000 => uppercase ? "亿" : "亿",
+                1_0000 => "万",
+                1_0000_0000 => "亿",
+                1_0000_0000_0000 => "兆",
+                1_0000_0000_0000_0000 => "京",
                 _ => string.Empty,
             };
         }

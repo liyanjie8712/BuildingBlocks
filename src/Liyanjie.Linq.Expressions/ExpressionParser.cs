@@ -24,7 +24,7 @@ namespace Liyanjie.Linq.Expressions
         /// </summary>
         /// <param name="parameterExpression"></param>
         /// <param name="variables"></param>
-        public ExpressionParser(ParameterExpression parameterExpression, IDictionary<string, object> variables)
+        public ExpressionParser(ParameterExpression parameterExpression, IDictionary<string, object> variables = default)
         {
             this.parameterExpression = parameterExpression;
             this.variablesObject = TypeFactory.CreateObject(variables ?? new Dictionary<string, object>());
@@ -1048,7 +1048,7 @@ namespace Liyanjie.Linq.Expressions
         /// <param name="expressionString"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        public static LambdaExpression ParseLambda(Type parameterType, string expressionString, IDictionary<string, object> variables)
+        public static LambdaExpression ParseLambda(Type parameterType, string expressionString, IDictionary<string, object> variables = default)
         {
             var parameter = Expression.Parameter(parameterType);
             var parser = new ExpressionParser(parameter, variables);

@@ -24,7 +24,7 @@ export declare class Guid {
      * @param format
      * @returns
      */
-    toString(format?: string): string;
+    format(format?: string): string;
     /**
      * Guid 类的默认实例，其值保证均为零
      */

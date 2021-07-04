@@ -10,15 +10,17 @@ namespace Liyanjie.Http
     /// </summary>
     public abstract class Request
     {
+        HttpClient client;
+
         internal HttpMethod Method { get; set; }
 
         internal string Url { get; set; }
 
-        internal IList<KeyValuePair<string, string>> Queries { get; set; } = new List<KeyValuePair<string, string>>();
+        internal List<KeyValuePair<string, string>> Queries { get; set; } = new();
 
-        internal IList<KeyValuePair<string, string>> Headers { get; set; } = new List<KeyValuePair<string, string>>();
+        internal List<KeyValuePair<string, string>> Headers { get; set; } = new();
 
-        internal IList<HttpContent> Contents { get; set; } = new List<HttpContent>();
+        internal List<HttpContent> Contents { get; set; } = new();
 
         internal Request() { }
 
@@ -65,6 +67,13 @@ namespace Liyanjie.Http
             return null;
         }
 
+        public Request UseHttpClient(HttpClient client)
+        {
+            this.client = client;
+
+            return this;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -72,13 +81,25 @@ namespace Liyanjie.Http
         /// <returns></returns>
         public virtual async Task<HttpResponseMessage> SendAsync(int timeoutBySeconds = 60)
         {
-            using var client = CreateHttpClient(TimeSpan.FromSeconds(timeoutBySeconds));
-            return await client.SendAsync(new HttpRequestMessage
+            if (this.client is not null)
             {
-                Content = CreateHttpContent(),
-                Method = Method,
-                RequestUri = CreateRequestUri(),
-            });
+                return await SendAsync(this.client);
+            }
+            else
+            {
+                using var client = CreateHttpClient(TimeSpan.FromSeconds(timeoutBySeconds));
+                return await SendAsync(client);
+            }
+
+            async Task<HttpResponseMessage> SendAsync(HttpClient client)
+            {
+                return await client.SendAsync(new HttpRequestMessage
+                {
+                    Content = CreateHttpContent(),
+                    Method = Method,
+                    RequestUri = CreateRequestUri(),
+                });
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ namespace System
         /// <param name="radix"></param>
         /// <param name="radixCodes"></param>
         /// <returns></returns>
-        public static string ToString(this short input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        public static string ToString(this short input, int radix = 62, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             => RadixHelper.ToString(input, radix, radixCodes);
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace System
         /// <param name="radix"></param>
         /// <param name="radixCodes"></param>
         /// <returns></returns>
-        public static string ToString(this int input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        public static string ToString(this int input, int radix = 62, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             => RadixHelper.ToString(input, radix, radixCodes);
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace System
         /// <param name="radix"></param>
         /// <param name="radixCodes"></param>
         /// <returns></returns>
-        public static string ToString(this long input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        public static string ToString(this long input, int radix = 62, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             => RadixHelper.ToString(input, radix, radixCodes);
 
         static bool _Is2PowN(long input)

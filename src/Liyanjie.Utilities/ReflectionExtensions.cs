@@ -33,13 +33,13 @@ namespace System.Reflection
         /// <typeparam name="TInput"></typeparam>
         /// <typeparam name="TOutput"></typeparam>
         /// <param name="input"></param>
-        /// <param name="additional"></param>
+        /// <param name="extra"></param>
         /// <returns></returns>
-        public static TOutput Translate<TInput, TOutput>(this TInput input, Action<TInput, TOutput> additional)
+        public static TOutput Translate<TInput, TOutput>(this TInput input, Action<TInput, TOutput> extra)
         {
             var output = Translate<TOutput>(input);
 
-            additional?.Invoke(input, output);
+            extra?.Invoke(input, output);
 
             return output;
         }
@@ -50,14 +50,14 @@ namespace System.Reflection
         /// <typeparam name="TInput"></typeparam>
         /// <typeparam name="TOutput"></typeparam>
         /// <param name="input"></param>
-        /// <param name="additional"></param>
+        /// <param name="extra"></param>
         /// <returns></returns>
-        public static async Task<TOutput> TranslateAsync<TInput, TOutput>(this TInput input, Func<TInput, TOutput, Task> additional)
+        public static async Task<TOutput> TranslateAsync<TInput, TOutput>(this TInput input, Func<TInput, TOutput, Task> extra)
         {
             var output = Translate<TOutput>(input);
 
-            if (additional != null)
-                await additional.Invoke(input, output);
+            if (extra != null)
+                await extra.Invoke(input, output);
 
             return output;
         }

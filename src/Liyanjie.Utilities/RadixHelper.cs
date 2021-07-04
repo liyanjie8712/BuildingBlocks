@@ -15,7 +15,7 @@ namespace System
         /// <param name="radix"></param>
         /// <param name="radixCodes"></param>
         /// <returns></returns>
-        public static string ToString(long number, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        public static string ToString(long number, int radix = 62, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
         {
             var result = string.Empty;
             var fu = false;
@@ -77,7 +77,7 @@ namespace System
         /// <param name="radix">进制</param>
         /// <param name="radixCodes"></param>
         /// <returns></returns>
-        public static long GetLong(string input, int radix, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        public static long GetLong(string input, int radix = 62, string radixCodes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentException($"Parameter '{nameof(input)}' can't be Null nor Empty nor WhiteSpace", nameof(input));
