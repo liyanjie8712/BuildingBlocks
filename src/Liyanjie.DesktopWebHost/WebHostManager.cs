@@ -13,12 +13,28 @@ namespace Liyanjie.DesktopWebHost
 {
     class WebHostManager
     {
-        static readonly string[] startup = ConfigurationManager.AppSettings["Startup"].Split(',', StringSplitOptions.RemoveEmptyEntries);
-        static readonly string[] urls = ConfigurationManager.AppSettings["Urls"].Split(',', StringSplitOptions.RemoveEmptyEntries);
+        static readonly string[] startup;
+        static readonly string[] urls;
         static IHost webhost;
+
+        static WebHostManager()
+        {
+            try
+            {
+                startup = ConfigurationManager.AppSettings["Startup"]?.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                urls = ConfigurationManager.AppSettings["Urls"]?.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            }
+            catch { }
+        }
 
         internal static void StartWebHost()
         {
+            if (startup is null || startup.Length < 2)
+            {
+                MessageBox.Show("AppSettings\\Startup 配置错误");
+                return;
+            }
+
             foreach (var item in Directory.EnumerateFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll", new EnumerationOptions
             {
                 RecurseSubdirectories = true,
@@ -36,7 +52,8 @@ namespace Liyanjie.DesktopWebHost
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseStartup(Assembly.LoadFrom(startup[0]).GetType(startup[1]));
-                        webBuilder.UseUrls(urls);
+                        if (urls is not null)
+                            webBuilder.UseUrls(urls);
                         webBuilder.ConfigureLogging(logging => logging.AddProvider(new Logging.MyLoggerProvider()));
                     })
                     .Build();
@@ -44,22 +61,24 @@ namespace Liyanjie.DesktopWebHost
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.ToString());
             }
         }
-
         internal static void CloseWebHost()
         {
-            if (webhost is not null)
+            try
             {
-                webhost.StopAsync().ConfigureAwait(false);
-                webhost.Dispose();
+                if (webhost is not null)
+                {
+                    webhost.StopAsync().ConfigureAwait(false);
+                    webhost.Dispose();
+                }
             }
+            catch { }
         }
-
         internal static void OpenInBrowser()
         {
-            var url = urls.FirstOrDefault() ?? "http://localhost:5000";
+            var url = urls?.FirstOrDefault() ?? "http://localhost:5000";
             if (url.IndexOf('*') > 0)
                 url = url.Replace("*", "localhost");
 

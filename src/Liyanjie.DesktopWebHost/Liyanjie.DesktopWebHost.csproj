@@ -3,7 +3,7 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <IsPackable>true</IsPackable>
-        <TargetFramework>net5.0-windows</TargetFramework>
+        <TargetFrameworks>netcoreapp3.1;net5.0-windows;</TargetFrameworks>
         <UseWindowsForms>true</UseWindowsForms>
         <ApplicationIcon>favicon.ico</ApplicationIcon>
         <Description>Liyanjie.DesktopWebHost</Description>
@@ -17,28 +17,46 @@
         <PackageId>Liyanjie.DesktopWebHost</PackageId>
         <PackageIcon>liyanjie.net.256.png</PackageIcon>
         <PackageIconUrl />
+        <EnableDefaultContentItems>false</EnableDefaultContentItems>
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Remove="App.config" />
-      <Content Remove="DWH\web.config" />
+        <Content Remove="App.config" />
+        <Content Remove="DWH\net5.0-windows\web.config" />
+        <Content Remove="DWH\netcoreapp3.1\web.config" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="DWH\DesktopWebHost.dll" />
-      <None Remove="DWH\DesktopWebHost.exe" />
-      <None Remove="DWH\DesktopWebHost.pdb" />
+      <None Remove="DWH\net5.0-windows\DesktopWebHost.dll" />
+      <None Remove="DWH\net5.0-windows\DesktopWebHost.dll.config" />
+      <None Remove="DWH\net5.0-windows\DesktopWebHost.exe" />
+      <None Remove="DWH\net5.0-windows\DesktopWebHost.runtimeconfig.json" />
+      <None Remove="DWH\netcoreapp3.1\DesktopWebHost.dll" />
+      <None Remove="DWH\netcoreapp3.1\DesktopWebHost.dll.config" />
+      <None Remove="DWH\netcoreapp3.1\DesktopWebHost.exe" />
+      <None Remove="DWH\netcoreapp3.1\DesktopWebHost.runtimeconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="DWH\DesktopWebHost.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Content Include="DWH\net5.0-windows\DesktopWebHost.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="DWH\DesktopWebHost.exe">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Content Include="DWH\net5.0-windows\DesktopWebHost.dll.config" />
+      <Content Include="DWH\net5.0-windows\DesktopWebHost.exe">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="DWH\DesktopWebHost.pdb">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Content Include="DWH\net5.0-windows\DesktopWebHost.runtimeconfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="DWH\netcoreapp3.1\DesktopWebHost.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="DWH\netcoreapp3.1\DesktopWebHost.dll.config" />
+      <Content Include="DWH\netcoreapp3.1\DesktopWebHost.exe">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="DWH\netcoreapp3.1\DesktopWebHost.runtimeconfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 
@@ -48,11 +66,10 @@
             <PackagePath></PackagePath>
         </None>
         <None Include="App.config">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </None>
-        <None Include="DWH\web.config">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </None>
+        <None Include="DWH\net5.0-windows\web.config" />
+        <None Include="DWH\netcoreapp3.1\web.config" />
     </ItemGroup>
 
 </Project>

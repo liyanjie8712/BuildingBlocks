@@ -56,6 +56,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication", "test\WebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Liyanjie.DesktopWebHost", "src\Liyanjie.DesktopWebHost\Liyanjie.DesktopWebHost.csproj", "{12148903-8CF3-4991-BB89-045E7BE0A22B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp", "test\WinFormsApp\WinFormsApp.csproj", "{FAB9572E-6801-4EAE-86AF-98DD9EBDD0FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +144,10 @@ Global
 		{12148903-8CF3-4991-BB89-045E7BE0A22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12148903-8CF3-4991-BB89-045E7BE0A22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12148903-8CF3-4991-BB89-045E7BE0A22B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAB9572E-6801-4EAE-86AF-98DD9EBDD0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAB9572E-6801-4EAE-86AF-98DD9EBDD0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAB9572E-6801-4EAE-86AF-98DD9EBDD0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAB9572E-6801-4EAE-86AF-98DD9EBDD0FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -167,6 +173,7 @@ Global
 		{EC552C20-3E84-4015-8F5A-B285355B6A29} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
 		{4E03DA03-2C06-40DF-AF33-D0150D34165D} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 		{12148903-8CF3-4991-BB89-045E7BE0A22B} = {6E9FF2CF-EAD3-43DD-8D5D-A53BB0445A43}
+		{FAB9572E-6801-4EAE-86AF-98DD9EBDD0FD} = {E8BAE215-1C03-4791-8D18-D34C71363E07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8F8E1D8-848B-4EE7-B1FD-9200F7EF1AD2}
