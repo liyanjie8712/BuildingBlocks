@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Liyanjie.DesktopWebHost
@@ -33,6 +35,18 @@ namespace Liyanjie.DesktopWebHost
             this.LogShowing += Form_LogShowing;
 
             WebHostManager.StartWebHost();
+            foreach (var url in WebHostManager.GetUrls().Reverse())
+            {
+                var item = new ToolStripMenuItem
+                {
+                    Name = url,
+                    Text = url,
+                    Size = new System.Drawing.Size(322, 38),
+                    Tag = url,
+                };
+                item.Click += ToolStripMenuItem_Open_Click;
+                this.ContextMenuStrip_NotifyIcon.Items.Insert(0, item);
+            }
         }
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -56,7 +70,8 @@ namespace Liyanjie.DesktopWebHost
 
         private void ToolStripMenuItem_Open_Click(object sender, EventArgs e)
         {
-            WebHostManager.OpenInBrowser();
+            if (sender is ToolStripMenuItem item)
+                Process.Start("explorer", item.Tag.ToString());
         }
         private void ToolStripMenuItem_Restart_Click(object sender, EventArgs e)
         {

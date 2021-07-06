@@ -52,7 +52,7 @@ namespace Liyanjie.DesktopWebHost
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseStartup(Assembly.LoadFrom(startup[0]).GetType(startup[1]));
-                        if (urls is not null)
+                        if (urls?.Length > 0)
                             webBuilder.UseUrls(urls);
                         webBuilder.ConfigureLogging(logging => logging.AddProvider(new Logging.MyLoggerProvider()));
                     })
@@ -76,13 +76,13 @@ namespace Liyanjie.DesktopWebHost
             }
             catch { }
         }
-        internal static void OpenInBrowser()
+        internal static string[] GetUrls()
         {
-            var url = urls?.FirstOrDefault() ?? "http://localhost:5000";
-            if (url.IndexOf('*') > 0)
-                url = url.Replace("*", "localhost");
+            return urls?.Length > 0
+                ? urls
+                : new[] { "http://localhost:5000" };
 
-            System.Diagnostics.Process.Start("explorer", url);
+            //System.Diagnostics.Process.Start("explorer", url);
         }
     }
 }

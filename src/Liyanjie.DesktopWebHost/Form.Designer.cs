@@ -33,12 +33,11 @@ namespace Liyanjie.DesktopWebHost
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form));
             this.TextBox = new System.Windows.Forms.TextBox();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ToolStripMenuItem_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.ContextMenuStrip_NotifyIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripMenuItem_Restart = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.ContextMenuStrip.SuspendLayout();
+            this.ContextMenuStrip_NotifyIcon.SuspendLayout();
             this.SuspendLayout();
             // 
             // TextBox
@@ -61,47 +60,39 @@ namespace Liyanjie.DesktopWebHost
             // 
             // NotifyIcon
             // 
-            this.NotifyIcon.ContextMenuStrip = this.ContextMenuStrip;
+            this.NotifyIcon.ContextMenuStrip = this.ContextMenuStrip_NotifyIcon;
             this.NotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIcon.Icon")));
             this.NotifyIcon.Text = "NotifyIcon";
             this.NotifyIcon.Visible = true;
             this.NotifyIcon.DoubleClick += new System.EventHandler(this.NotifyIcon_DoubleClick);
             // 
-            // ContextMenuStrip
+            // ContextMenuStrip_NotifyIcon
             // 
-            this.ContextMenuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItem_Open,
+            this.ContextMenuStrip_NotifyIcon.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.ContextMenuStrip_NotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripSeparator1,
             this.ToolStripMenuItem_Restart,
             this.ToolStripMenuItem_Exit});
-            this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.ShowCheckMargin = true;
-            this.ContextMenuStrip.Size = new System.Drawing.Size(279, 124);
-            // 
-            // ToolStripMenuItem_Open
-            // 
-            this.ToolStripMenuItem_Open.Name = "ToolStripMenuItem_Open";
-            this.ToolStripMenuItem_Open.Size = new System.Drawing.Size(278, 38);
-            this.ToolStripMenuItem_Open.Text = "在浏览器中打开";
-            this.ToolStripMenuItem_Open.Click += new System.EventHandler(this.ToolStripMenuItem_Open_Click);
+            this.ContextMenuStrip_NotifyIcon.Name = "ContextMenuStrip";
+            this.ContextMenuStrip_NotifyIcon.ShowCheckMargin = true;
+            this.ContextMenuStrip_NotifyIcon.Size = new System.Drawing.Size(323, 130);
             // 
             // ToolStripSeparator1
             // 
             this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-            this.ToolStripSeparator1.Size = new System.Drawing.Size(275, 6);
+            this.ToolStripSeparator1.Size = new System.Drawing.Size(319, 6);
             // 
             // ToolStripMenuItem_Restart
             // 
             this.ToolStripMenuItem_Restart.Name = "ToolStripMenuItem_Restart";
-            this.ToolStripMenuItem_Restart.Size = new System.Drawing.Size(278, 38);
+            this.ToolStripMenuItem_Restart.Size = new System.Drawing.Size(322, 38);
             this.ToolStripMenuItem_Restart.Text = "重启WebHost";
             this.ToolStripMenuItem_Restart.Click += new System.EventHandler(this.ToolStripMenuItem_Restart_Click);
             // 
             // ToolStripMenuItem_Exit
             // 
             this.ToolStripMenuItem_Exit.Name = "ToolStripMenuItem_Exit";
-            this.ToolStripMenuItem_Exit.Size = new System.Drawing.Size(278, 38);
+            this.ToolStripMenuItem_Exit.Size = new System.Drawing.Size(322, 38);
             this.ToolStripMenuItem_Exit.Text = "退出";
             this.ToolStripMenuItem_Exit.Click += new System.EventHandler(this.ToolStripMenuItem_Exit_Click);
             // 
@@ -117,22 +108,21 @@ namespace Liyanjie.DesktopWebHost
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Liyanjie.Desktop.WebHost";
             this.Load += new System.EventHandler(this.Form_Load);
-            this.ContextMenuStrip.ResumeLayout(false);
+            this.ContextMenuStrip_NotifyIcon.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
+        private System.Windows.Forms.TextBox TextBox;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
 #pragma warning disable CS0108 // 成员隐藏继承的成员；缺少关键字 new
-        private System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip ContextMenuStrip_NotifyIcon;
 #pragma warning restore CS0108 // 成员隐藏继承的成员；缺少关键字 new
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Exit;
-        private System.Windows.Forms.TextBox TextBox;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Open;
         private System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Restart;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Exit;
     }
 }
 
