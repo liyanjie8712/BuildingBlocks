@@ -79,7 +79,7 @@ namespace Liyanjie.DesktopWebHost
             WebHostManager.CloseWebHost();
             Task.Run(async () =>
             {
-                this.TextBox.Text = string.Empty;
+                this.TextBox.Clear();
                 this.TextBox.AppendText($"WebHost restarting……{Environment.NewLine}");
                 await Task.Delay(3000);
                 this.TextBox.AppendText($"WebHost restart success.{Environment.NewLine}{Environment.NewLine}");
