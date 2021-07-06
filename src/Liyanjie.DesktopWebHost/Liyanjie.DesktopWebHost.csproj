@@ -27,10 +27,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="DWH\net5.0-windows\DesktopWebHost.deps.json" />
       <None Remove="DWH\net5.0-windows\DesktopWebHost.dll" />
       <None Remove="DWH\net5.0-windows\DesktopWebHost.dll.config" />
       <None Remove="DWH\net5.0-windows\DesktopWebHost.exe" />
       <None Remove="DWH\net5.0-windows\DesktopWebHost.runtimeconfig.json" />
+      <None Remove="DWH\netcoreapp3.1\DesktopWebHost.deps.json" />
       <None Remove="DWH\netcoreapp3.1\DesktopWebHost.dll" />
       <None Remove="DWH\netcoreapp3.1\DesktopWebHost.dll.config" />
       <None Remove="DWH\netcoreapp3.1\DesktopWebHost.exe" />
@@ -38,6 +40,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="DWH\net5.0-windows\DesktopWebHost.deps.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="DWH\net5.0-windows\DesktopWebHost.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
@@ -46,6 +51,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="DWH\net5.0-windows\DesktopWebHost.runtimeconfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="DWH\netcoreapp3.1\DesktopWebHost.deps.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="DWH\netcoreapp3.1\DesktopWebHost.dll">
