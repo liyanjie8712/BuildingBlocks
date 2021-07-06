@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Liyanjie.DesktopWebHost
@@ -34,18 +35,18 @@ namespace Liyanjie.DesktopWebHost
             this.FormClosing += Form_FormClosing;
             this.LogShowing += Form_LogShowing;
 
-            WebHostManager.StartWebHost();
+            Task.Run(() => WebHostManager.StartWebHost());
             foreach (var url in WebHostManager.GetUrls().Reverse())
             {
                 var item = new ToolStripMenuItem
                 {
                     Name = url,
-                    Text = url,
+                    Text = $"    {url}",
                     Size = new System.Drawing.Size(322, 38),
                     Tag = url,
                 };
                 item.Click += ToolStripMenuItem_Open_Click;
-                this.ContextMenuStrip_NotifyIcon.Items.Insert(0, item);
+                this.ContextMenuStrip_NotifyIcon.Items.Insert(1, item);
             }
         }
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -60,7 +61,7 @@ namespace Liyanjie.DesktopWebHost
         }
         private void Form_LogShowing(object sender, Logging.LogMessage e)
         {
-            this.TextBox.Text += e.Message;
+            this.TextBox.AppendText(e.Message);
         }
 
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
@@ -76,7 +77,15 @@ namespace Liyanjie.DesktopWebHost
         private void ToolStripMenuItem_Restart_Click(object sender, EventArgs e)
         {
             WebHostManager.CloseWebHost();
-            WebHostManager.StartWebHost();
+            Task.Run(async () =>
+            {
+                this.TextBox.Text = string.Empty;
+                this.TextBox.AppendText($"WebHost restarting……{Environment.NewLine}");
+                await Task.Delay(3000);
+                this.TextBox.AppendText($"WebHost restart success.{Environment.NewLine}{Environment.NewLine}");
+                WebHostManager.StartWebHost();
+            });
+
         }
         private void ToolStripMenuItem_Exit_Click(object sender, EventArgs e)
         {
