@@ -51,7 +51,7 @@
     - 配置 DesktopWebHost.exe.config，将 Startup 指向 AspNetCore 应用的 dll
     - 运行 DesktopWebHost.exe
     - 将 favicon.ico 文件放入 DesktopWebHost.exe 所在目录，可以改变通知栏图标
-    - DesktopWebHost.exe.config 中可以配置桌面应用显示名称、绑定 host 和 port
+    - 在 DesktopWebHost.exe.config 中可以配置桌面应用显示名称、绑定 host 和 port
 - #### Liyanjie.Drawing.Extensions
     Image绘图相关的一些扩展
     - ExtendMethods
