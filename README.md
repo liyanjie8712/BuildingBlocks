@@ -56,7 +56,7 @@
     Image绘图相关的一些扩展
     - ExtendMethods
     ```csharp
-    Image Opacity(this Image image, float opacity);  //设置透明度
+    Image SetOpacity(this Image image, float opacity);  //设置透明度
     Image Clear(this Image image, Color color);  //清除整个图像并以指定颜色填充
     Image Crop(this Image image, int startX, int startY, int width, int height);  //裁剪
     Image Crop(this Image image, Rectangle rectangle);  //裁剪
