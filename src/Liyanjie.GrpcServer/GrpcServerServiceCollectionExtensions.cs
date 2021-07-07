@@ -1,5 +1,4 @@
-﻿#if NETSTANDARD
-using System;
+﻿using System;
 
 using Liyanjie.GrpcServer;
 
@@ -26,4 +25,3 @@ namespace Microsoft.Extensions.DependencyInjection
         }
     }
 }
-#endif

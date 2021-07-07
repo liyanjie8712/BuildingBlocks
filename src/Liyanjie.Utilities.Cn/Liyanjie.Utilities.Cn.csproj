@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net452;netstandard2.1;</TargetFrameworks>
+        <TargetFrameworks>net461;netstandard2.1;</TargetFrameworks>
         <Description>扩展方法合集（Chinese）</Description>
         <Copyright>© Liyanjie.net</Copyright>
         <Authors>liyanjie8712@outlook.com</Authors>
@@ -58,14 +58,13 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='net452'">
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+    <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
         <PackageReference Include="System.Text.Json" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     </ItemGroup>
 
 </Project>

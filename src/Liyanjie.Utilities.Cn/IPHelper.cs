@@ -19,9 +19,7 @@ namespace Liyanjie.Utilities.Cn
 
         static IPHelper()
         {
-#if NETSTANDARD
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-#endif
         }
 
         public static (string Area, string ISP) SearchIP(string ip)

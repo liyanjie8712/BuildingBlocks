@@ -1,5 +1,4 @@
-﻿#if NETSTANDARD
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,4 +40,3 @@ namespace Liyanjie.GrpcServer
         }
     }
 }
-#endif

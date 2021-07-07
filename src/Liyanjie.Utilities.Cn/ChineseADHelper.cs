@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Liyanjie.Utilities.Cn
@@ -16,11 +17,7 @@ namespace Liyanjie.Utilities.Cn
             if (!File.Exists(dataFile))
                 throw new FileNotFoundException("数据文件未找到", dataFile);
             var json = File.ReadAllText(dataFile);
-#if NETFRAMEWORK
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json);
-#else
-            return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json);
-#endif
+            return JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json);
         }
 
         public static IReadOnlyDictionary<string, Dictionary<string, string>> ChineseChars => chineseADs_Lazy.Value;
