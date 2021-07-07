@@ -3,14 +3,16 @@
 一系列帮助类及扩展方法、小组件等
 - #### Liyanjie.AspNetCore.Authentication.Code
     Code认证
+  - ExtendMethods
     ```csharp
+    // services is IServiceCollection
     services.AddAuthentication().AddCode("CODE");
     ```
 - #### Liyanjie.AspNetCore.Extensions
     AspNetCore的一些扩展
-    - DelimitedArrayAttribute
-    - DelimitedArrayModelBinder
-    - DelimitedArrayModelBinderProvider
+  - DelimitedArrayAttribute
+  - DelimitedArrayModelBinder
+  - DelimitedArrayModelBinderProvider
     ```csharp
     IMvcBuilder.AddMvcOptions(options => 
     { 
@@ -23,18 +25,18 @@
         public string[] Array { get; set; }
     }
     ```
-    - UniqueAuthorizationFilter
+  - UniqueAuthorizationFilter
     ```csharp
     IMvcBuilder.AddMvcOptions(options =>
     {
         options.Filters.Add(new Liyanjie.AspNetCore.Extensions.UniqueAuthorizationFilter(context => string));
     });
     ```
-    - WakeupBackgroundService
+  - WakeupBackgroundService
     ```csharp
     services.AddHostedService<WakeupBackgroundService>();  //默认从配置文件中查找键“WakeupUrl”
     ```
-    - ExtendMethods
+  - ExtendMethods
     ```csharp
     string GetClientIpAddress(this HttpContext httpContext);  //获取客户端IP地址
     bool IsValid(this ModelStateDictionary modelState, string key);  //查看模型绑定中某一项是否验证通过
@@ -42,23 +44,23 @@
     ```
 - #### Liyanjie.DesktopWebHost
     可以在Windows桌面上托管AspNetCore应用
-    - 新建 netcoreapp3.1 或 net5.0 的 AspNetCore 应用
-    - 安装 Liyanjie.DesktopWebHost.1.0.0.nupkg (https://www.myget.org/feed/liyanjie/package/nuget/Liyanjie.DesktopWebHost)
-    - 将 DWH 目录中对应版本的文件夹下的所有文件设置 “生成操作=内容”、“复制到输出目录=始终复制”
-    - 编译 AspNetCore 应用（net5.0下需要先修改targetFramework为net5.0-windows）
-    - 发布 AspNetCore 应用
-    - 进入发布后的目录，将 DWH\对应版本\* 目录下所有文件移动到与 AspNetCore 应用同一目录
-    - 配置 DesktopWebHost.exe.config，将 Startup 指向 AspNetCore 应用的 dll
-    - 运行 DesktopWebHost.exe
-    - 将 favicon.ico 文件放入 DesktopWebHost.exe 所在目录，可以改变通知栏图标
-    - 在 DesktopWebHost.exe.config 中可以配置桌面应用显示名称、绑定 host 和 port
+  - 新建 netcoreapp3.1 或 net5.0 的 AspNetCore 应用
+  - 安装 Liyanjie.DesktopWebHost.1.0.0.nupkg (https://www.myget.org/feed/liyanjie/package/nuget/Liyanjie.DesktopWebHost)
+  - 将 DWH 目录中对应版本的文件夹下的所有文件设置 “生成操作=内容”、“复制到输出目录=始终复制”
+  - 编译 AspNetCore 应用（net5.0下需要先修改targetFramework为net5.0-windows）
+  - 发布 AspNetCore 应用
+  - 进入发布后的目录，将 DWH\对应版本\* 目录下所有文件移动到与 AspNetCore 应用同一目录
+  - 配置 DesktopWebHost.exe.config，将 Startup 指向 AspNetCore 应用的 dll
+  - 运行 DesktopWebHost.exe
+  - 将 favicon.ico 文件放入 DesktopWebHost.exe 所在目录，可以改变通知栏图标
+  - 在 DesktopWebHost.exe.config 中可以配置桌面应用显示名称、绑定 host 和 port
 - #### Liyanjie.Drawing.Extensions
     Image绘图相关的一些扩展
-    - GIFWriter
+  - GIFWriter
     ```csharp
     void WriteFrame(Image image, int delay = 0);
     ```
-    - ExtendMethods
+  - ExtendMethods
     ```csharp
     Image SetOpacity(this Image image, float opacity);  //设置透明度
     Image Clear(this Image image, Color color);  //清除整个图像并以指定颜色填充
@@ -74,14 +76,16 @@
     ```
 - #### Liyanjie.EnglishPluralization
     英语多元化
-    - EnglishPluralization
+  - EnglishPluralization
     ```csharp
     string Pluralize(string word);  //将单词转为复数形式
     string Singularize(string word);  //将单词转为单数形式
     ```
 - #### Liyanjie.GrpcServer
     GrpcServer实现
+  - ExtendMethods
     ```csharp
+    // services is IServiceCollection
     services.AddGrpcServer(options => 
     {
         options.AddPort(string host, int port, ServerCredentials credentials = default);
@@ -90,7 +94,7 @@
     ```
 - #### Liyanjie.Http
     优雅的发送Http请求的方式
-    - Http
+  - Http
     ```csharp
     Http.Do(HttpMethod method, string url)
         [.AddQuery(string name, string value)]
@@ -101,14 +105,14 @@
     ```
 - #### Liyanjie.Linq
     基于字符串动态构建Lambda表达式实现的Linq扩展
-    - IEnumerable
+  - IEnumerable
     ```csharp
     object[] ToArray(this IEnumerable source);
     T[] ToArray<T>(this IEnumerable source);
     List<object> ToList(this IEnumerable source);
     List<T> ToList<T>(this IEnumerable source);
     ```
-    - IQueryable
+  - IQueryable
     ```csharp
     int Count(this IQueryable source, string predicate, [IDictionary<string, dynamic> parameters]);
     object FirstOrDefault(this IQueryable source, string predicate, [IDictionary<string, dynamic> parameters]);
@@ -119,27 +123,29 @@
     ```
 - #### Liyanjie.Linq.Expressions
     基于字符串动态构建Lambda表达式
-    - ExpressionParser
+  - ExpressionParser
     ```csharp
     LambdaExpression ParseLambda(Type, string, IDictionary<string, object>);
     ```
 - #### Liyanjie.Linq.js
     javascript的linq实现
+  - Enumerable
     ```javascript
     Enumerable.new([]).orderBy(_ => _).thenByDescing(_ => _).groupBy(_ => _);
     ```
 - #### Liyanjie.MongoDB.Driver.Extensions
     MongoDB Driver的一些扩展
-    - MongoDBDateTimeOffsetSerializer
+  - MongoDBDateTimeOffsetSerializer
     ```csharp
     BsonSerializer.RegisterSerializer(new MongoDBDateTimeOffsetSerializer());
     ```
-    - ExtendMethods
+  - ExtendMethods
     ```csharp
     IMongoQueryable<TSource> IfWhere<TSource>(this IMongoQueryable<TSource> source, Func<bool> ifPredicate, Expression<Func<TSource, bool>> wherePredicate);
     ```
 - #### Liyanjie.TemplateMatching
     适用于AspNet的模板匹配
+  - Usage
     ```csharp
     var routeValues = new RouteValueDictionary();
     var templateMatcher = new TemplateMatcher(TemplateParser.Parse(string routeTemplate), routeValues);
@@ -147,52 +153,52 @@
     ```
 - #### Liyanjie.TypeBuilder
     动态构建Type类型
-    - TypeFactory
+  - TypeFactory
     ```csharp
     Type CreateType(IDictionary<string, Type> properties);  //使用 属性 字典创建类型
     object CreateObject(IDictionary<string, object> values);  //使用 值 字典创建对象
     ```
 - #### Liyanjie.Utility
     常用帮助类及扩展方法
-    - BEncoding
+  - BEncoding
     ```csharp
     object Decode(Stream stream, Encoding encoding);
     void Encode(Stream stream, Encoding encoding, object data);
     ```
-    - EnumHelper
+  - EnumHelper
     ```csharp
     IEnumerable<T> GetItems<T>() where T : Enum;
     ```
-    - ExtendMethods
+  - ExtendMethods
     ```csharp
     //so many…
     ```
 - #### Liyanjie.Utility.Cn
     中国(中文)常用的一些帮助类及扩展方法
-    - ChineseADHelper
+  - ChineseADHelper
     ```csharp
     bool TryGetChildren(string code, out Dictionary<string, string> children);
     string[] Display(string code);
     ```
-    - ChineseCharHelper
+  - ChineseCharHelper
     ```csharp
     bool TryGetChineseCharInfo(char chineseChar, out (string Unicode, int StrokeCount, string[] Pinyins) info);
     ```
-    - IPHelper
+  - IPHelper
     ```csharp
     (string Area, string ISP) SearchIP(string ip);
     ```
-    - PhoneNumberHelper
+  - PhoneNumberHelper
     ```csharp
     bool TryFindPhoneNumber(string phoneNumber, out PhoneNumber number);
     ```
-    - PinyinHelper
+  - PinyinHelper
     ```csharp
     string[] GetPinyin(this IEnumerable<string> chineseWords);  //获取中文拼音
     string[] GetChineseWordPinyin(this string chineseWord);  //尝试获取中文词语的拼音
     string[] GetChineseCharPinyins(this char chineseChar);  //尝试获取中文字符的拼音
     ```
-    - ExtendMethods
+  - ExtendMethods
     ```csharp
     string ToCn(this number number, CnNumberType numberType);  //将数字转换为中文
     string ToCnNumber(this number number, bool uppercase = false);  //将数字转换为中文
@@ -205,13 +211,13 @@
     ```
 - #### Liyanjie.Utility.js
     javascript的扩展类及扩展方法
-    - Guid
+  - Guid
     ```javascript
     Guid Guid.empty();  //00000000-0000-0000-0000-000000000000
     Guid Guid.newGuid();  //新Guid实例
     Guid.prototype.format(format?: 'N|D|B|P');  //Guid格式化，format默认为D
     ```
-    - ExtendMethods
+  - ExtendMethods
     ```javascript
     Date.prototype.format(format: string, weekDisplay: {sun,mon,tue,wed,thu,fri,sat}); //Date格式化
     Date.prototype.addMillionSeconds(millionSeconds: number);
@@ -230,3 +236,16 @@
     ```
 - #### Liyanjie.ValueObjects
     常用复合类型
+  - Address
+  - Consignee
+  - Contact
+  - Delivery
+  - Geolocation
+  - Identity
+  - Job
+  - Licence
+  - Name
+  - Operator
+  - School
+  - Score
+  - Status
