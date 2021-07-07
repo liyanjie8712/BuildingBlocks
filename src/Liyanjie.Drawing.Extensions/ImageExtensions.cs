@@ -15,7 +15,8 @@ namespace System.Drawing
         /// <param name="image"></param>
         /// <param name="format"></param>
         /// <returns></returns>
-        public static string Encode(this Image image, ImageFormat format = default)
+        public static string Encode(this Image image,
+            ImageFormat format = default)
         {
             using var memory = new MemoryStream();
             image.Save(memory, format ?? image.RawFormat);
@@ -27,7 +28,8 @@ namespace System.Drawing
         /// </summary>
         /// <param name="image"></param>
         /// <param name="opacity"></param>
-        public static Image SetOpacity(this Image image, float opacity)
+        public static Image SetOpacity(this Image image,
+            float opacity)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -60,7 +62,8 @@ namespace System.Drawing
         /// <param name="image"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        public static Image Clear(this Image image, Color color)
+        public static Image Clear(this Image image,
+            Color color)
         {
             using var graphics = Graphics.FromImage(image);
             graphics.Clear(color);
@@ -77,7 +80,11 @@ namespace System.Drawing
         /// <param name="width">裁剪宽度</param>
         /// <param name="height">裁剪高度</param>
         /// <returns></returns>
-        public static Image Crop(this Image image, int startX, int startY, int width, int height)
+        public static Image Crop(this Image image,
+            int startX,
+            int startY,
+            int width,
+            int height)
         {
             if (startX >= image.Width || startY >= image.Height || width <= 0 || height <= 0)
                 throw new ArgumentException();
@@ -100,7 +107,8 @@ namespace System.Drawing
         /// <param name="image"></param>
         /// <param name="rectangle"></param>
         /// <returns></returns>
-        public static Image Crop(this Image image, Rectangle rectangle)
+        public static Image Crop(this Image image,
+            Rectangle rectangle)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -118,7 +126,11 @@ namespace System.Drawing
         /// <param name="zoom">等比缩放</param>
         /// <param name="coverSize">Ture：在同时指定宽和高并且等比缩放的情况下，将裁剪图片以满足宽高比</param>
         /// <returns></returns>
-        public static Image Resize(this Image image, int? width, int? height, bool zoom = true, bool coverSize = false)
+        public static Image Resize(this Image image,
+            int? width,
+            int? height,
+            bool zoom = true,
+            bool coverSize = false)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -197,7 +209,8 @@ namespace System.Drawing
         /// <param name="image">底图</param>
         /// <param name="images">图片集合</param>
         /// <returns></returns>
-        public static Image Combine(this Image image, params (Point Point, Size Size, Image Image)[] images)
+        public static Image Combine(this Image image,
+            params (Point Point, Size Size, Image Image)[] images)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -217,13 +230,50 @@ namespace System.Drawing
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="delay"></param>
+        /// <param name="repeat"></param>
+        /// <param name="images"></param>
+        /// <returns></returns>
+        public static Image CombineToGIF(this Image image,
+            int delay = 0,
+            int repeat = -1,
+            params (Point Point, Size Size, Image Image, int Delay)[] images)
+        {
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+            if (images == null)
+                throw new ArgumentNullException(nameof(images));
+
+            using var memory = new MemoryStream();
+            using var gif = new GIFWriter(memory, repeat: repeat);
+            gif.WriteFrame(image, delay);
+
+            foreach (var item in images)
+            {
+                using var _image = new Bitmap(image.Width, image.Height);
+                using var _graphics = Graphics.FromImage(_image);
+                _graphics.Clear(Color.Transparent);
+                _graphics.DrawImage(item.Image, new Rectangle(item.Point, item.Size));
+
+                gif.WriteFrame(_image, item.Delay);
+            }
+
+            return Image.FromStream(memory);
+        }
+
+        /// <summary>
         /// 拼接图片
         /// </summary>
         /// <param name="image"></param>
         /// <param name="image2"></param>
         /// <param name="direction">true=水平方向，false=垂直方向</param>
         /// <returns></returns>
-        public static Image Concatenate(this Image image, Image image2, bool direction = false)
+        public static Image Concatenate(this Image image,
+            Image image2,
+            bool direction = false)
         {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -260,7 +310,10 @@ namespace System.Drawing
         /// <param name="path"></param>
         /// <param name="quality">质量，0~100</param>
         /// <param name="format"></param>
-        public static void CompressSave(this Image image, string path, long quality, ImageFormat format = default)
+        public static void CompressSave(this Image image,
+            string path,
+            long quality,
+            ImageFormat format = default)
         {
             if (quality < 0)
                 quality = 0;

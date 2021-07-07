@@ -54,6 +54,10 @@
     - 在 DesktopWebHost.exe.config 中可以配置桌面应用显示名称、绑定 host 和 port
 - #### Liyanjie.Drawing.Extensions
     Image绘图相关的一些扩展
+    - GIFWriter
+    ```csharp
+    void WriteFrame(Image image, int delay = 0);
+    ```
     - ExtendMethods
     ```csharp
     Image SetOpacity(this Image image, float opacity);  //设置透明度
@@ -62,6 +66,7 @@
     Image Crop(this Image image, Rectangle rectangle);  //裁剪
     Image Resize(this Image image, int? width, int? height, bool zoom = true, bool coverSize = false);  //调整尺寸
     Image Combine(this Image image, params (Point Point, Size Size, Image Image)[] images);  //组合多张图片
+    Image CombineToGIF(this Image image, int delay = 0, int repeat = 0, params (Point Point, Size Size, Image Image, int Delay)[] images);  //组合多张图片并生成GIF
     Image Concatenate(this Image image, Image image2, bool direction = false);  //拼接多张图片
     void CompressSave(this Image image, string path, long quality, ImageFormat format = default);  //压缩存储
     string Encode(this Image image, ImageFormat format = default);  //将图片转换为Base64字符串
