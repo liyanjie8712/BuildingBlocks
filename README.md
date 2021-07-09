@@ -201,14 +201,13 @@
     ```
   - ExtendMethods
     ```csharp
-    string ToCn(this number number, CnNumberType numberType);  //将数字转换为中文
-    string ToCnNumber(this number number, bool uppercase = false);  //将数字转换为中文
-    string ChangeToZHHans(this string zhHantInput);  //中文繁体转简体
-    string ChangeToZHHant(this string zhHansInput);  //中文简体转繁体
-    bool IsPhoneNumber_Cn(this string input);  //是否为手机号码
-    string HidePhoneNumber_Cn(this string origin, char @char = '*');  //隐藏手机号码
+    string ToCn(this number number, OutputType outputType);  //将数字转换为中文
+    string ChangeToZhHans(this string zhHantInput);  //中文繁体转简体
+    string ChangeToZhHant(this string zhHansInput);  //中文简体转繁体
     bool IsIdNumber_Cn(this string input);  //是否为身份证号码
+    bool IsPhoneNumber_Cn(this string input);  //是否为手机号码
     string HideIdNumber_Cn(this string origin, char @char = '*');  //隐藏身份证号码
+    string HidePhoneNumber_Cn(this string origin, char @char = '*');  //隐藏手机号码
     ```
 - #### Liyanjie.Utility.js
     javascript的扩展类及扩展方法
