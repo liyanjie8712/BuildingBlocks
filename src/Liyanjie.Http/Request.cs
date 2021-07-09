@@ -69,7 +69,7 @@ namespace Liyanjie.Http
 
         public Request UseHttpClient(HttpClient client)
         {
-            this.client = client;
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
 
             return this;
         }
@@ -81,7 +81,7 @@ namespace Liyanjie.Http
         /// <returns></returns>
         public virtual async Task<HttpResponseMessage> SendAsync(int timeoutBySeconds = 60)
         {
-            if (this.client is not null)
+            if (client is not null)
             {
                 return await SendAsync(this.client);
             }
