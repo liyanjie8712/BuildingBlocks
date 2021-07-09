@@ -3,7 +3,6 @@ interface Number {
     minus(arg: number): number;
     multipy(arg: number): number;
     divide(arg: number): number;
-    toCnNumber(uppercase?: boolean): string;
     toCn(numberType?: string): string;
 }
 declare function __toCnNumber(number: number, uppercase: boolean): string;

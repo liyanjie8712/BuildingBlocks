@@ -3,50 +3,9 @@
     minus(arg: number): number;
     multipy(arg: number): number;
     divide(arg: number): number;
-    toCnNumber(uppercase?: boolean): string;
     toCn(numberType?: string): string;
 }
 
-function __toCnNumber(number: number, uppercase: boolean): string {
-    switch (number) {
-        case 0:
-            return uppercase ? '零' : '〇';
-        case 1:
-            return uppercase ? '壹' : '一';
-        case 2:
-            return uppercase ? '贰' : '二';
-        case 3:
-            return uppercase ? '叁' : '三';
-        case 4:
-            return uppercase ? '肆' : '四';
-        case 5:
-            return uppercase ? '伍' : '五';
-        case 6:
-            return uppercase ? '陆' : '六';
-        case 7:
-            return uppercase ? '柒' : '七';
-        case 8:
-            return uppercase ? '捌' : '八';
-        case 9:
-            return uppercase ? '玖' : '九';
-        case 10:
-            return uppercase ? '拾' : '十';
-        case 100:
-            return uppercase ? '佰' : '百';
-        case 1000:
-            return uppercase ? '仟' : '千';
-        case 10000:
-            return '万';
-        case 100000000:
-            return '亿';
-        case 1000000000000:
-            return '兆';
-        case 10000000000000000:
-            return '京';
-        default:
-            break;
-    }
-};
 Number.prototype.plus = function (arg: number) {
     let r1, r2, m;
     try {
@@ -100,195 +59,204 @@ Number.prototype.divide = function (arg: number) {
     r2 = Number(arg.toString().replace('.', ''));
     return (r1 / r2) * Math.pow(10, t2 - t1);
 };
-Number.prototype.toCnNumber = function (uppercase: boolean = false) {
-    let i = parseInt(this.toString());
-    if (i >= 10000000000000000)
-        i = 10000000000000000;
-    if (i >= 1000000000000)
-        i = 1000000000000;
-    if (i >= 100000000)
-        i = 100000000;
-    else if (i >= 10000)
-        i = 10000;
-    else if (i >= 1000)
-        i = 1000;
-    else if (i >= 100)
-        i = 100;
-    else if (i >= 10)
-        i = 10;
-    else if (i < 0)
-        i = 0;
-    return __toCnNumber(i, uppercase);
+
+function __toCnNumber(number: number, uppercase: boolean): string {
+    switch (number.toString()) {
+        case '0':
+            return uppercase ? '零' : '〇';
+        case '1':
+            return uppercase ? '壹' : '一';
+        case '2':
+            return uppercase ? '贰' : '二';
+        case '3':
+            return uppercase ? '叁' : '三';
+        case '4':
+            return uppercase ? '肆' : '四';
+        case '5':
+            return uppercase ? '伍' : '五';
+        case '6':
+            return uppercase ? '陆' : '六';
+        case '7':
+            return uppercase ? '柒' : '七';
+        case '8':
+            return uppercase ? '捌' : '八';
+        case '9':
+            return uppercase ? '玖' : '九';
+        case '10':
+            return uppercase ? '拾' : '十';
+        case '100':
+            return uppercase ? '佰' : '百';
+        case '1000':
+            return uppercase ? '仟' : '千';
+        case '10000':
+            return '万';
+        case '100000000':
+            return '亿';
+        case '1000000000000':
+            return '兆';
+        case '10000000000000000':
+            return '京';
+        case '100000000000000000000':
+            return '垓';
+        case '1e+24':
+            return '秭';
+        case '1e+28':
+            return '穰';
+        case '1e+32':
+            return '沟';
+        case '9.999999999999999e+35':
+            return '涧';
+        case '1e+40':
+            return '正';
+        case '1e+44':
+            return '载';
+        case '1e+48':
+            return '极';
+        default:
+            break;
+    }
 };
-Number.prototype.toCn = function (numberType: string = 'Normal') {
-    numberType = numberType.toLowerCase();
-    let number = this.toString();
+Number.prototype.toCn = function (outputType: string = 'Normal') {
+    outputType = outputType.toLowerCase();
+    let number = <number>this;
+    let numberString = this.toString();
     let s = '';
-    if (number[0] == '-') {
+    if (numberString[0] == '-') {
         s += '负';
-        number = number.substr(1);
+        number = Math.abs(number);
     }
     let
-        unit = function (i): string {
-            switch (i) {
-                case 0:
-                    return '角';
-                case 1:
-                    return '分';
-                case 2:
-                    return '厘';
-                default:
-                    return '';
-                    break;
-            }
+        unit = function (i: number, currency: boolean): string {
+            return currency
+                ? i < 3 ? '角分厘'[i] : ''
+                : i < 7 ? '分釐毫丝忽微纤'[i] : '';
         },
-        processLong = function (number: number, uppercase: boolean): string {
+        processLong = function (number: number, currency: boolean): string {
             let sb = '';
             let zeroFlag = false;//输出0
             if (number > 1) {
                 let l = number;
-                for (let i = 4; i >= 0; i--) {
+                for (let i = 12; i >= 0; i--) {
                     let level = Math.pow(10000, i);
+                    console.log('level=' + level);
                     if (number >= level) {
                         l = number % level;
-                        number = parseInt((number / level).toString());
+                        number = Math.trunc(number / level);
+                        console.log('l=' + l + ',number=' + number);
                         if (number > 19) {
                             let j = 1000;
                             while (number % (j * 10) >= 1) {
-                                let tmp = parseInt((number / j).toString());
+                                let tmp = Math.trunc(number / j);
+                                console.log(',tmp=' + number);
                                 if (tmp != 0) {
-                                    sb += __toCnNumber(tmp, uppercase);
+                                    sb += __toCnNumber(tmp, currency);
                                     if (j > 1)
-                                        sb += __toCnNumber(j, uppercase);
+                                        sb += __toCnNumber(j, currency);
                                     zeroFlag = true;
                                 }
                                 else if (zeroFlag) {
-                                    sb += __toCnNumber(0, uppercase);
+                                    sb += __toCnNumber(0, currency);
                                     zeroFlag = false;
                                 }
                                 if (j == 1)
                                     break;
 
                                 number %= j;
-                                j = j.divide(10);
+                                j = j / 10;
                             }
                         }
                         else if (number >= 10) {
-                            sb += __toCnNumber(10, uppercase);
+                            sb += __toCnNumber(10, currency);
                             if (number % 10 > 0) {
-                                sb += __toCnNumber(number % 10, uppercase);
+                                sb += __toCnNumber(number % 10, currency);
                                 zeroFlag = true;
                             }
                         }
                         else
-                            sb += __toCnNumber(number, uppercase);
+                            sb += __toCnNumber(number, currency);
 
                         if (level > 1)
-                            sb += __toCnNumber(level, uppercase);
+                            sb += __toCnNumber(level, currency);
                     }
                     number = l;
                 }
             }
             else
-                sb += __toCnNumber(number, uppercase);
+                sb += __toCnNumber(number, currency);
             return sb;
         },
-        processDecimal = function (decimal: string): string {
+        processDecimal = function (decimal: string, currency: boolean): string {
             let sb = '';
             let zeroFlag = false;//输出0
             for (let i = 0; i < decimal.length; i++) {
                 let d = parseInt(decimal[i]);
                 if (d > 0) {
-                    sb += __toCnNumber(d, true);
-                    sb += unit(i);
+                    sb += __toCnNumber(d, currency);
+                    sb += unit(i, currency);
                     zeroFlag = true;
                 }
                 else if (decimal.length > i + 1 && zeroFlag) {
-                    sb += __toCnNumber(0, true);
+                    sb += __toCnNumber(0, currency);
                     zeroFlag = false;
                 }
             }
             return sb;
         };
-    let int = parseInt(number);
-    switch (numberType) {
-        case 'normal':
+
+    let int = Math.trunc(number);
+    switch (outputType) {
+        case 'number':
             s += processLong(int, false);
-            break;
-        case 'normalupper':
-            s += processLong(int, true);
-            break;
-        case 'direct':
-            {
-                let s_ = int.toString();
-                for (let i = 0; i < s_.length; i++) {
-                    s += __toCnNumber(parseInt(s_[i]), false);
-                }
-            }
-            break;
-        case 'directupper':
-            {
-                let s_ = int.toString();
-                for (let i = 0; i < s_.length; i++) {
-                    s += __toCnNumber(parseInt(s_[i]), true);
-                }
-            }
             break;
         case 'currency':
             s += processLong(int, true);
+            break;
+        case 'digit':
+            let s_ = int.toString();
+            for (let i = 0; i < s_.length; i++) {
+                s += __toCnNumber(parseInt(s_[i]), false);
+            }
             break;
         default:
             break;
     }
 
-    let dec, index = number.indexOf('.');
+    let dec, index = numberString.indexOf('.');
     if (index > 0)
-        dec = number.substr(index + 1);
+        dec = numberString.substr(index + 1);
     if (dec) {
-        switch (numberType) {
-            case 'normal':
-            case 'normalupper':
-            case 'direct':
-            case 'directupper':
-                s += '点';
+        switch (outputType) {
+            case 'number':
+                s += '又';
                 break;
             case 'currency':
                 s += '圆';
+                break;
+            case 'digit':
+                s += '点';
                 break;
             default:
                 break;
         }
 
-        switch (numberType) {
-            case 'normal':
-                for (let i = 0; i < dec.length; i++) {
-                    s += __toCnNumber(parseInt(dec[i]), false);
-                }
-                break;
-            case 'normalupper':
-                for (let i = 0; i < dec.length; i++) {
-                    s += __toCnNumber(parseInt(dec[i]), true);
-                }
-                break;
-            case 'direct':
-                for (let i = 0; i < dec.length; i++) {
-                    s += __toCnNumber(parseInt(dec[i]), false);
-                }
-                break;
-            case 'directupper':
-                for (let i = 0; i < dec.length; i++) {
-                    s += __toCnNumber(parseInt(dec[i]), true);
-                }
+        switch (outputType) {
+            case 'number':
+                s += processDecimal(dec, false);
                 break;
             case 'currency':
-                s += processDecimal(dec);
+                s += processDecimal(dec, true);
+                break;
+            case 'digit':
+                for (let i = 0; i < dec.length; i++) {
+                    s += __toCnNumber(parseInt(dec[i]), false);
+                }
                 break;
             default:
                 break;
         }
     }
-    else if (numberType == 'currency')
-        s += '圆整';
+    else if (outputType == 'currency')
+        s += '圆';
 
     return s;
 };
